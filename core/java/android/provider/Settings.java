@@ -9350,6 +9350,14 @@ public final class Settings {
         /* Altair ROM Secure Settings Start */
         /************************************/
 
+        /**
+         * Whether to vibrate when quick settings tile is pressed.
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_VIBRATE = "quick_settings_vibrate";
+
+        private static final Validator QUICK_SETTINGS_VIBRATE_VALIDATOR = BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM Secure Settings End */
         /**********************************/
@@ -9493,6 +9501,7 @@ public final class Settings {
             AWARE_TAP_PAUSE_TOUCH_COUNT,
             VOLUME_LINK_NOTIFICATION,
             // Altair ROM settings start
+            QUICK_SETTINGS_VIBRATE,
             // Altair ROM settings end
         };
 
@@ -9693,6 +9702,7 @@ public final class Settings {
             VALIDATORS.put(TAP_GESTURE, TAP_GESTURE_VALIDATOR);
             VALIDATORS.put(VOLUME_LINK_NOTIFICATION, VOLUME_LINK_NOTIFICATION_VALIDATOR);
             // Altair ROM settings start
+            VALIDATORS.put(QUICK_SETTINGS_VIBRATE, QUICK_SETTINGS_VIBRATE_VALIDATOR);
             // Altair ROM settings end
         }
 
