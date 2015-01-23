@@ -21,5 +21,12 @@
     <!-- SystemUI Tuner Parts -->
     <string name="systemui_tuner_navbar_title">Stock settings</string>
 
+    <!-- Navigation bar Tile -->
+    <string name="quick_settings_navigation_bar">Navigation bar</string>
+    <string name="quick_settings_smartbar">SmartBar</string>
+    <string name="quick_settings_fling">Fling</string>
+    <string name="quick_settings_navigation_default">Stock</string>
+    <string name="quick_settings_navigation_disabled">Disabled</string>
+
 </resources>
 
