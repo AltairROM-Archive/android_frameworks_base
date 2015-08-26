@@ -4516,6 +4516,16 @@ public final class Settings {
         /* Altair ROM System Settings Start */
         /************************************/
 
+        /**
+         * Toast icon
+         * @hide
+         */
+        public static final String TOAST_ICON = "toast_icon";
+
+        /** @hide */
+        private static final Validator TOAST_ICON_VALIDATOR =
+              BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4586,6 +4596,7 @@ public final class Settings {
             ALARM_ALERT,
             NOTIFICATION_LIGHT_PULSE,
             // Altair ROM settings start
+            TOAST_ICON,
             // Altair ROM settings end
         };
 
@@ -4709,6 +4720,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SHOW_BATTERY_PERCENT);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
             // Altair ROM settings start
+            PRIVATE_SETTINGS.add(TOAST_ICON);
             // Altair ROM settings end
         }
 
@@ -4806,6 +4818,7 @@ public final class Settings {
             VALIDATORS.put(ACCELEROMETER_ROTATION_ANGLES,
                     ACCELEROMETER_ROTATION_ANGLES_VALIDATOR);
             // Altair ROM settings start
+            VALIDATORS.put(TOAST_ICON, TOAST_ICON_VALIDATOR);
             // Altair ROM settings end
         }
 
