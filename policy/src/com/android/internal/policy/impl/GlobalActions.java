@@ -331,29 +331,15 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         };
 
         mItems = Lists.newArrayList(
-                // silent mode
-                mSilentModeToggle,
-                // next: airplane mode
-                mAirplaneModeOn,
-                // next: choose profile
-                new ProfileChooseAction() {
-                    public void onPress() {
-                        createProfileDialog();
-                    }
+                // first: power off
+                new SinglePressAction(
+                        com.android.internal.R.drawable.ic_lock_power_off,
+                        R.string.global_action_power_off) {
 
-                    public boolean showDuringKeyguard() {
-                        return false;
-                    }
-
-                    public boolean showBeforeProvisioning() {
-                        return false;
-                    }
-                },
-                // next: screenshot
-                new SinglePressAction(com.android.internal.R.drawable.ic_lock_screenshot, R.string.global_action_screenshot) {
                     public void onPress() {
-                        Intent intent = new Intent("android.intent.action.SCREENSHOT");
-                        mContext.sendBroadcast(intent);
+                        // shutdown by making sure radio and power are handled accordingly.
+                        ShutdownThread.shutdown(getUiContext(),(Settings.System.getInt(mContext.getContentResolver(),
+                                Settings.System.POWER_DIALOG_PROMPT, 1) == 1));
                     }
 
                     public boolean showDuringKeyguard() {
@@ -379,15 +365,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                         return true;
                     }
                 },
-                // last: power off
-                new SinglePressAction(
-                        com.android.internal.R.drawable.ic_lock_power_off,
-                        R.string.global_action_power_off) {
-
+                // next: screenshot
+                new SinglePressAction(com.android.internal.R.drawable.ic_lock_screenshot, R.string.global_action_screenshot) {
                     public void onPress() {
-                        // shutdown by making sure radio and power are handled accordingly.
-                        ShutdownThread.shutdown(getUiContext(),(Settings.System.getInt(mContext.getContentResolver(),
-                                Settings.System.POWER_DIALOG_PROMPT, 1) == 1));
+                        Intent intent = new Intent("android.intent.action.SCREENSHOT");
+                        mContext.sendBroadcast(intent);
                     }
 
                     public boolean showDuringKeyguard() {
@@ -397,7 +379,26 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     public boolean showBeforeProvisioning() {
                         return true;
                     }
-                });
+                },
+                // next: choose profile
+                new ProfileChooseAction() {
+                    public void onPress() {
+                        createProfileDialog();
+                    }
+
+                    public boolean showDuringKeyguard() {
+                        return false;
+                    }
+
+                    public boolean showBeforeProvisioning() {
+                        return false;
+                    }
+                },
+                // next: airplane mode
+                mAirplaneModeOn,
+                // last: silent mode
+                mSilentModeToggle
+                );
 
         mAdapter = new MyAdapter();
 
