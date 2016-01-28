@@ -54,6 +54,8 @@
                 android:src="@drawable/ic_dialog_info" />
             <com.android.internal.widget.DialogTitle android:id="@+id/alertTitle"
                 style="?android:attr/textAppearanceLarge"
+                android:textColor="@color/holo_blue_light"
+                android:textStyle="bold"
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:layout_width="match_parent"

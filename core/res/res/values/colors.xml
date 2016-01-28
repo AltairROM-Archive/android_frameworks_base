@@ -55,6 +55,10 @@
     <color name="dim_foreground_light_inverse_disabled">#80bebebe</color>
     <color name="hint_foreground_light">#808080</color>
 
+    <color name="holo_blue_light">#ff33b5e5</color>
+    <color name="holo_blue_dark">#ff0099cc</color>
+    <color name="holo_blue_bright">#ff00ddff</color>
+
     <drawable name="stat_notify_sync_noanim">@drawable/stat_notify_sync_anim0</drawable>
     <drawable name="stat_sys_download_done">@drawable/stat_sys_download_anim0</drawable>
     <drawable name="stat_sys_upload_done">@drawable/stat_sys_upload_anim0</drawable>

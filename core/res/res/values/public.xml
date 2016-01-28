@@ -730,6 +730,9 @@
   <public type="color" name="background_light" id="0x0106000f" />
   <public type="color" name="tertiary_text_dark" id="0x01060010" />
   <public type="color" name="tertiary_text_light" id="0x01060011" />
+  <public type="color" name="holo_blue_light" id="0x01060012" />
+  <public type="color" name="holo_blue_dark" id="0x01060013" />
+  <public type="color" name="holo_blue_bright" id="0x01060014" />
 
   <public type="array" name="emailAddressTypes" id="0x01070000" />
   <public type="array" name="imProtocols" id="0x01070001" />
