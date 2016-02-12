@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2010 The Android Open Source Project
  * Patched by Sven Dawitz; Copyright (C) 2011 CyanogenMod Project
+ * Copyright (C) 2016 The Altair ROM Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,9 +139,9 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     View mExpandedContents;
     // top bar
     TextView mNoNotificationsTitle;
-    TextView mClearButton;
-    TextView mCompactClearButton;
+    ImageView mClearButton;
     ViewGroup mClearButtonParent;
+    ImageView mSettingsButton;
     CmBatteryMiniIcon mCmBatteryMiniIcon;
     // drag bar
     CloseDragHandle mCloseView;
@@ -158,9 +159,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     boolean mExpanded;
     boolean mExpandedVisible;
 
-    // the date view
-    DateView mDateView;
-
     // the tracker view
     TrackingView mTrackingView;
     WindowManager.LayoutParams mTrackingParams;
@@ -171,9 +169,9 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     PowerWidget mPowerWidget;
 
     //Carrier label stuff
-    LinearLayout mCarrierLabelLayout;
-    LinearLayout mCompactCarrierLayout;
-    LinearLayout mPowerAndCarrier;
+    LinearLayout mDateTimeHeaderLayout;
+    LinearLayout mPowerAndDateTimeLayout;
+    CarrierLabel mCloseCarrierLabel;
 
     // ticker
     private Ticker mTicker;
@@ -244,7 +242,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             defValue=(CmSystem.getDefaultBool(mContext, CmSystem.CM_DEFAULT_USE_DEAD_ZONE) ? 1 : 0);
             mDeadZone = (Settings.System.getInt(resolver,
                     Settings.System.STATUS_BAR_DEAD_ZONE, defValue) == 1);
-            mCompactCarrier = (Settings.System.getInt(resolver,
+            mHideCarrierLabel = (Settings.System.getInt(resolver,
                     Settings.System.STATUS_BAR_COMPACT_CARRIER, 0) == 1);
             updateLayout();
             updateCarrierLabel();
@@ -362,7 +360,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         return null;
     }
 
-    private boolean mCompactCarrier = false;
+    private boolean mHideCarrierLabel = false;
 
     // ================================================================================
     // Constructing the view
@@ -374,8 +372,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
         mIconSize = res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_icon_size);
 
-        //Check for compact carrier layout and apply if enabled
-        mCompactCarrier = Settings.System.getInt(getContentResolver(),
+        //Check for hide carrier label
+        mHideCarrierLabel = Settings.System.getInt(getContentResolver(),
                                                 Settings.System.STATUS_BAR_COMPACT_CARRIER, 0) == 1;
         ExpandedView expanded = (ExpandedView)View.inflate(context,
                                                 R.layout.status_bar_expanded, null);
@@ -397,7 +395,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mNotificationIcons = (IconMerger)sb.findViewById(R.id.notificationIcons);
         mIcons = (LinearLayout)sb.findViewById(R.id.icons);
         mTickerView = sb.findViewById(R.id.ticker);
-        mDateView = (DateView)sb.findViewById(R.id.date);
         mCmBatteryMiniIcon = (CmBatteryMiniIcon)sb.findViewById(R.id.CmBatteryMiniIcon);
 
         /* Destroy any existing widgets before recreating the expanded dialog
@@ -414,15 +411,24 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mLatestTitle = (TextView)expanded.findViewById(R.id.latestTitle);
         mLatestItems = (LinearLayout)expanded.findViewById(R.id.latestItems);
         mNoNotificationsTitle = (TextView)expanded.findViewById(R.id.noNotificationsTitle);
-        mClearButton = (TextView)expanded.findViewById(R.id.clear_all_button);
-        mClearButton.setOnClickListener(mClearButtonListener);
-        mCompactClearButton = (TextView)expanded.findViewById(R.id.compact_clear_all_button);
-        mCompactClearButton.setOnClickListener(mClearButtonListener);
-        mPowerAndCarrier = (LinearLayout)expanded.findViewById(R.id.power_and_carrier);
+        mPowerAndDateTimeLayout = (LinearLayout)expanded.findViewById(R.id.power_and_date_time);
         mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
         mBottomScrollView = (ScrollView)expanded.findViewById(R.id.bottomScroll);
         mNotificationLinearLayout = (LinearLayout)expanded.findViewById(R.id.notificationLinearLayout);
         mBottomNotificationLinearLayout = (LinearLayout)expanded.findViewById(R.id.bottomNotificationLinearLayout);
+
+        mClearButton = (ImageView) expanded.findViewById(R.id.clear_all_button);
+        if (mClearButton != null) {
+            mClearButton.setOnClickListener(mClearButtonListener);
+            mClearButton.setImageResource(R.drawable.ic_notify_clear);
+        }
+
+        mSettingsButton = (ImageView) expanded.findViewById(R.id.settings_button);
+        if (mSettingsButton != null) {
+            mSettingsButton.setOnClickListener(mSettingsButtonListener);
+            mSettingsButton.setVisibility(View.VISIBLE);
+            mSettingsButton.setImageResource(R.drawable.ic_notify_settings);
+        }
 
         mExpandedView.setVisibility(View.GONE);
         mOngoingTitle.setVisibility(View.GONE);
@@ -444,8 +450,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
                    }
                });
 
-        mCarrierLabelLayout = (LinearLayout)expanded.findViewById(R.id.carrier_label_layout);
-        mCompactCarrierLayout = (LinearLayout)expanded.findViewById(R.id.compact_carrier_layout);
+        mDateTimeHeaderLayout = (LinearLayout)expanded.findViewById(R.id.date_time_header_layout);
 
         mTicker = new MyTicker(context, sb);
 
@@ -457,6 +462,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mCloseView = (CloseDragHandle)mTrackingView.findViewById(R.id.close);
         mCloseView.mService = this;
 
+        mCloseCarrierLabel = (CarrierLabel)mTrackingView.findViewById(R.id.close_carrier_label);
+
         mContext=context;
         updateLayout();
         updateCarrierLabel();
@@ -465,24 +472,16 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
         // set the inital view visibility
         setAreThereNotifications();
-        mDateView.setVisibility(View.INVISIBLE);
     }
 
     private void updateCarrierLabel() {
-        if (mCompactCarrier) {
-            mCarrierLabelLayout.setVisibility(View.GONE);
-            // Disable compact carrier when bottom bar is enabled for now
-            // till we find a better solution (looks ugly alone at the top)
-            if (mBottomBar)
-                mCompactCarrierLayout.setVisibility(View.GONE);
-            if (mLatest.hasClearableItems())
-                mCompactClearButton.setVisibility(View.VISIBLE);
-        } else {
-            mCarrierLabelLayout.setVisibility(View.VISIBLE);
-            mCompactCarrierLayout.setVisibility(View.GONE);
-            mCompactClearButton.setVisibility(View.GONE);
+        mDateTimeHeaderLayout.setVisibility(View.VISIBLE);
+        if (mCloseCarrierLabel != null) {
+            mCloseCarrierLabel.setVisibility((mBottomBar || mHideCarrierLabel) ? View.GONE : View.VISIBLE);
         }
+    }
 
+    private void updateDate() {
     }
 
     private void updateLayout() {
@@ -494,7 +493,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mTrackingView.addView(mCloseView, mBottomBar ? 0 : 1);
 
         // handle expanded view reording for bottom bar
-        LinearLayout powerAndCarrier=(LinearLayout)mExpandedView.findViewById(R.id.power_and_carrier);
+        LinearLayout powerAndCarrier=(LinearLayout)mExpandedView.findViewById(R.id.power_and_date_time);
         PowerWidget power=(PowerWidget)mExpandedView.findViewById(R.id.exp_power_stat);
         //FrameLayout notifications=(FrameLayout)mExpandedView.findViewById(R.id.notifications);
 
@@ -504,7 +503,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
         // readd in right order
         mExpandedView.addView(powerAndCarrier, mBottomBar ? 1 : 0);
-        powerAndCarrier.addView(power, mBottomBar && !mCompactCarrier ? 1 : 0);
+        powerAndCarrier.addView(power, mBottomBar ? 1 : 0);
 
         // Remove all notification views
         mNotificationLinearLayout.removeAllViews();
@@ -513,7 +512,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         // Readd to correct scrollview depending on mBottomBar
         if (mBottomBar) {
             mScrollView.setVisibility(View.GONE);
-            mBottomNotificationLinearLayout.addView(mCompactClearButton);
             mBottomNotificationLinearLayout.addView(mNoNotificationsTitle);
             mBottomNotificationLinearLayout.addView(mOngoingTitle);
             mBottomNotificationLinearLayout.addView(mOngoingItems);
@@ -527,16 +525,11 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             mNotificationLinearLayout.addView(mOngoingItems);
             mNotificationLinearLayout.addView(mLatestTitle);
             mNotificationLinearLayout.addView(mLatestItems);
-            mNotificationLinearLayout.addView(mCompactClearButton);
             mScrollView.setVisibility(View.VISIBLE);
-            mCompactCarrierLayout.setVisibility(View.VISIBLE);
+            if (mCloseCarrierLabel != null) {
+                mCloseCarrierLabel.setVisibility(View.VISIBLE);
+            }
         }
-
-        //remove small ugly grey area if compactcarrier is enabled and power widget disabled
-        boolean hideArea = mCompactCarrier &&
-                           Settings.System.getInt(mContext.getContentResolver(),
-                                   Settings.System.EXPANDED_VIEW_WIDGET, 1) == 0;
-        mPowerAndCarrier.setVisibility(hideArea ? View.GONE : View.VISIBLE);
     }
 
     protected void addStatusBarView() {
@@ -839,10 +832,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
         // (no ongoing notifications are clearable)
         if (mLatest.hasClearableItems()) {
-            if (mCompactCarrier) mCompactClearButton.setVisibility(View.VISIBLE);
             mClearButton.setVisibility(View.VISIBLE);
         } else {
-            mCompactClearButton.setVisibility(View.GONE);
             mClearButton.setVisibility(View.INVISIBLE);
         }
 
@@ -934,10 +925,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mExpandedView.requestFocus(View.FOCUS_FORWARD);
         mTrackingView.setVisibility(View.VISIBLE);
         mExpandedView.setVisibility(View.VISIBLE);
-
-        if (!mTicking) {
-            setDateViewVisibility(true, com.android.internal.R.anim.fade_in);
-        }
     }
 
     public void animateExpand() {
@@ -1018,9 +1005,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
         if ((mDisabled & StatusBarManager.DISABLE_NOTIFICATION_ICONS) == 0) {
             setNotificationIconVisibility(true, com.android.internal.R.anim.fade_in);
-        }
-        if (mDateView.getVisibility() == View.VISIBLE) {
-            setDateViewVisibility(false, com.android.internal.R.anim.fade_out);
         }
 
         if (!mExpanded) {
@@ -1426,9 +1410,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             mTickerView.setVisibility(View.VISIBLE);
             mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.push_up_in, null));
             mIcons.startAnimation(loadAnim(com.android.internal.R.anim.push_up_out, null));
-            if (mExpandedVisible) {
-                setDateViewVisibility(false, com.android.internal.R.anim.push_up_out);
-            }
         }
 
         @Override
@@ -1439,9 +1420,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             mTickerView.setVisibility(View.GONE);
             mIcons.startAnimation(loadAnim(com.android.internal.R.anim.push_down_in, null));
             mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.push_down_out, null));
-            if (mExpandedVisible) {
-                setDateViewVisibility(true, com.android.internal.R.anim.push_down_in);
-            }
         }
 
         void tickerHalting() {
@@ -1451,9 +1429,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             mTickerView.setVisibility(View.GONE);
             mIcons.startAnimation(loadAnim(com.android.internal.R.anim.fade_in, null));
             mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.fade_out, null));
-            if (mExpandedVisible) {
-                setDateViewVisibility(true, com.android.internal.R.anim.fade_in);
-            }
         }
     }
 
@@ -1596,15 +1571,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     }
 
     void onTrackingViewDetached() {
-    }
-
-    void setDateViewVisibility(boolean visible, int anim) {
-        if(mHasSoftButtons && mButtonsLeft)
-            return;
-
-        mDateView.setUpdates(visible);
-        mDateView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-        mDateView.startAnimation(loadAnim(anim, null));
     }
 
     void setNotificationIconVisibility(boolean visible, int anim) {
@@ -1792,6 +1758,17 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         }
     };
 
+    private final View.OnClickListener mSettingsButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Context context = v.getContext();
+            Intent intent = new Intent("android.settings.SETTINGS");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            animateCollapse();
+       }
+    };
+
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -1874,7 +1851,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             mCmBatteryMiniIcon.updateMatrix();
             recreateStatusBar();
         } else {
-            mClearButton.setText(getText(R.string.status_bar_clear_all_button));
             mOngoingTitle.setText(getText(R.string.status_bar_ongoing_events_title));
             mLatestTitle.setText(getText(R.string.status_bar_latest_events_title));
             mNoNotificationsTitle.setText(getText(R.string.status_bar_no_notifications_title));
