@@ -36,6 +36,7 @@ public class CmBatteryText extends TextView {
 
     // battery style preferences
     private static final int BATTERY_STYLE_PERCENT   = 1;
+    private static final int BATTERY_STYLE_ICON_PCT  = 3;
     private int mStatusBarBattery;
 
     Handler mHandler;
@@ -120,7 +121,7 @@ public class CmBatteryText extends TextView {
      */
     final void updateCmBatteryText(Intent intent) {
         int level = intent.getIntExtra("level", 0);
-        setText(Integer.toString(level));
+        setText(Integer.toString(level) + "%");
     }
 
     /**
@@ -134,7 +135,7 @@ public class CmBatteryText extends TextView {
                 Settings.System.STATUS_BAR_BATTERY, 2));
         mStatusBarBattery = Integer.valueOf(statusBarBattery);
 
-        if (mStatusBarBattery == BATTERY_STYLE_PERCENT) {
+        if ((mStatusBarBattery == BATTERY_STYLE_PERCENT) || (mStatusBarBattery == BATTERY_STYLE_ICON_PCT)) {
             setVisibility(View.VISIBLE);
         } else {
             setVisibility(View.GONE);

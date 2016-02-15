@@ -2311,9 +2311,10 @@ public final class Settings {
 
         /**
          * Display style of the status bar battery information
-         * 0: Display the stock battery information
-         * 1: Display cm battery percentage implementation / dont show stock icon
-         * 2: Hide the battery information
+         * 0: Icon
+         * 1: Percentage text
+         * 2: Hidden
+         * 3: Icon w/ percentage text
          * default: 0
          * @hide
          */

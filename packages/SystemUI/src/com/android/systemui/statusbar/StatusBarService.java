@@ -22,7 +22,6 @@ import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarIconList;
 import com.android.internal.statusbar.StatusBarNotification;
-import com.android.systemui.statusbar.CmBatteryMiniIcon.SettingsObserver;
 import com.android.systemui.statusbar.powerwidget.PowerWidget;
 import com.android.systemui.R;
 import android.os.IPowerManager;
@@ -142,7 +141,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     ImageView mClearButton;
     ViewGroup mClearButtonParent;
     ImageView mSettingsButton;
-    CmBatteryMiniIcon mCmBatteryMiniIcon;
     // drag bar
     CloseDragHandle mCloseView;
     // ongoing
@@ -395,7 +393,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mNotificationIcons = (IconMerger)sb.findViewById(R.id.notificationIcons);
         mIcons = (LinearLayout)sb.findViewById(R.id.icons);
         mTickerView = sb.findViewById(R.id.ticker);
-        mCmBatteryMiniIcon = (CmBatteryMiniIcon)sb.findViewById(R.id.CmBatteryMiniIcon);
 
         /* Destroy any existing widgets before recreating the expanded dialog
          * to ensure there are no lost context issues */
@@ -1847,8 +1844,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         if (newTheme != null &&
                 (mCurrentTheme == null || !mCurrentTheme.equals(newTheme))) {
             mCurrentTheme = (CustomTheme)newTheme.clone();
-            mCmBatteryMiniIcon.updateIconCache();
-            mCmBatteryMiniIcon.updateMatrix();
             recreateStatusBar();
         } else {
             mOngoingTitle.setText(getText(R.string.status_bar_ongoing_events_title));

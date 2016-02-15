@@ -88,6 +88,7 @@ public class StatusBarPolicy {
     private static final int BATTERY_STYLE_NORMAL    = 0;
     private static final int BATTERY_STYLE_PERCENT   = 1;
     private static final int BATTERY_STYLE_GONE      = 2;
+    private static final int BATTERY_STYLE_ICON_PCT  = 3;
 
     private static final int INET_CONDITION_THRESHOLD = 50;
 
@@ -810,12 +811,10 @@ public class StatusBarPolicy {
         final int id = intent.getIntExtra("icon-small", 0);
         int level = intent.getIntExtra("level", 0);
         mService.setIcon("battery", id, level);
-        if(mStatusBarBattery == BATTERY_STYLE_NORMAL) {
-                mService.setIconVisibility("battery", true);
-        } else if (mStatusBarBattery == BATTERY_STYLE_PERCENT) {
-                mService.setIconVisibility("battery", false);
-        } else if (mStatusBarBattery == BATTERY_STYLE_GONE) {
-                mService.setIconVisibility("battery", false);
+        if((mStatusBarBattery == BATTERY_STYLE_NORMAL) || (mStatusBarBattery == BATTERY_STYLE_ICON_PCT)) {
+            mService.setIconVisibility("battery", true);
+        } else {
+            mService.setIconVisibility("battery", false);
         }
 
         boolean plugged = intent.getIntExtra("plugged", 0) != 0;
@@ -1665,10 +1664,10 @@ public class StatusBarPolicy {
                 Settings.System.STATUS_BAR_BATTERY, 0);
         mStatusBarBattery = Integer.valueOf(statusBarBattery);
 
-        if (mStatusBarBattery == BATTERY_STYLE_NORMAL) {
-                mService.setIconVisibility("battery", true);
-        } else if (mStatusBarBattery == BATTERY_STYLE_PERCENT || mStatusBarBattery == BATTERY_STYLE_GONE) {
-                mService.setIconVisibility("battery", false);
+        if((mStatusBarBattery == BATTERY_STYLE_NORMAL) || (mStatusBarBattery == BATTERY_STYLE_ICON_PCT)) {
+            mService.setIconVisibility("battery", true);
+        } else {
+            mService.setIconVisibility("battery", false);
         }
 
         mShowHeadset = (Settings.System.getInt(resolver,
