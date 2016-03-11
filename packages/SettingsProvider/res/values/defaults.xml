@@ -33,7 +33,7 @@
     <bool name="def_haptic_feedback">true</bool>
     
     <bool name="def_bluetooth_on">false</bool>
-    <bool name="def_install_non_market_apps">false</bool>
+    <bool name="def_install_non_market_apps">true</bool>
     <!-- Comma-separated list of location providers. 
          Network location is off by default because it requires
          user opt-in via Setup Wizard or Settings.  
@@ -75,4 +75,10 @@
 
     <!-- Default for Settings.System.VIBRATE_IN_SILENT -->
     <bool name="def_vibrate_in_silent">true</bool>
+
+    <!-- Default for Settings.System.STATUS_BAR_AM_PM -->
+    <integer name="def_clock_am_pm_style">1</integer> <!-- Small -->
+
+    <!-- Default for Settings.System.STATUS_BAR_BATTERY -->
+    <integer name="def_battery_style">3</integer> <!-- Icon w/ percent -->
 </resources>

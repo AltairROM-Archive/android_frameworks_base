@@ -1073,6 +1073,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.System.NOTIFICATIONS_USE_RING_VOLUME,
                     R.bool.def_notifications_use_ring_volume);
 
+            loadIntegerSetting(stmt, Settings.System.STATUS_BAR_AM_PM,
+                    R.integer.def_clock_am_pm_style);
+
+            loadIntegerSetting(stmt, Settings.System.STATUS_BAR_BATTERY,
+                    R.integer.def_battery_style);
+
         } finally {
             if (stmt != null) stmt.close();
         }
