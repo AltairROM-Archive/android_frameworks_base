@@ -64,6 +64,7 @@ import com.android.systemui.qs.tiles.ProfilesTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenTimeoutTile;
 import com.android.systemui.qs.tiles.SyncTile;
+import com.android.systemui.qs.tiles.SystemUIRestartTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.VolumeTile;
 import com.android.systemui.qs.tiles.WifiTile;
@@ -374,7 +375,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("heads_up")) return new HeadsUpTile(this);
         else if (tileSpec.equals("battery_saver")) return new BatterySaverTile(this);
         else if (tileSpec.equals("caffeine")) return new CaffeineTile(this);
-
+        else if (tileSpec.equals("restart_systemui")) return new SystemUIRestartTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else if (TextUtils.split(tileSpec, "\\|").length == 3) {
             /** restores placeholder for
@@ -473,7 +474,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (spec.equals("heads_up")) return R.string.quick_settings_heads_up_label;
         else if (spec.equals("battery_saver")) return R.string.quick_settings_battery_saver_label;
         else if (spec.equals("caffeine")) return R.string.quick_settings_caffeine_label;
-
+        else if (spec.equals("restart_systemui")) return R.string.quick_settings_systemui_restart_label;
         return 0;
     }
 
@@ -505,6 +506,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (spec.equals("heads_up")) return R.drawable.ic_qs_heads_up_on;
         else if (spec.equals("battery_saver")) return R.drawable.ic_qs_battery_saver_on;
         else if (spec.equals("caffeine")) return R.drawable.ic_qs_caffeine_on;
+        else if (spec.equals("restart_systemui")) return R.drawable.ic_qs_systemui_restart;
         return 0;
     }
 
