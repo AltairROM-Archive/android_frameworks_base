@@ -18,6 +18,7 @@ package com.android.internal.statusbar;
 
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import android.content.Intent; 
 
 import com.android.internal.statusbar.IStatusBar;
 import com.android.internal.statusbar.StatusBarIcon;
@@ -67,6 +68,10 @@ interface IStatusBarService
     void toggleRecentApps();
     void preloadRecentApps();
     void cancelPreloadRecentApps();
+    void toggleLastApp();
+    void toggleKillApp();
+    void toggleScreenshot();
+    void toggleOrientationListener(boolean enable);
 
     /**
      * Notifies the status bar that an app transition is pending to delay applying some flags with
@@ -90,4 +95,8 @@ interface IStatusBarService
     void appTransitionStarting(long statusBarAnimationsStartTime, long statusBarAnimationsDuration);
 
     void startAssist(in Bundle args);
+    void showCustomIntentAfterKeyguard(inout Intent intent);
+
+    void setAutoRotate(boolean enabled);
+    void screenPinningStateChanged(boolean enabled);
 }

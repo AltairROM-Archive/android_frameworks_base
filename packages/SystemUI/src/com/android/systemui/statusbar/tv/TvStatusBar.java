@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.tv;
 
+import android.content.Intent;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService.RankingMap;
 import android.service.notification.StatusBarNotification;
@@ -103,6 +104,14 @@ public class TvStatusBar extends BaseStatusBar {
     public void notificationLightPulse(int argb, int onMillis, int offMillis) {
     }
 
+    @Override // CommandQueue
+    public void showCustomIntentAfterKeyguard(Intent intent) {
+    }
+ 
+    @Override // CommandQueue
+    public void setAutoRotate(boolean enabled) {
+    }
+
     @Override
     protected void setAreThereNotifications() {
     }
@@ -185,5 +194,13 @@ public class TvStatusBar extends BaseStatusBar {
 
     protected boolean isSnoozedPackage(StatusBarNotification sbn) {
         return false;
+    }
+
+    @Override
+    public void screenPinningStateChanged(boolean enabled) {
+    }
+
+    @Override
+    public void toggleOrientationListener(boolean enable) {
     }
 }

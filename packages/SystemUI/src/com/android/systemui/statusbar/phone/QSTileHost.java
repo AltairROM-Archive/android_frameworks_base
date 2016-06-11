@@ -55,7 +55,9 @@ import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.LocationTile;
+import com.android.systemui.qs.tiles.NavBarTile;
 import com.android.systemui.qs.tiles.LockscreenToggleTile;
+
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.PerfProfileTile;
 import com.android.systemui.qs.tiles.ProfilesTile;
@@ -295,7 +297,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
     public SecurityController getSecurityController() {
         return mSecurity;
     }
-    
+
     @Override
     public void onTuningChanged(String key, String newValue) {
         if (!CMSettings.Secure.QS_TILES.equals(key)) {
@@ -368,9 +370,11 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("performance")) return new PerfProfileTile(this);
         else if (tileSpec.equals("lockscreen")) return  new LockscreenToggleTile(this);
         else if (tileSpec.equals("ambient_display")) return new AmbientDisplayTile(this);
+        else if (tileSpec.equals("navbar")) return new NavBarTile(this);
         else if (tileSpec.equals("heads_up")) return new HeadsUpTile(this);
         else if (tileSpec.equals("battery_saver")) return new BatterySaverTile(this);
         else if (tileSpec.equals("caffeine")) return new CaffeineTile(this);
+
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else if (TextUtils.split(tileSpec, "\\|").length == 3) {
             /** restores placeholder for
@@ -465,9 +469,11 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (spec.equals("performance")) return R.string.qs_tile_performance;
         else if (spec.equals("lockscreen")) return R.string.quick_settings_lockscreen_label;
         else if (spec.equals("ambient_display")) return R.string.quick_settings_ambient_display_label;
+        else if (spec.equals("navbar")) return R.string.quick_settings_navigation_bar;
         else if (spec.equals("heads_up")) return R.string.quick_settings_heads_up_label;
         else if (spec.equals("battery_saver")) return R.string.quick_settings_battery_saver_label;
         else if (spec.equals("caffeine")) return R.string.quick_settings_caffeine_label;
+
         return 0;
     }
 
@@ -495,6 +501,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (spec.equals("performance")) return R.drawable.ic_qs_perf_profile;
         else if (spec.equals("lockscreen")) return R.drawable.ic_qs_lock_screen_on;
         else if (spec.equals("ambient_display")) return R.drawable.ic_qs_ambientdisplay_on;
+        else if (spec.equals("navbar")) return R.drawable.ic_qs_smartbar;
         else if (spec.equals("heads_up")) return R.drawable.ic_qs_heads_up_on;
         else if (spec.equals("battery_saver")) return R.drawable.ic_qs_battery_saver_on;
         else if (spec.equals("caffeine")) return R.drawable.ic_qs_caffeine_on;
