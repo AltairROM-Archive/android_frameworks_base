@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="20"
+    android:viewportHeight="18.39815"
+    android:width="20dp"
+    android:height="18.398146dp">
+    <group
+        android:translateX="3.408806E-08"
+        android:translateY="-980.3705">
+        <group
+            android:scaleX="0.8764338"
+            android:scaleY="0.8764338"
+            android:translateX="7.0391E-08"
+            android:translateY="126.3652">
+            <path
+                android:pathData="M14.815557 982.40942A6.8155565 6.8155565 0 0 1 8 989.22498 6.8155565 6.8155565 0 0 1 1.1844435 982.40942 6.8155565 6.8155565 0 0 1 8 975.59387a6.8155565 6.8155565 0 0 1 6.815557 6.81555z"
+                android:strokeWidth="2.368887"
+                android:strokeLineJoin="round"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="@color/icon_color_sysbar_search" />
+            <group
+                android:rotation="-50.80632">
+                <path
+                    android:pathData="M-757.55524 633.68079l1.57235 0 0 11.26834 -1.57235 0z"
+                    android:strokeWidth="1.427653"
+                    android:strokeLineJoin="round"
+                    android:fillColor="@color/icon_color_sysbar_search"
+                    android:strokeLineCap="round"
+                    android:strokeMiterLimit="4"
+                    android:strokeColor="@color/icon_color_sysbar_search" />
+            </group>
+        </group>
+    </group>
+</vector>

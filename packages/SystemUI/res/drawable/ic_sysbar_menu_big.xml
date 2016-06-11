@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="20"
+    android:viewportHeight="20"
+    android:width="20dp"
+    android:height="20dp">
+    <group
+        android:translateY="-1032.362">
+        <path
+            android:pathData="M1.1979874 1033.5601l17.6040226 0 0 17.604 -17.6040226 0z"
+            android:strokeWidth="2.395975"
+            android:strokeLineJoin="round"
+            android:strokeLineCap="butt"
+            android:strokeMiterLimit="4"
+            android:strokeColor="@color/icon_color_sysbar_menu" />
+        <path
+            android:pathData="M11.599999 1042.4402a1.5999998 1.5999998 0 0 1 -1.6 1.6 1.5999998 1.5999998 0 0 1 -1.5999997 -1.6 1.5999998 1.5999998 0 0 1 1.5999997 -1.6 1.5999998 1.5999998 0 0 1 1.6 1.6z"
+            android:strokeLineJoin="round"
+            android:fillColor="@color/icon_color_sysbar_menu"
+            android:strokeLineCap="butt"
+            android:strokeMiterLimit="4" />
+        <path
+            android:pathData="M11.599999 1037.3816a1.5999997 1.5999997 0 0 1 -1.6 1.6 1.5999997 1.5999997 0 0 1 -1.5999996 -1.6 1.5999997 1.5999997 0 0 1 1.5999996 -1.6 1.5999997 1.5999997 0 0 1 1.6 1.6z"
+            android:strokeLineJoin="round"
+            android:fillColor="@color/icon_color_sysbar_menu"
+            android:strokeLineCap="butt"
+            android:strokeMiterLimit="4" />
+        <path
+            android:pathData="M11.599999 1047.4988a1.5999997 1.5999997 0 0 1 -1.6 1.6 1.5999997 1.5999997 0 0 1 -1.5999996 -1.6 1.5999997 1.5999997 0 0 1 1.5999996 -1.6 1.5999997 1.5999997 0 0 1 1.6 1.6z"
+            android:strokeLineJoin="round"
+            android:fillColor="@color/icon_color_sysbar_menu"
+            android:strokeLineCap="butt"
+            android:strokeMiterLimit="4" />
+    </group>
+</vector>

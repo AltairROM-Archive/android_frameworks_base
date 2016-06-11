@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="20"
+    android:viewportHeight="20"
+    android:width="20dp"
+    android:height="20dp">
+    <group
+        android:translateX="0.3474419"
+        android:translateY="-1032.71">
+        <path
+            android:pathData="M0.85066658 1033.9077l17.60378042 0 0 17.6038 -17.60378042 0z"
+            android:strokeWidth="2.396217"
+            android:strokeLineJoin="round"
+            android:strokeLineCap="butt"
+            android:strokeMiterLimit="4"
+            android:strokeColor="@color/icon_color_sysbar_recent" />
+    </group>
+</vector>
