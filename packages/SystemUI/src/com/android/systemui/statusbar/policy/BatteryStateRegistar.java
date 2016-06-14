@@ -21,6 +21,7 @@ public interface BatteryStateRegistar {
         void onBatteryLevelChanged(boolean present, int level, boolean pluggedIn, boolean charging);
         void onPowerSaveChanged();
         void onBatteryStyleChanged(int style, int percentMode);
+        void onBatteryColorsChanged(boolean useCustomColors, int fillColor, int boltColor, int textColor);
     }
 
     public void addStateChangedCallback(BatteryStateChangeCallback cb);

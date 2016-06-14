@@ -40,6 +40,7 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
 
     public static final int STYLE_ICON_PORTRAIT = 0;
     public static final int STYLE_CIRCLE = 2;
+    public static final int STYLE_DOTTED_CIRCLE = 3;
     public static final int STYLE_GONE = 4;
     public static final int STYLE_ICON_LANDSCAPE = 5;
     public static final int STYLE_TEXT = 6;
@@ -60,6 +61,10 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
 
     private int mStyle;
     private int mPercentMode;
+    private boolean mUseCustomColors;
+    private int mFillColor;
+    private int mBoltColor;
+    private int mTextColor;
     private int mUserId;
     private SettingsObserver mObserver;
 
@@ -98,6 +103,7 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
         mChangeCallbacks.add(cb);
         cb.onBatteryLevelChanged(mPresent, mLevel, mPluggedIn, mCharging);
         cb.onBatteryStyleChanged(mStyle, mPercentMode);
+        cb.onBatteryColorsChanged(mUseCustomColors, mFillColor, mBoltColor, mTextColor);
     }
 
     @Override
@@ -159,6 +165,8 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
     private void fireSettingsChanged() {
         final int N = mChangeCallbacks.size();
         for (int i = 0; i < N; i++) {
+            mChangeCallbacks.get(i).onBatteryColorsChanged(mUseCustomColors, mFillColor,
+                mBoltColor, mTextColor);
             mChangeCallbacks.get(i).onBatteryStyleChanged(mStyle, mPercentMode);
         }
     }
@@ -171,6 +179,14 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
                 CMSettings.System.getUriFor(CMSettings.System.STATUS_BAR_BATTERY_STYLE);
         private final Uri PERCENT_URI =
                 CMSettings.System.getUriFor(CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT);
+        private final Uri USE_CUSTOM_COLORS_URI =
+                CMSettings.System.getUriFor(CMSettings.System.STATUS_BAR_BATTERY_USE_CUSTOM_COLORS);
+        private final Uri CUSTOM_COLOR_CHARGE_URI =
+                CMSettings.System.getUriFor(CMSettings.System.STATUS_BAR_BATTERY_CUSTOM_COLOR_CHARGE);
+        private final Uri CUSTOM_COLOR_BOLT_URI =
+                CMSettings.System.getUriFor(CMSettings.System.STATUS_BAR_BATTERY_CUSTOM_COLOR_BOLT);
+        private final Uri CUSTOM_COLOR_TEXT_URI =
+                CMSettings.System.getUriFor(CMSettings.System.STATUS_BAR_BATTERY_CUSTOM_COLOR_TEXT);
 
         public SettingsObserver(Context context, Handler handler) {
             super(handler);
@@ -183,6 +199,10 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
             }
             mResolver.registerContentObserver(STYLE_URI, false, this, mUserId);
             mResolver.registerContentObserver(PERCENT_URI, false, this, mUserId);
+            mResolver.registerContentObserver(USE_CUSTOM_COLORS_URI, false, this, mUserId);
+            mResolver.registerContentObserver(CUSTOM_COLOR_CHARGE_URI, false, this, mUserId);
+            mResolver.registerContentObserver(CUSTOM_COLOR_BOLT_URI, false, this, mUserId);
+            mResolver.registerContentObserver(CUSTOM_COLOR_TEXT_URI, false, this, mUserId);
             mRegistered = true;
 
             update();
@@ -198,6 +218,14 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
                     CMSettings.System.STATUS_BAR_BATTERY_STYLE, 0, mUserId);
             mPercentMode = CMSettings.System.getIntForUser(mResolver,
                     CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0, mUserId);
+            mUseCustomColors = (CMSettings.System.getIntForUser(mResolver,
+                    CMSettings.System.STATUS_BAR_BATTERY_USE_CUSTOM_COLORS, 0, mUserId) == 1);
+            mFillColor = CMSettings.System.getIntForUser(mResolver,
+                    CMSettings.System.STATUS_BAR_BATTERY_CUSTOM_COLOR_CHARGE, 0, mUserId);
+            mBoltColor = CMSettings.System.getIntForUser(mResolver,
+                    CMSettings.System.STATUS_BAR_BATTERY_CUSTOM_COLOR_BOLT, 0, mUserId);
+            mTextColor = CMSettings.System.getIntForUser(mResolver,
+                    CMSettings.System.STATUS_BAR_BATTERY_CUSTOM_COLOR_TEXT, 0, mUserId);
 
             fireSettingsChanged();
         }

@@ -1144,6 +1144,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 public void onBatteryStyleChanged(int style, int percentMode) {
                     // noop
                 }
+
+                @Override
+                public void onBatteryColorsChanged(boolean useCustomColors, int fillColor, int boltColor, int textColor) {
+                    // noop
+                }
             });
         }
         if (mBatteryManager.isDockBatterySupported()) {

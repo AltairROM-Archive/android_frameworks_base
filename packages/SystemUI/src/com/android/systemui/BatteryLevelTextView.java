@@ -19,13 +19,17 @@ package com.android.systemui;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BatteryStateRegistar;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
+
+import cyanogenmod.providers.CMSettings;
 
 public class BatteryLevelTextView extends TextView implements
         BatteryController.BatteryStateChangeCallback{
@@ -39,12 +43,23 @@ public class BatteryLevelTextView extends TextView implements
     private int mRequestedVisibility;
     private int mStyle;
     private int mPercentMode;
+    private boolean mUseCustomColors;
+    private int mTextColor;
 
     public BatteryLevelTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         // setBatteryStateRegistar (if called) will made the view visible and ready to be hidden
         // if the view shouldn't be displayed. Otherwise this view should be hidden from start.
         mRequestedVisibility = GONE;
+
+        ContentResolver resolver = context.getContentResolver();
+        mUseCustomColors = (CMSettings.System.getInt(resolver,
+            CMSettings.System.STATUS_BAR_BATTERY_USE_CUSTOM_COLORS,
+            0) != 0);
+        mTextColor = CMSettings.System.getInt(resolver,
+            CMSettings.System.STATUS_BAR_BATTERY_CUSTOM_COLOR_TEXT,
+            Color.WHITE);
+        setTextColor();
     }
 
     public void setForceShown(boolean forceShow) {
@@ -96,8 +111,19 @@ public class BatteryLevelTextView extends TextView implements
     public void onBatteryStyleChanged(int style, int percentMode) {
         mStyle = style;
         mPercentMode = percentMode;
+        setTextColor();
         updateVisibility();
     }
+
+    @Override
+    public void onBatteryColorsChanged(boolean useCustomColors, int fillColor,
+            int boltColor, int textColor) {
+        mUseCustomColors = useCustomColors;
+        mTextColor = textColor;
+        setTextColor();
+        updateVisibility();
+    }
+
 
     @Override
     public void onAttachedToWindow() {
@@ -117,6 +143,14 @@ public class BatteryLevelTextView extends TextView implements
 
         if (mBatteryStateRegistar != null) {
             mBatteryStateRegistar.removeStateChangedCallback(this);
+        }
+    }
+
+    public void setTextColor() {
+        if (mUseCustomColors) {
+            setTextColor(mTextColor);
+        } else {
+            setTextColor(Color.WHITE);
         }
     }
 

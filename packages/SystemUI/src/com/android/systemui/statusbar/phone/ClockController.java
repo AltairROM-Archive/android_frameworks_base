@@ -13,6 +13,9 @@ import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.statusbar.policy.Clock;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import cyanogenmod.providers.CMSettings;
 
 /**
@@ -33,6 +36,11 @@ public class ClockController {
     private int mClockLocation;
     private int mAmPmStyle;
     private int mIconTint = Color.WHITE;
+    private boolean mClockShowSeconds = false;
+    private int mClockDateDisplay = Clock.CLOCK_DATE_DISPLAY_GONE;
+    private int mClockDateStyle = Clock.CLOCK_DATE_STYLE_REGULAR;
+    private String mClockDateFormat = "";
+    private int mClockFontStyle = Clock.FONT_NORMAL;
 
     class SettingsObserver extends UserContentObserver {
         SettingsObserver(Handler handler) {
@@ -47,6 +55,20 @@ public class ClockController {
                     CMSettings.System.STATUS_BAR_AM_PM), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(CMSettings.System.getUriFor(
                     CMSettings.System.STATUS_BAR_CLOCK), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_CLOCK_FONT_STYLE), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_CLOCK_SHOW_SECONDS), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_CLOCK_DATE_DISPLAY), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_CLOCK_DATE_STYLE), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_CLOCK_DATE_FORMAT), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_CLOCK_USE_CUSTOM_COLOR), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_CLOCK_CUSTOM_COLOR), false, this, UserHandle.USER_ALL);
             updateSettings();
         }
 
@@ -61,6 +83,9 @@ public class ClockController {
             updateSettings();
         }
     }
+
+    private final Handler handler = new Handler();
+    TimerTask second;
 
     public ClockController(View statusBar, IconMerger notificationIcons, Handler handler) {
         mRightClock = (Clock) statusBar.findViewById(R.id.clock);
@@ -101,6 +126,11 @@ public class ClockController {
         mActiveClock = getClockForCurrentLocation();
         mActiveClock.setVisibility(View.VISIBLE);
         mActiveClock.setAmPmStyle(mAmPmStyle);
+        mActiveClock.setShowSeconds(mClockShowSeconds);
+        mActiveClock.setDateDisplay(mClockDateDisplay);
+        mActiveClock.setDateStyle(mClockDateStyle);
+        mActiveClock.setDateFormat(mClockDateFormat);
+        mActiveClock.setFontStyle(mClockFontStyle);
 
         setClockAndDateStatus();
         setTextColor(mIconTint);
@@ -115,6 +145,55 @@ public class ClockController {
         mClockLocation = CMSettings.System.getIntForUser(
                 resolver, CMSettings.System.STATUS_BAR_CLOCK, STYLE_CLOCK_RIGHT,
                 UserHandle.USER_CURRENT);
+        mClockShowSeconds = (CMSettings.System.getIntForUser(resolver,
+                CMSettings.System.STATUS_BAR_CLOCK_SHOW_SECONDS, 0,
+                UserHandle.USER_CURRENT) != 0);
+        mClockDateDisplay = CMSettings.System.getIntForUser(resolver,
+                CMSettings.System.STATUS_BAR_CLOCK_DATE_DISPLAY, Clock.CLOCK_DATE_DISPLAY_GONE,
+                UserHandle.USER_CURRENT);
+        mClockDateStyle = CMSettings.System.getIntForUser(resolver,
+                CMSettings.System.STATUS_BAR_CLOCK_DATE_STYLE, Clock.CLOCK_DATE_STYLE_REGULAR,
+                UserHandle.USER_CURRENT);
+        mClockDateFormat = CMSettings.System.getString(resolver,
+                CMSettings.System.STATUS_BAR_CLOCK_DATE_FORMAT);
+        mClockFontStyle = CMSettings.System.getIntForUser(resolver,
+                CMSettings.System.STATUS_BAR_CLOCK_FONT_STYLE, Clock.FONT_NORMAL,
+                UserHandle.USER_CURRENT);
+
+        second = new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                Runnable updater = new Runnable()
+                {
+                    public void run()
+                    {
+                        updateActiveClock();
+                    }
+                };
+                handler.post(updater);
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(second, 0, 1001);
+
+        int defaultColor = mContext.getResources().getColor(R.color.status_bar_clock_color);
+        int clockColor = defaultColor;
+        if (CMSettings.System.getIntForUser(resolver,
+                CMSettings.System.STATUS_BAR_CLOCK_USE_CUSTOM_COLOR, 0,
+                UserHandle.USER_CURRENT) != 0)
+        {
+            clockColor = CMSettings.System.getIntForUser(resolver,
+                    CMSettings.System.STATUS_BAR_CLOCK_CUSTOM_COLOR, defaultColor,
+                    UserHandle.USER_CURRENT);
+            if (clockColor == Integer.MIN_VALUE) {
+                // flag to reset the color
+                clockColor = defaultColor;
+            }
+        }
+        mIconTint = clockColor;
+
         updateActiveClock();
     }
 
@@ -133,7 +212,7 @@ public class ClockController {
     public void setTextColor(int iconTint) {
         mIconTint = iconTint;
         if (mActiveClock != null) {
-            mActiveClock.setTextColor(iconTint);
+            mActiveClock.setColor(iconTint);
         }
     }
 
