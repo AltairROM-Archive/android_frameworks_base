@@ -398,27 +398,35 @@ public class StatusBarIconController implements Tunable {
     }
 
     private void applyIconTint() {
-        for (int i = 0; i < mStatusIcons.getChildCount(); i++) {
-            StatusBarIconView v = (StatusBarIconView) mStatusIcons.getChildAt(i);
-            v.setImageTintList(ColorStateList.valueOf(mIconTint));
-        }
-        mSignalCluster.setIconTint(mIconTint, mDarkIntensity);
-        mMoreIcon.setImageTintList(ColorStateList.valueOf(mIconTint));
         mBatteryLevelTextView.setTextColor(mIconTint);
-        mBatteryMeterView.setDarkIntensity(mDarkIntensity);
         mClockController.setTextColor(mIconTint);
-        applyNotificationIconsTint();
+        if (isIconTintEnabled()) {
+            for (int i = 0; i < mStatusIcons.getChildCount(); i++) {
+                StatusBarIconView v = (StatusBarIconView) mStatusIcons.getChildAt(i);
+                v.setImageTintList(ColorStateList.valueOf(mIconTint));
+            }
+            mSignalCluster.setIconTint(mIconTint, mDarkIntensity);
+            mMoreIcon.setImageTintList(ColorStateList.valueOf(mIconTint));
+            mBatteryMeterView.setDarkIntensity(mDarkIntensity);
+            applyNotificationIconsTint();
+        }
     }
 
     private void applyNotificationIconsTint() {
-        for (int i = 0; i < mNotificationIcons.getChildCount(); i++) {
-            StatusBarIconView v = (StatusBarIconView) mNotificationIcons.getChildAt(i);
-            boolean isPreL = Boolean.TRUE.equals(v.getTag(R.id.icon_is_pre_L));
-            boolean colorize = !isPreL || isGrayscale(v);
-            if (colorize) {
-                v.setImageTintList(ColorStateList.valueOf(mIconTint));
+        if (isIconTintEnabled()) {
+            for (int i = 0; i < mNotificationIcons.getChildCount(); i++) {
+                StatusBarIconView v = (StatusBarIconView) mNotificationIcons.getChildAt(i);
+                boolean isPreL = Boolean.TRUE.equals(v.getTag(R.id.icon_is_pre_L));
+                boolean colorize = !isPreL || isGrayscale(v);
+                if (colorize) {
+                    v.setImageTintList(ColorStateList.valueOf(mIconTint));
+                }
             }
         }
+    }
+
+    private boolean isIconTintEnabled() {
+        return (mContext.getColor(R.color.notification_icon_color) != Color.TRANSPARENT);
     }
 
     private boolean isGrayscale(StatusBarIconView v) {

@@ -464,14 +464,20 @@ public class SignalClusterView
     }
 
     private void applyIconTint() {
-        setTint(mVpn, mIconTint);
-        setTint(mAirplane, mIconTint);
-        applyDarkIntensity(mDarkIntensity, mNoSims, mNoSimsDark);
-        applyDarkIntensity(mDarkIntensity, mWifi, mWifiDark);
-        applyDarkIntensity(mDarkIntensity, mEthernet, mEthernetDark);
-        for (int i = 0; i < mPhoneStates.size(); i++) {
-            mPhoneStates.get(i).setIconTint(mIconTint, mDarkIntensity);
+        if (isIconTintEnabled()) {
+            setTint(mVpn, mIconTint);
+            setTint(mAirplane, mIconTint);
+            applyDarkIntensity(mDarkIntensity, mNoSims, mNoSimsDark);
+            applyDarkIntensity(mDarkIntensity, mWifi, mWifiDark);
+            applyDarkIntensity(mDarkIntensity, mEthernet, mEthernetDark);
+            for (int i = 0; i < mPhoneStates.size(); i++) {
+                mPhoneStates.get(i).setIconTint(mIconTint, mDarkIntensity);
+            }
         }
+    }
+
+    private boolean isIconTintEnabled() {
+        return (getContext().getColor(R.color.notification_icon_color) != Color.TRANSPARENT);
     }
 
     private void applyDarkIntensity(float darkIntensity, View lightIcon, View darkIcon) {

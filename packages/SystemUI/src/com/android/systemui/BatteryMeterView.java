@@ -411,7 +411,7 @@ public class BatteryMeterView extends View implements DemoMode,
             if (percent <= thresh) {
 
                 // Respect tinting for "normal" level
-                if (i == mColors.length-2) {
+                if (i == mColors.length-2 && isIconTintEnabled()) {
                     return mIconTint;
                 } else {
                     return color;
@@ -419,6 +419,10 @@ public class BatteryMeterView extends View implements DemoMode,
             }
         }
         return color;
+    }
+
+    private boolean isIconTintEnabled() {
+        return (getContext().getColor(R.color.notification_icon_color) != Color.TRANSPARENT);
     }
 
     public void setDarkIntensity(float darkIntensity) {
