@@ -66,7 +66,6 @@ public class BatteryMeterView extends View implements DemoMode,
         BATTERY_METER_ICON_PORTRAIT,
         BATTERY_METER_ICON_LANDSCAPE,
         BATTERY_METER_CIRCLE,
-        BATTERY_METER_DOTTED_CIRCLE,
         BATTERY_METER_TEXT
     }
 
@@ -325,9 +324,6 @@ public class BatteryMeterView extends View implements DemoMode,
         switch (style) {
             case BatteryController.STYLE_CIRCLE:
                 meterMode = BatteryMeterMode.BATTERY_METER_CIRCLE;
-                break;
-            case BatteryController.STYLE_DOTTED_CIRCLE:
-                meterMode = BatteryMeterMode.BATTERY_METER_DOTTED_CIRCLE;
                 break;
             case BatteryController.STYLE_GONE:
                 meterMode = BatteryMeterMode.BATTERY_METER_GONE;
@@ -659,8 +655,6 @@ public class BatteryMeterView extends View implements DemoMode,
             }
         }
 
-        private DashPathEffect mPathEffect;
-
         private void loadBatteryDrawables(Resources res, BatteryMeterMode mode) {
             if (isThemeApplied()) {
                 try {
@@ -786,7 +780,6 @@ public class BatteryMeterView extends View implements DemoMode,
             // not much we can do with zero width or height, we'll get another pass later
             if (mWidth <= 0 || mHeight <=0) return;
 
-            mPathEffect = new DashPathEffect(new float[]{3,2},0);
             final float widthDiv2 = mWidth / 2f;
             // text size is width / 2 - 2dp for wiggle room
             final float textSize = widthDiv2 - getResources().getDisplayMetrics().density * 2;
@@ -835,7 +828,6 @@ public class BatteryMeterView extends View implements DemoMode,
                 case BATTERY_METER_ICON_LANDSCAPE:
                     return R.drawable.ic_battery_landscape;
                 case BATTERY_METER_CIRCLE:
-                case BATTERY_METER_DOTTED_CIRCLE:
                     return R.drawable.ic_battery_circle;
                 case BATTERY_METER_ICON_PORTRAIT:
                     return R.drawable.ic_battery_portrait;
@@ -849,7 +841,6 @@ public class BatteryMeterView extends View implements DemoMode,
                 case BATTERY_METER_ICON_LANDSCAPE:
                     return R.style.BatteryMeterViewDrawable_Landscape;
                 case BATTERY_METER_CIRCLE:
-                case BATTERY_METER_DOTTED_CIRCLE:
                     return R.style.BatteryMeterViewDrawable_Circle;
                 case BATTERY_METER_ICON_PORTRAIT:
                     return R.style.BatteryMeterViewDrawable_Portrait;
@@ -890,7 +881,6 @@ public class BatteryMeterView extends View implements DemoMode,
                 newBoltDrawable.setBounds(bounds);
             }
             newBoltDrawable.getPaint().set(mTextAndBoltPaint);
-            newBoltDrawable.getPaint().setPathEffect(mPathEffect);
             if (mUseCustomColors && (mBoltColor != mFillColor)) {
                 if (mBoltDrawable != null) {
                     newBoltDrawable.setColorFilter(0xff000000 | mBoltColor, Mode.SRC_ATOP);
