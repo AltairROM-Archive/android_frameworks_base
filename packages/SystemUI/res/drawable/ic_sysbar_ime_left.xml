@@ -17,18 +17,18 @@
                 android:pathData="M0.4379285 1038.8002l1.1241428 0 0 13.1241 -1.1241428 0z"
                 android:strokeWidth="0.875857"
                 android:strokeLineJoin="round"
-                android:fillColor="@color/icon_color_sysbar_ime_left"
+                android:fillColor="#ffffff"
                 android:strokeLineCap="round"
                 android:strokeMiterLimit="4"
-                android:strokeColor="@color/icon_color_sysbar_ime_left" />
+                android:strokeColor="#ffffff" />
             <path
                 android:pathData="M0.83537996 1051.1976l12.32923904 0 0 0.3293 -12.32923904 0z"
                 android:strokeWidth="1.67076"
                 android:strokeLineJoin="round"
-                android:fillColor="@color/icon_color_sysbar_ime_left"
+                android:fillColor="#ffffff"
                 android:strokeLineCap="round"
                 android:strokeMiterLimit="4"
-                android:strokeColor="@color/icon_color_sysbar_ime_left" />
+                android:strokeColor="#ffffff" />
         </group>
     </group>
 </vector>
