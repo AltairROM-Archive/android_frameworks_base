@@ -714,9 +714,11 @@ public class BatteryMeterView extends View implements DemoMode,
                 Paint boltPaint = mTextAndBoltPaint;
                 if (!tracker.plugged) {
                     boltPaint = mClearPaint;
-                } else if (mUseCustomColors && (mBoltColor != mFillColor)) {
-                    mCustomBoltPaint.setColor(mBoltColor);
-                    boltPaint = mCustomBoltPaint;
+                } else if (mUseCustomColors) {
+                    if (mBoltColor != mFillColor) {
+                        mCustomBoltPaint.setColor(mBoltColor);
+                        boltPaint = mCustomBoltPaint;
+                    }
                 } else {
                     int fillColor = getContext().getColor(R.color.batterymeter_charge_color);
                     int boltColor = getContext().getColor(R.color.batterymeter_bolt_color);
@@ -755,9 +757,11 @@ public class BatteryMeterView extends View implements DemoMode,
                 String pctText = String.valueOf(SINGLE_DIGIT_PERCENT ? (level/10) : level);
                 mTextAndBoltPaint.setColor(getColorForLevel(level));
                 Paint textPaint = mTextAndBoltPaint;
-                if (mUseCustomColors && (mTextColor != mFillColor)) {
-                    mCustomTextPaint.setColor(0xff000000 | mTextColor);
-                    textPaint = mCustomTextPaint;
+                if (mUseCustomColors) {
+                    if (mTextColor != mFillColor) {
+                        mCustomTextPaint.setColor(0xff000000 | mTextColor);
+                        textPaint = mCustomTextPaint;
+                    }
                 } else {
                     int fillColor = getContext().getColor(R.color.batterymeter_charge_color);
                     int textColor = getContext().getColor(R.color.status_bar_battery_level_text_color);

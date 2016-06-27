@@ -42,6 +42,9 @@ public class ClockController {
     private String mClockDateFormat = "";
     private int mClockFontStyle = Clock.FONT_NORMAL;
 
+    private boolean mUseCustomColor;
+    private int mCustomTextColor;
+
     class SettingsObserver extends UserContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -178,23 +181,29 @@ public class ClockController {
         Timer timer = new Timer();
         timer.schedule(second, 0, 1001);
 
+        getTextColor();
         int defaultColor = mContext.getResources().getColor(R.color.status_bar_clock_color);
-        int clockColor = defaultColor;
-        if (CMSettings.System.getIntForUser(resolver,
-                CMSettings.System.STATUS_BAR_CLOCK_USE_CUSTOM_COLOR, 0,
-                UserHandle.USER_CURRENT) != 0)
-        {
-            clockColor = CMSettings.System.getIntForUser(resolver,
-                    CMSettings.System.STATUS_BAR_CLOCK_CUSTOM_COLOR, defaultColor,
-                    UserHandle.USER_CURRENT);
-            if (clockColor == Integer.MIN_VALUE) {
-                // flag to reset the color
-                clockColor = defaultColor;
-            }
-        }
-        mIconTint = clockColor;
+        mIconTint = mUseCustomColor ? mCustomTextColor : defaultColor;
 
         updateActiveClock();
+    }
+
+    private void getTextColor() {
+        ContentResolver resolver = mContext.getContentResolver();
+        mUseCustomColor = (CMSettings.System.getIntForUser(resolver,
+                CMSettings.System.STATUS_BAR_CLOCK_USE_CUSTOM_COLOR, 0,
+                UserHandle.USER_CURRENT) != 0);
+        if (mUseCustomColor)
+        {
+            int defaultColor = mContext.getResources().getColor(R.color.status_bar_clock_color);
+            mCustomTextColor = CMSettings.System.getIntForUser(resolver,
+                    CMSettings.System.STATUS_BAR_CLOCK_CUSTOM_COLOR, defaultColor,
+                    UserHandle.USER_CURRENT);
+            if (mCustomTextColor == Integer.MIN_VALUE) {
+                // flag to reset the color
+                mCustomTextColor = defaultColor;
+            }
+        }
     }
 
     private void setClockAndDateStatus() {
@@ -210,9 +219,14 @@ public class ClockController {
     }
 
     public void setTextColor(int iconTint) {
-        mIconTint = iconTint;
+        getTextColor();
+        if (mUseCustomColor) {
+            mIconTint = mCustomTextColor;
+        } else {
+            mIconTint = iconTint;
+        }
         if (mActiveClock != null) {
-            mActiveClock.setColor(iconTint);
+            mActiveClock.setColor(mIconTint);
         }
     }
 
