@@ -120,11 +120,6 @@ public class BatterySaverTile extends QSTile<QSTile.BooleanState> {
         public void onBatteryStyleChanged(int style, int percentMode) {
             // ignore
         }
-
-        @Override
-        public void onBatteryColorsChanged(boolean useCustomColors, int fillColor, int boltColor, int textColor) {
-            // noop
-        }
     };
 
     @Override
