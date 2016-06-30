@@ -398,8 +398,7 @@ public class StatusBarIconController implements Tunable {
     }
 
     private void applyIconTint() {
-        //mBatteryLevelTextView.setTextColor(mIconTint);
-        mBatteryLevelTextView.setTextColor();
+        mBatteryLevelTextView.setTextColor(mIconTint);
         mClockController.setTextColor(mIconTint);
         if (isIconTintEnabled()) {
             for (int i = 0; i < mStatusIcons.getChildCount(); i++) {
