@@ -78,6 +78,7 @@ public class SignalClusterView
     private ArrayList<PhoneState> mPhoneStates = new ArrayList<PhoneState>();
     private int mIconTint = Color.WHITE;
     private float mDarkIntensity;
+    public boolean mAllowTint = false;
 
     ViewGroup mEthernetGroup, mWifiGroup;
     View mNoSimsCombo;
@@ -455,6 +456,7 @@ public class SignalClusterView
     }
 
     public void setIconTint(int tint, float darkIntensity) {
+        mAllowTint = (mContext.getColor(R.color.notification_icon_color) != Color.TRANSPARENT);
         boolean changed = tint != mIconTint || darkIntensity != mDarkIntensity;
         mIconTint = tint;
         mDarkIntensity = darkIntensity;
@@ -464,13 +466,18 @@ public class SignalClusterView
     }
 
     private void applyIconTint() {
-        setTint(mVpn, mIconTint);
-        setTint(mAirplane, mIconTint);
+        mAllowTint = (mContext.getColor(R.color.notification_icon_color) != Color.TRANSPARENT);
+        if (mAllowTint) {
+            setTint(mVpn, mIconTint);
+            setTint(mAirplane, mIconTint);
+        }
         applyDarkIntensity(mDarkIntensity, mNoSims, mNoSimsDark);
         applyDarkIntensity(mDarkIntensity, mWifi, mWifiDark);
         applyDarkIntensity(mDarkIntensity, mEthernet, mEthernetDark);
-        for (int i = 0; i < mPhoneStates.size(); i++) {
-            mPhoneStates.get(i).setIconTint(mIconTint, mDarkIntensity);
+        if (mAllowTint) {
+            for (int i = 0; i < mPhoneStates.size(); i++) {
+                mPhoneStates.get(i).setIconTint(mIconTint, mDarkIntensity);
+            }
         }
     }
 
@@ -582,9 +589,12 @@ public class SignalClusterView
         }
 
         public void setIconTint(int tint, float darkIntensity) {
+            mAllowTint = (mContext.getColor(R.color.notification_icon_color) != Color.TRANSPARENT);
             applyDarkIntensity(darkIntensity, mMobile, mMobileDark);
-            setTint(mMobileType, tint);
-            setTint(mMobileRoaming, tint);
+            if (mAllowTint) {
+                setTint(mMobileType, tint);
+                setTint(mMobileRoaming, tint);
+            }
         }
     }
 }

@@ -31,6 +31,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -93,6 +94,8 @@ public class BatteryMeterView extends View implements DemoMode,
     protected BatteryTracker mTracker = new BatteryTracker();
     private BatteryMeterDrawable mBatteryMeterDrawable;
     private int mIconTint = Color.WHITE;
+    private boolean mAllowTint = false;
+    private int mBatteryFillColor;
 
     private int mCurrentBackgroundColor = 0;
     private int mCurrentFillColor = 0;
@@ -633,6 +636,8 @@ public class BatteryMeterView extends View implements DemoMode,
                 }
             }
 
+            mBatteryFillColor = mContext.getColor(R.color.batterymeter_charge_color);
+            mAllowTint = (mContext.getColor(R.color.notification_icon_color) != Color.TRANSPARENT);
             int drawableResId = getBatteryDrawableResourceForMode(mode);
             mBatteryDrawable = (LayerDrawable) res.getDrawable(drawableResId);
             mFrameDrawable = mBatteryDrawable.findDrawableByLayerId(R.id.battery_frame);
@@ -642,6 +647,11 @@ public class BatteryMeterView extends View implements DemoMode,
             // set the animated vector drawable we will be stop animating
             Drawable levelDrawable = mBatteryDrawable.findDrawableByLayerId(R.id.battery_fill);
             mLevelDrawable = new StopMotionVectorDrawable(levelDrawable);
+            if (!mAllowTint) {
+                if (levelDrawable != null) {
+                    levelDrawable.setColorFilter(mBatteryFillColor, Mode.SRC_ATOP);
+                }
+            }
             mBoltDrawable = mBatteryDrawable.findDrawableByLayerId(R.id.battery_charge_indicator);
         }
 
