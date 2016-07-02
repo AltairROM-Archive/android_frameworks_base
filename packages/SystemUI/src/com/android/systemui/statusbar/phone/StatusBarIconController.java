@@ -392,6 +392,12 @@ public class StatusBarIconController implements Tunable {
         applyIconTint();
     }
 
+    private int getIconTint(float darkIntensity, int iconTint) {
+        mDarkIntensity = darkIntensity;
+        return (int) ArgbEvaluator.getInstance().evaluate(darkIntensity,
+                iconTint, mDarkModeIconColorSingleTone);
+    }
+
     private void deferIconTintChange(float darkIntensity) {
         if (mTintChangePending && darkIntensity == mPendingDarkIntensity) {
             return;
@@ -405,8 +411,9 @@ public class StatusBarIconController implements Tunable {
         mBatteryTextColor = mContext.getColor(R.color.status_bar_battery_level_text_color);
         mClockTextColor = mContext.getColor(R.color.status_bar_clock_color);
         if (mAllowTint) {
-            mBatteryLevelTextView.setTextColor(mIconTint);
+            mBatteryLevelTextView.setColor(mDarkIntensity);
             mClockController.setTextColor(mIconTint);
+            mClockController.setDarkIntensity(mDarkIntensity);
             for (int i = 0; i < mStatusIcons.getChildCount(); i++) {
                 StatusBarIconView v = (StatusBarIconView) mStatusIcons.getChildAt(i);
                 v.setImageTintList(ColorStateList.valueOf(mIconTint));
@@ -414,7 +421,7 @@ public class StatusBarIconController implements Tunable {
             mSignalCluster.setIconTint(mIconTint, mDarkIntensity);
             mMoreIcon.setImageTintList(ColorStateList.valueOf(mIconTint));
         } else {
-            mBatteryLevelTextView.setTextColor(mBatteryTextColor);
+            mBatteryLevelTextView.setColor();
             mClockController.setTextColor(mClockTextColor);
         }
         mBatteryMeterView.setDarkIntensity(mDarkIntensity);
