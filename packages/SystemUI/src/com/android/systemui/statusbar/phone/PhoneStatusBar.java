@@ -526,6 +526,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.QS_NUM_TILE_COLUMNS), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_NUM_TILE_ROWS), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_ALPHA), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_SECURITY_ALPHA), false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -556,6 +560,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             // This method reads CMSettings.Secure.RECENTS_LONG_PRESS_ACTIVITY
             updateCustomRecentsLongPressHandler(false);
+
+            float overlayalpha = Settings.System.getFloatForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_ALPHA, 0.45f, UserHandle.USER_CURRENT);
+            if (mScrimController != null) {
+                mScrimController.setOverlayAlpha(overlayalpha);
+            }
+
+            float securityoverlayalpha = Settings.System.getFloatForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_SECURITY_ALPHA, 0.75f, UserHandle.USER_CURRENT);
+            if (mScrimController != null) {
+                mScrimController.setSecurityOverlayAlpha(securityoverlayalpha);
+            }
         }
     }
 

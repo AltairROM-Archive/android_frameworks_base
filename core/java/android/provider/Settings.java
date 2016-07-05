@@ -3665,6 +3665,18 @@ public final class Settings {
         public static final String STATUS_BAR_CARRIER_FONT_STYLE = "status_bar_carrier_font_style";
 
         /**
+         * Change lock screen alpha color
+         * @hide
+         */
+        public static final String LOCKSCREEN_ALPHA = "lockscreen_alpha";
+
+        /**
+         * Change locks creen security alpha color
+         * @hide
+         */
+        public static final String LOCKSCREEN_SECURITY_ALPHA = "lockscreen_security_alpha";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
