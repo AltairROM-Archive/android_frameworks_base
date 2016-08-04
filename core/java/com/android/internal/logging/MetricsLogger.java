@@ -49,6 +49,7 @@ public class MetricsLogger implements MetricsConstants {
 
 	//Custom ROM Settings
 	public static final int CUSTOM_ROM_SETTINGS = 999;
+    public static final int HALO_SETTINGS = 998;
 
     public static void visible(Context context, int category) throws IllegalArgumentException {
         if (Build.IS_DEBUGGABLE && category == VIEW_UNKNOWN) {
