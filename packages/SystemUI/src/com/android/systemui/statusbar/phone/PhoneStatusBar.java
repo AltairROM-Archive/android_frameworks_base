@@ -1755,7 +1755,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     @Override
-    public void updateNotificationRanking(RankingMap ranking) {
+    protected void updateNotificationRanking(RankingMap ranking) {
         mNotificationData.updateRanking(ranking);
         updateNotifications();
     }
@@ -2011,7 +2011,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     @Override
-    public void updateNotifications() {
+    protected void updateNotifications() {
         mNotificationData.filterAndSort();
 
         updateNotificationShade();
@@ -3913,8 +3913,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // fix notification panel being shifted to the left by calling
         // instantCollapseNotificationPanel()
         instantCollapseNotificationPanel();
-
-        restartHalo();
 
         mStatusBarWindow.requestLayout();
         mStatusBarWindow.getViewTreeObserver().addOnGlobalLayoutListener(

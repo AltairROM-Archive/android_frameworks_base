@@ -48,7 +48,6 @@ public class MetricsLogger implements MetricsConstants {
     public static final int ACTION_WIGGLE_CAMERA_GESTURE = 256;
 
 	//Custom ROM Settings
-    public static final int HALO_SETTINGS = 998;
 	public static final int CUSTOM_ROM_SETTINGS = 999;
 
     public static void visible(Context context, int category) throws IllegalArgumentException {
