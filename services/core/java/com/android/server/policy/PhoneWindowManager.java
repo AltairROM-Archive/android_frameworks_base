@@ -7290,18 +7290,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     BootDexoptDialog mBootMsgDialog = null;
 
-    /**
-    * name of package currently being dex optimized
-    * as shown through this.showBootMessage(msg, always);
-    */
-    static String currentPackageName;
-    public void setPackageName(String pkgName) {
-        if (pkgName == null) {
-            pkgName = "stop.looking.at.me.swan";
-        }
-        this.currentPackageName = pkgName;
-    }
-
     /** {@inheritDoc} */
     @Override
     public void updateBootProgress(final int stage, final ApplicationInfo optimizedApp,
