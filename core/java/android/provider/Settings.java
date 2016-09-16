@@ -6440,6 +6440,12 @@ public final class Settings {
                 INCALL_BACK_BUTTON_BEHAVIOR_NONE;
 
         /**
+         * Enable single click to turn WiFi on or off.
+         * @hide
+         */
+        public static final String QS_WIFI_EASY_TOGGLE = "qs_wifi_easy_toggle";
+
+        /**
          * Whether the device should wake when the wake gesture sensor detects motion.
          * @hide
          */
