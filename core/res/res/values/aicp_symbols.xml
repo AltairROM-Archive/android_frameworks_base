@@ -68,4 +68,7 @@
   <java-symbol type="string" name="singlehandmode_slide_hint_message" />
 
   <java-symbol type="layout" name="single_hand_window" />
+
+  <!-- Quick settings tiles columns and rows config -->
+  <java-symbol type="integer" name="config_qs_num_rows_landscape_default"/>
 </resources>

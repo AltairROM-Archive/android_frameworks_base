@@ -149,6 +149,7 @@ import com.android.systemui.R;
 import com.android.systemui.SystemUIFactory;
 import com.android.systemui.classifier.FalsingLog;
 import com.android.systemui.classifier.FalsingManager;
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.doze.DozeHost;
 import com.android.systemui.doze.DozeLog;
 import com.android.systemui.keyguard.KeyguardViewMediator;
@@ -494,32 +495,51 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
-    class DevForceNavbarObserver extends ContentObserver {
-        DevForceNavbarObserver(Handler handler) {
+    class SettingsObserver extends UserContentObserver {
+        SettingsObserver(Handler handler) {
             super(handler);
         }
 
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(CMSettings.Global.getUriFor(
-                    CMSettings.Global.DEV_FORCE_SHOW_NAVBAR), false, this, UserHandle.USER_ALL);
-
-            CurrentUserTracker userTracker = new CurrentUserTracker(mContext) {
-                @Override
-                public void onUserSwitched(int newUserId) {
-                    update();
-                }
-            };
-            userTracker.startTracking();
-        }
-
         @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
+        protected void observe() {
+            super.observe();
+
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                   Settings.Secure.QS_ROWS_PORTRAIT),
+                   false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                   Settings.Secure.QS_ROWS_LANDSCAPE),
+                   false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                   Settings.Secure.QS_COLUMNS),
+                   false, this, UserHandle.USER_ALL);
             update();
         }
 
-        private void update() {
+        @Override
+        protected void unobserve() {
+            super.unobserve();
+            ContentResolver resolver = mContext.getContentResolver();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.Secure.getUriFor(
+                    Settings.Secure.QS_ROWS_PORTRAIT))
+                    || uri.equals(Settings.Secure.getUriFor(
+                    Settings.Secure.QS_ROWS_LANDSCAPE))) {
+                    updateResources();
+            } else if (uri.equals(Settings.Secure.getUriFor(
+                    Settings.Secure.QS_COLUMNS))) {
+                    updateResources();
+            }
+
+            update();
+        }
+
+        @Override
+        public void update() {
         }
     }
 
@@ -808,7 +828,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         addNavigationBar();
 
-        final DevForceNavbarObserver observer = new DevForceNavbarObserver(mHandler);
+        SettingsObserver observer = new SettingsObserver(mHandler);
         observer.observe();
 
         // Lastly, call to the icon policy to install/update all the icons.
