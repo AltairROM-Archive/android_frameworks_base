@@ -696,7 +696,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mForcingShowNavBar;
     int mForcingShowNavBarLayer;
 
-    boolean mDevForceNavbar = false;
+    // User defined bar visibility, regardless of factory configuration
+    boolean mNavbarVisible = false;
 
     // States of keyguard dismiss.
     private static final int DISMISS_KEYGUARD_NONE = 0; // Keyguard not being dismissed.
@@ -2313,10 +2314,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void updateKeyAssignments() {
         int activeHardwareKeys = mDeviceHardwareKeys;
 
-        if (mDevForceNavbar) {
+        if (mNavbarVisible) {
             activeHardwareKeys = 0;
         }
         final boolean hasMenu = (activeHardwareKeys & KEY_MASK_MENU) != 0;
+        final boolean hasHome = (activeHardwareKeys & KEY_MASK_HOME) != 0;
         final boolean hasAssist = (activeHardwareKeys & KEY_MASK_ASSIST) != 0;
         final boolean hasAppSwitch = (activeHardwareKeys & KEY_MASK_APP_SWITCH) != 0;
 
@@ -2451,6 +2453,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mHasNavigationBar = true;
         }
 
+        // Allow a system property to override this. Used by the emulator.
+        // See also hasNavigationBar().
+        String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
+        if ("1".equals(navBarOverride)) {
+            mHasNavigationBar = false;
+        } else if ("0".equals(navBarOverride)) {
+            mHasNavigationBar = true;
+        }
+
         // For demo purposes, allow the rotation of the HDMI display to be controlled.
         // By default, HDMI locks rotation to landscape.
         if ("portrait".equals(SystemProperties.get("persist.demo.hdmirotation"))) {
@@ -2570,12 +2581,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 updateWakeGestureListenerLp();
             }
 
-            boolean devForceNavbar = CMSettings.Global.getIntForUser(resolver,
-                    CMSettings.Global.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
-            if (devForceNavbar != mDevForceNavbar) {
-                mDevForceNavbar = devForceNavbar;
+            boolean doShowNavbar = Settings.Secure.getIntForUser(resolver,
+                    Settings.Secure.NAVIGATION_BAR_VISIBLE,
+                    DUActionUtils.hasNavbarByDefault(mContext) ? 1 : 0,
+                    UserHandle.USER_CURRENT) == 1;
+            if (doShowNavbar != mNavbarVisible) {
+                mNavbarVisible = doShowNavbar;
                 if (mCMHardware.isSupported(CMHardwareManager.FEATURE_KEY_DISABLE)) {
-                    mCMHardware.set(CMHardwareManager.FEATURE_KEY_DISABLE, mDevForceNavbar);
+                    mCMHardware.set(CMHardwareManager.FEATURE_KEY_DISABLE, mNavbarVisible);
                 }
             }
 
