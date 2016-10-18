@@ -5854,7 +5854,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             default:
                 Log.w(TAG, "getVolumeWakeTriggered: unexpected keyCode=" + keyCode);
                 return false;
->>>>>>> upstream/cm-13.0
         }
     }
 
