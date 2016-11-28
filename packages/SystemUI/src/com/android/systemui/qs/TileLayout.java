@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
@@ -30,6 +31,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     private int mCellMarginTop;
     private int mDefaultColumns;
     private boolean mListening;
+    private boolean mShowTitles = true;
 
     public TileLayout(Context context) {
         this(context, null);

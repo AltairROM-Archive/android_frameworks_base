@@ -517,6 +517,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                    Settings.Secure.QS_COLUMNS_LANDSCAPE),
                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_TILE_TITLE_VISIBILITY),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -524,6 +527,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         protected void unobserve() {
             super.unobserve();
             ContentResolver resolver = mContext.getContentResolver();
+            resolver.unregisterContentObserver(this);
         }
 
         @Override
@@ -540,6 +544,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     if (mHeader != null) {
                         mHeader.updateSettings();
                     }
+                    updateResources();
+            } else if (uri.equals(Settings.System.getUriFor(
+                       Settings.System.QS_TILE_TITLE_VISIBILITY))) {
                     updateResources();
             }
 
