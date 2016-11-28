@@ -4526,6 +4526,16 @@ public final class Settings {
         private static final Validator TOAST_ICON_VALIDATOR =
               BOOLEAN_VALIDATOR;
 
+        /**
+         * Whether to display qs tile titles in the qs panel
+         * @hide
+         */
+        public static final String QS_TILE_TITLE_VISIBILITY = "qs_tile_title_visibility";
+
+        /** @hide */
+        private static final Validator QS_TILE_TITLE_VISIBILITY_VALIDATOR =
+              BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4597,6 +4607,7 @@ public final class Settings {
             NOTIFICATION_LIGHT_PULSE,
             // Altair ROM settings start
             TOAST_ICON,
+            QS_TILE_TITLE_VISIBILITY,
             // Altair ROM settings end
         };
 
@@ -4721,6 +4732,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
             // Altair ROM settings start
             PRIVATE_SETTINGS.add(TOAST_ICON);
+            PRIVATE_SETTINGS.add(QS_TILE_TITLE_VISIBILITY);
             // Altair ROM settings end
         }
 
@@ -4819,6 +4831,7 @@ public final class Settings {
                     ACCELEROMETER_ROTATION_ANGLES_VALIDATOR);
             // Altair ROM settings start
             VALIDATORS.put(TOAST_ICON, TOAST_ICON_VALIDATOR);
+            VALIDATORS.put(QS_TILE_TITLE_VISIBILITY, QS_TILE_TITLE_VISIBILITY_VALIDATOR);
             // Altair ROM settings end
         }
 
