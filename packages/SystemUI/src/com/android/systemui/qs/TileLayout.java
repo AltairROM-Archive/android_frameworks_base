@@ -28,6 +28,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     protected final ArrayList<TileRecord> mRecords = new ArrayList<>();
     private int mCellMarginTop;
+    private int mDefaultColumns;
     private boolean mListening;
 
     public TileLayout(Context context) {
@@ -79,15 +80,33 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         final Resources res = mContext.getResources();
 
         final ContentResolver resolver = mContext.getContentResolver();
-        final int columnsConfig = Settings.Secure.getInt(resolver,
-                Settings.Secure.QS_COLUMNS, 3);
-        final int columns = Math.max(1, columnsConfig);
 
-        mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
+        mDefaultColumns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
+        boolean isPortrait = res.getConfiguration().orientation
+                == Configuration.ORIENTATION_PORTRAIT;
+        int columns = Settings.Secure.getInt(resolver,
+                Settings.Secure.QS_COLUMNS_PORTRAIT, mDefaultColumns);
+        int columnsLandscape = Settings.Secure.getInt(resolver,
+                Settings.Secure.QS_COLUMNS_LANDSCAPE, mDefaultColumns);
+        boolean showTitles = Settings.System.getIntForUser(resolver,
+                Settings.System.QS_TILE_TITLE_VISIBILITY, 1,
+                UserHandle.USER_CURRENT) == 1;
+
+        if (showTitles) {
+            mCellHeight = res.getDimensionPixelSize(R.dimen.qs_tile_height);
+        } else {
+            mCellHeight = res.getDimensionPixelSize(R.dimen.qs_tile_height_wo_label);
+        }
         mCellMargin = res.getDimensionPixelSize(R.dimen.qs_tile_margin);
         mCellMarginTop = res.getDimensionPixelSize(R.dimen.qs_tile_margin_top);
-        if (mColumns != columns) {
-            mColumns = columns;
+        if (mColumns != (isPortrait ? columns : columnsLandscape) || mShowTitles != showTitles) {
+            mColumns = isPortrait ? columns : columnsLandscape;
+            mShowTitles = showTitles;
+            for (TileRecord record : mRecords) {
+                if (record.tileView instanceof QSTileView) {
+                    ((QSTileView) record.tileView).setLabelVisibility(mShowTitles);
+                }
+            }
             requestLayout();
             return true;
         }
