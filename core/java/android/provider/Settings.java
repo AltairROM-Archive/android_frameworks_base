@@ -5270,6 +5270,12 @@ public final class Settings {
         public static final String SMARTBAR_LONGPRESS_DELAY = "smartbar_longpress_delay";
 
         /**
+         * Pulse Solid units count
+         * @hide
+         */
+        public static final String PULSE_SOLID_UNITS_COUNT = "pulse_solid_units_count";
+
+        /**
          * A flag containing settings used for biometric weak
          * @hide
          */
