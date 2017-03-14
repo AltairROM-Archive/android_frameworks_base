@@ -226,7 +226,7 @@ public final class ShutdownThread extends Thread {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (!mRebootSafeMode && advancedReboot) {
+                            if (advancedReboot && mReboot && !mRebootSafeMode) {
                                 boolean softReboot = false;
                                 ListView reasonsList = ((AlertDialog)dialog).getListView();
                                 int selected = reasonsList.getCheckedItemPosition();
