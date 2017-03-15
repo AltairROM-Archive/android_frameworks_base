@@ -4900,6 +4900,12 @@ public final class Settings {
          */
         public static final String POWER_MENU_BACKGROUND_ALPHA = "power_menu_background_alpha";
 
+        /**
+         * Whether to display roaming indicator for roaming signal connection
+         * @hide
+         */
+        public static final String ROAMING_INDICATOR_ICON = "roaming_indicator_icon";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
