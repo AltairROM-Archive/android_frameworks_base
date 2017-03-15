@@ -126,9 +126,12 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
     private FeatureConnector<ImsManager> mFeatureConnector;
     private int mCallState = TelephonyManager.CALL_STATE_IDLE;
     private boolean mShowVolteIcon;
+    private boolean mRoamingIconAllowed;
 
     private static final String SHOW_VOLTE_ICON =
             "system:" + Settings.System.SHOW_VOLTE_ICON;
+    private static final String ROAMING_INDICATOR_ICON =
+            "system:" + Settings.System.ROAMING_INDICATOR_ICON;
 
     private final MobileStatusTracker.Callback mMobileCallback =
             new MobileStatusTracker.Callback() {
@@ -295,6 +298,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         mProviderModelSetting = featureFlags.isProviderModelSettingEnabled();
 
         Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
+        Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
     }
 
     @Override
@@ -303,6 +307,11 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
             case SHOW_VOLTE_ICON:
                 mShowVolteIcon =
                     TunerService.parseIntegerSwitch(newValue, false);
+                updateTelephony();
+                break;
+            case ROAMING_INDICATOR_ICON:
+                mRoamingIconAllowed =
+                    TunerService.parseIntegerSwitch(newValue, true);
                 updateTelephony();
                 break;
             default:
@@ -889,7 +898,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         }
         mCurrentState.dataConnected = mCurrentState.isDataConnected();
 
-        mCurrentState.roaming = isRoaming();
+        mCurrentState.roaming = isRoaming() && mRoamingIconAllowed;
         if (isCarrierNetworkChangeActive()) {
             mCurrentState.iconGroup = TelephonyIcons.CARRIER_NETWORK_CHANGE;
         } else if (isDataDisabled() && !mConfig.alwaysShowDataRatIcon) {
