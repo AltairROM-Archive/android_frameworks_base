@@ -4686,6 +4686,16 @@ public final class Settings {
         private static final Validator SHOW_VOLTE_ICON_VALIDATOR =
                 BOOLEAN_VALIDATOR;
 
+        /**
+         * Whether to display roaming indicator for roaming signal connection
+         * @hide
+         */
+        public static final String ROAMING_INDICATOR_ICON = "roaming_indicator_icon";
+
+        /** @hide */
+        private static final Validator ROAMING_INDICATOR_ICON_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4773,6 +4783,7 @@ public final class Settings {
             BLUETOOTH_SHOW_BATTERY,
             BLUETOOTH_QS_SHOW_BATTERY,
             SHOW_VOLTE_ICON,
+            ROAMING_INDICATOR_ICON,
             // Altair ROM settings end
         };
 
@@ -4913,6 +4924,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(BLUETOOTH_SHOW_BATTERY);
             PRIVATE_SETTINGS.add(BLUETOOTH_QS_SHOW_BATTERY);
             PRIVATE_SETTINGS.add(SHOW_VOLTE_ICON);
+            PRIVATE_SETTINGS.add(ROAMING_INDICATOR_ICON);
             // Altair ROM settings end
         }
 
