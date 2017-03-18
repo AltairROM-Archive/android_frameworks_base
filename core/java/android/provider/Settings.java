@@ -5265,6 +5265,12 @@ public final class Settings {
          */
         public static final String TOAST_ICON = "toast_icon";
 
+        /**
+         * Enable/disable Bluetooth Battery bar
+         * @hide
+         */
+        public static final String BLUETOOTH_SHOW_BATTERY = "bluetooth_show_battery";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
