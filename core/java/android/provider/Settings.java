@@ -4882,6 +4882,12 @@ public final class Settings {
          */
         public static final String DATA_ACTIVITY_ARROWS = "data_activity_arrows";
 
+        /**
+         * Enable\Disable Bluetooth Battery bar
+         * @hide
+         */
+        public static final String BLUETOOTH_SHOW_BATTERY = "bluetooth_show_battery";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
