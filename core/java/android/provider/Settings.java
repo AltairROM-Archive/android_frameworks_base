@@ -4656,6 +4656,16 @@ public final class Settings {
         private static final Validator NOTIFICATION_GUTS_KILL_APP_BUTTON_VALIDATOR =
                 BOOLEAN_VALIDATOR;
 
+        /**
+         * Enable\Disable Bluetooth Battery bar
+         * @hide
+         */
+        public static final String BLUETOOTH_SHOW_BATTERY = "bluetooth_show_battery";
+
+        /** @hide */
+        private static final Validator BLUETOOTH_SHOW_BATTERY_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4740,6 +4750,7 @@ public final class Settings {
             DATA_ACTIVITY_ARROWS,
             SWIPE_DOWN_TO_CLEAR_ALL_RECENTS,
             NOTIFICATION_GUTS_KILL_APP_BUTTON,
+            BLUETOOTH_SHOW_BATTERY,
             // Altair ROM settings end
         };
 
@@ -4877,6 +4888,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(DATA_ACTIVITY_ARROWS);
             PRIVATE_SETTINGS.add(SWIPE_DOWN_TO_CLEAR_ALL_RECENTS);
             PRIVATE_SETTINGS.add(NOTIFICATION_GUTS_KILL_APP_BUTTON);
+            PRIVATE_SETTINGS.add(BLUETOOTH_SHOW_BATTERY);
             // Altair ROM settings end
         }
 
@@ -4988,6 +5000,7 @@ public final class Settings {
             VALIDATORS.put(DATA_ACTIVITY_ARROWS, DATA_ACTIVITY_ARROWS_VALIDATOR);
             VALIDATORS.put(SWIPE_DOWN_TO_CLEAR_ALL_RECENTS, SWIPE_DOWN_TO_CLEAR_ALL_RECENTS_VALIDATOR);
             VALIDATORS.put(NOTIFICATION_GUTS_KILL_APP_BUTTON, NOTIFICATION_GUTS_KILL_APP_BUTTON_VALIDATOR);
+            VALIDATORS.put(BLUETOOTH_SHOW_BATTERY, BLUETOOTH_SHOW_BATTERY_VALIDATOR);
             // Altair ROM settings end
         }
 
