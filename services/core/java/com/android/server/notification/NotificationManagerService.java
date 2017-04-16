@@ -1638,31 +1638,6 @@ public class NotificationManagerService extends SystemService {
             return mRankingHelper.getShowNotificationForPackageOnKeyguard(pkg, uid);
         }
 
-        public void setHaloPolicyBlack(String pkg, int uid, boolean allowed) {
-            checkCallerIsSystem();
-            mRankingHelper.setHaloPolicyBlack(pkg, uid, allowed);
-            savePolicyFile();
-        }
-
-        @Override
-        public void setPackageNotificationSoundTimeout(String pkg, int uid, long timeout) {
-            checkCallerIsSystem();
-            mRankingHelper.setPackageNotificationSoundTimeout(pkg, uid, timeout);
-            savePolicyFile();
-        }
-
-        @Override
-        public boolean isPackageAllowedForHalo(String pkg, int uid) {
-            enforceSystemOrSystemUI("INotificationManager.setHaloBlacklistStatus");
-            return mRankingHelper.isPackageAllowedForHalo(pkg, uid);
-        }
-
-        @Override
-        public long getPackageNotificationSoundTimeout(String pkg, int uid) {
-            checkCallerIsSystem();
-            return mRankingHelper.getPackageNotificationSoundTimeout(pkg, uid);
-        }
-
         /**
          * System-only API for getting a list of current (i.e. not cleared) notifications.
          *

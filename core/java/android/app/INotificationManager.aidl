@@ -104,8 +104,4 @@ interface INotificationManager
 
     ParceledListSlice getAppActiveNotifications(String callingPkg, int userId);
     boolean deviceLightsCan(int lightCapability);
-
-    // Halo
-    void setHaloPolicyBlack(String pkg, int uid, boolean halo);
-    boolean isPackageAllowedForHalo(String pkg, int uid);
 }
