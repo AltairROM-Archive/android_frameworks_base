@@ -79,8 +79,7 @@
         android:layout_toStartOf="@id/settings_button_container"
         style="@android:style/Widget.Material.Button.Borderless"
         android:layout_marginStart="7dp"
-        android:background="@drawable/ripple_drawable"
-        android:visibility="gone" />
+        android:background="@drawable/ripple_drawable" />
 
     <LinearLayout android:id="@+id/system_icons_super_container"
         android:layout_width="wrap_content"
