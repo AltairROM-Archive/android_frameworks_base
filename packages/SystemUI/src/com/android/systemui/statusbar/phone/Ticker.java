@@ -108,24 +108,4 @@ public class Ticker {
             this.first = true;
         }
     };
-
-    public void addEntry(StatusBarNotification n) {
-        final Drawable icon = StatusBarIconView.getIcon(mContext,
-                new StatusBarIcon(n.pkg, n.user, n.notification.icon, n.notification.iconLevel, 0,
-                        n.notification.tickerText));
-        final CharSequence text = n.notification.tickerText;
-
-        int initialCount = mSegments.size();
-
-        if (initialCount > 0) {
-            final Segment seg = mSegments.get(0);
-        }
-
-        final Segment newSegment = new Segment(n, icon, text);
-
-        mSegments.add(newSegment);
-        if (mEvent != null) {
-            if (newSegment != null) mEvent.updateTicker(newSegment.notification, text.toString());
-        }
-    }
 }
