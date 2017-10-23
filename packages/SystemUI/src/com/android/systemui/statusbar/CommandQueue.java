@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar;
 
 import android.content.ComponentName;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -84,6 +85,7 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_TOGGLE_SCREENSHOT             = 38 << MSG_SHIFT;
     private static final int MSG_START_CUSTOM_INTENT_AFTER_KEYGUARD = 39 << MSG_SHIFT;
     private static final int MSG_LEFT_IN_LANDSCAPE_STATE_CHANGED = 40 << MSG_SHIFT;
+    private static final int MSG_TOGGLE_FLASHLIGHT = 41 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -142,16 +144,20 @@ public class CommandQueue extends IStatusBar.Stub {
         void handleSystemNavigationKey(int arg1);
         void screenPinningStateChanged(boolean enabled);
         void setAutoRotate(boolean enabled);
-        public void toggleLastApp();
-        public void toggleKillApp();
-        public void toggleScreenshot();
-        public void toggleOrientationListener(boolean enable);
         public void showCustomIntentAfterKeyguard(Intent intent);
         void leftInLandscapeChanged(boolean isLeft);
+        void toggleFlashlight();
     }
 
     public CommandQueue(Callbacks callbacks) {
         mCallbacks = callbacks;
+    }
+
+    public void toggleFlashlight() {
+        synchronized (mLock) {
+            mHandler.removeMessages(MSG_TOGGLE_FLASHLIGHT);
+            mHandler.sendEmptyMessage(MSG_TOGGLE_FLASHLIGHT);
+        }
     }
 
     public void leftInLandscapeChanged(boolean isLeft) {
@@ -430,6 +436,20 @@ public class CommandQueue extends IStatusBar.Stub {
         }
     }
 
+    public void setAutoRotate(boolean enabled) {
+        synchronized (mLock) {
+            mHandler.removeMessages(MSG_SET_AUTOROTATE_STATUS);
+            mHandler.obtainMessage(MSG_SET_AUTOROTATE_STATUS,
+                enabled ? 1 : 0, 0, null).sendToTarget();
+        }
+    }
+
+    public void showCustomIntentAfterKeyguard(Intent intent) {
+        mHandler.removeMessages(MSG_START_CUSTOM_INTENT_AFTER_KEYGUARD);
+        Message m = mHandler.obtainMessage(MSG_START_CUSTOM_INTENT_AFTER_KEYGUARD, 0, 0, intent);
+        m.sendToTarget();
+    }
+
     private final class H extends Handler {
         public void handleMessage(Message msg) {
             final int what = msg.what & MSG_MASK;
@@ -552,6 +572,9 @@ public class CommandQueue extends IStatusBar.Stub {
                     break;
                 case MSG_LEFT_IN_LANDSCAPE_STATE_CHANGED:
                     mCallbacks.leftInLandscapeChanged(msg.arg1 != 0);
+                    break;
+                case MSG_TOGGLE_FLASHLIGHT:
+                    mCallbacks.toggleFlashlight();
                     break;
             }
         }

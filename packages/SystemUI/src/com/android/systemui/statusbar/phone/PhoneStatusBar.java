@@ -131,9 +131,7 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.NotificationVisibility;
 import com.android.internal.statusbar.StatusBarIcon;
-import com.android.internal.utils.du.ActionHandler;
 import com.android.internal.utils.du.DUPackageMonitor;
-import com.android.internal.utils.du.DUSystemReceiver;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
@@ -220,7 +218,6 @@ import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout
         .OnChildLocationsChangedListener;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
-import com.android.systemui.tuner.TunerService;
 import com.android.systemui.volume.VolumeComponent;
 
 import java.io.FileDescriptor;
@@ -239,7 +236,7 @@ import static android.service.notification.NotificationListenerService.Ranking.i
 
 public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         DragDownHelper.DragDownCallback, ActivityStarter, OnUnlockMethodChangedListener,
-        OnHeadsUpChangedListener, VisualStabilityManager.Callback, TunerService.Tunable {
+        OnHeadsUpChangedListener, VisualStabilityManager.Callback {
     static final String TAG = "PhoneStatusBar";
     public static final boolean DEBUG = BaseStatusBar.DEBUG;
     public static final boolean SPEW = false;
@@ -322,17 +319,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
      * libhwui.
      */
     private static final float SRC_MIN_ALPHA = 0.002f;
-
-    private static final String SCREEN_BRIGHTNESS_MODE =
-            "system:" + Settings.System.SCREEN_BRIGHTNESS_MODE;
-    private static final String STATUS_BAR_BRIGHTNESS_CONTROL =
-            "cmsystem:" + CMSettings.System.STATUS_BAR_BRIGHTNESS_CONTROL;
-    private static final String NAVBAR_LEFT_IN_LANDSCAPE =
-            "cmsystem:" + CMSettings.System.NAVBAR_LEFT_IN_LANDSCAPE;
-    private static final String LOCKSCREEN_MEDIA_METADATA =
-            "cmsecure:" + CMSettings.Secure.LOCKSCREEN_MEDIA_METADATA;
-    private static final String SYSTEMUI_BURNIN_PROTECTION =
-            "cmsecure:" + CMSettings.System.SYSTEMUI_BURNIN_PROTECTION;
 
     static {
         boolean onlyCoreApps;
@@ -499,18 +485,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
-    private DUSystemReceiver mDUReceiver = new DUSystemReceiver() {
-        @Override
-        protected void onSecureReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (TextUtils.equals(ActionHandler.INTENT_TOGGLE_FLASHLIGHT, action)) {
-                if (mFlashlightController.isAvailable()) {
-                    mFlashlightController.setFlashlight(!mFlashlightController.isEnabled());
-                }
-            }
-        }
-    };
-
     Runnable mLongPressBrightnessChange = new Runnable() {
         @Override
         public void run() {
@@ -546,32 +520,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         private void update() {
-            boolean visible = CMSettings.Global.getIntForUser(mContext.getContentResolver(),
-                    CMSettings.Global.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
-
-            if (visible) {
-                forceAddNavigationBar();
-            } else {
-                removeNavigationBar();
-            }
-            if (mBurnInProtectionController != null) {
-                mBurnInProtectionController.setNavigationBarView(
-                        visible ? mNavigationBarView : null);
-            }
         }
-    }
-
-    private void forceAddNavigationBar() {
-        // If we have no Navbar view and we should have one, create it
-        if (mNavigationBarView != null) {
-            return;
-        }
-
-        mNavigationBarView =
-                (NavigationBarView) View.inflate(mContext, R.layout.navigation_bar, null);
-
-        mNavigationBarView.setDisabledFlags(mDisabled1);
-        addNavigationBar();
     }
 
     // ensure quick settings is disabled until the current user makes it through the setup wizard
@@ -859,22 +808,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         addNavigationBar();
 
-        // Developer options - Force Navigation bar
-        try {
-            boolean needsNav = mWindowManagerService.needsNavigationBar();
-            if (!needsNav) {
-                final DevForceNavbarObserver observer = new DevForceNavbarObserver(mHandler);
-                observer.observe();
-            }
-        } catch (RemoteException ex) {
-            // no window manager? good luck with that
-        }
-
-        TunerService.get(mContext).addTunable(this,
-                SCREEN_BRIGHTNESS_MODE,
-                NAVBAR_LEFT_IN_LANDSCAPE,
-                STATUS_BAR_BRIGHTNESS_CONTROL,
-                LOCKSCREEN_MEDIA_METADATA);
+        final DevForceNavbarObserver observer = new DevForceNavbarObserver(mHandler);
+        observer.observe();
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -1215,11 +1150,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         context.registerReceiverAsUser(mDemoReceiver, UserHandle.ALL, demoFilter,
                 android.Manifest.permission.DUMP, null);
 
-        // flashlight action target for toggle
-        IntentFilter flashlightFilter = new IntentFilter();
-        flashlightFilter.addAction(ActionHandler.INTENT_TOGGLE_FLASHLIGHT);
-        context.registerReceiver(mDUReceiver, flashlightFilter);
-
         // listen for USER_SETUP_COMPLETE setting (per-user)
         resetUserSetupObserver();
 
@@ -1535,6 +1465,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
+    private View.OnLongClickListener mLongPressBackListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            return handleLongPressBack();
+        }
+    };
+
     @Override
     protected void toggleSplitScreenMode(int metricsDockAction, int metricsUndockAction) {
         if (mRecents == null) {
@@ -1624,38 +1561,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (DEBUG) Log.v(TAG, "addNavigationBar: about to add " + mNavigationController.getBar());
         if (mNavigationController.getBar() == null) return;
 
-        try {
-            WindowManagerGlobal.getWindowManagerService()
-                    .watchRotation(new IRotationWatcher.Stub() {
-                @Override
-                public void onRotationChanged(int rotation) throws RemoteException {
-                    // We need this to be scheduled as early as possible to beat the redrawing of
-                    // window in response to the orientation change.
-                    Message msg = Message.obtain(mHandler, () -> {
-                        if (mNavigationBarView != null
-                                && mNavigationBarView.needsReorient(rotation)) {
-                            repositionNavigationBar();
-                        }
-                    });
-                    msg.setAsynchronous(true);
-                    mHandler.sendMessageAtFrontOfQueue(msg);
-                }
-            });
-        } catch (RemoteException e) {
-            throw e.rethrowFromSystemServer();
-        }
-
         prepareNavigationBarView();
 
         mWindowManager.addView(mNavigationController.getBar().getBaseView(), getNavigationBarLayoutParams());
-    }
-
-    private void removeNavigationBar() {
-        if (DEBUG) Log.d(TAG, "removeNavigationBar: about to remove " + mNavigationBarView);
-        if (mNavigationBarView == null) return;
-
-        mWindowManager.removeView(mNavigationBarView);
-        mNavigationBarView = null;
     }
 
     protected void repositionNavigationBar() {
@@ -1708,6 +1616,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     @Override
     public void setIcon(String slot, StatusBarIcon icon) {
         mIconController.setIcon(slot, icon);
+    }
+
+    @Override
+    public void toggleFlashlight() {
+        super.toggleFlashlight();
+        if (mFlashlightController.isAvailable()) {
+            mFlashlightController.setFlashlight(!mFlashlightController.isEnabled());
+        }
     }
 
     @Override
@@ -3037,8 +2953,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         mExpandedVisible = true;
-        if (mNavigationController.getBar() != null)
-            mNavigationController.getBar().setSlippery(true);
 
         // Expand the window to encompass the full screen in anticipation of the drag.
         // This is only possible to do atomically because the status bar is at the top of the screen!
@@ -3357,6 +3271,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     @Override // CommandQueue
+    public void showCustomIntentAfterKeyguard(Intent intent) {
+        startActivityDismissingKeyguard(intent, false, false);
+    }
+
+    @Override // CommandQueue
     public void setWindowState(int window, int state) {
         boolean showing = state == WINDOW_STATE_SHOWING;
         if (mStatusBarWindow != null
@@ -3467,6 +3386,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mLightStatusBarController.onSystemUiVisibilityChanged(fullscreenStackVis, dockedStackVis,
                 mask, fullscreenStackBounds, dockedStackBounds, sbModeChanged, mStatusBarMode);
+    }
+
+    @Override  // CommandQueue
+    public void setAutoRotate(boolean enabled) {
+        Settings.System.putInt(mContext.getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION,
+                enabled ? 1 : 0);
     }
 
     private int computeBarMode(int oldVis, int newVis, BarTransitions transitions,
@@ -4894,10 +4820,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mStackScroller.setActivatedChild(view);
     }
 
-    public ButtonDispatcher getHomeButton() {
-        return mNavigationBarView.getHomeButton();
-    }
-
     /**
      * @param state The {@link StatusBarState} to set.
      */
@@ -5277,9 +5199,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
      * 1) Not currently in screen pinning (lock task).
      * 2) Back is long-pressed without recents.
      */
-    private boolean handleLongPressBackRecents(View v) {
+    private boolean handleLongPressBack() {
         try {
-            boolean sendBackLongPress = false;
             IActivityManager activityManager = ActivityManagerNative.getDefault();
             if (activityManager.isInLockTaskMode()) {
                 activityManager.stopSystemLockTaskMode();
@@ -5594,42 +5515,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         break;
                 }
             }
-        }
-    }
-
-    @Override
-    public void onTuningChanged(String key, String newValue) {
-        switch (key) {
-            case SCREEN_BRIGHTNESS_MODE:
-                mAutomaticBrightness = newValue != null && Integer.parseInt(newValue)
-                        == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
-                break;
-            case NAVBAR_LEFT_IN_LANDSCAPE:
-                if (mNavigationBarView != null) {
-                    final boolean navLeftInLandscape = newValue != null &&
-                            Integer.parseInt(newValue) == 1;
-                    mNavigationBarView.setLeftInLandscape(navLeftInLandscape);
-                }
-                break;
-            case STATUS_BAR_BRIGHTNESS_CONTROL:
-                mBrightnessControl = newValue != null && Integer.parseInt(newValue) == 1;
-                break;
-            case LOCKSCREEN_MEDIA_METADATA:
-                mShowMediaMetadata = newValue == null || Integer.parseInt(newValue) == 1;
-                break;
-            case SYSTEMUI_BURNIN_PROTECTION:
-                mBurnInProtectionEnabled = newValue != null && Integer.parseInt(newValue) == 1;
-                if (mBurnInProtectionController != null) {
-                    if (mBurnInProtectionEnabled) {
-                        mBurnInProtectionController.startShiftTimer(true);
-                    } else {
-                        // Forcefully disable it
-                        mBurnInProtectionController.stopShiftTimer(true);
-                    }
-                }
-                break;
-            default:
-                break;
         }
     }
 }

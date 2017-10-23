@@ -5253,21 +5253,6 @@ public final class Settings {
          * @hide
          */
         public static final String PULSE_LAVALAMP_SOLID_SPEED = "lava_lamp_solid_speed";
- 
-        /**
-         * SmartBar buttons opacity on Pulse
-         * @hide
-         */
-        public static final String PULSE_CUSTOM_BUTTONS_OPACITY = "pulse_custom_buttons_opacity";
-
-        /**
-         * Long press delay for smartbar buttons
-         * @hide
-         * 0: Default (fast)
-         * 1: Normal delay
-         * 2: Long delay
-         */
-        public static final String SMARTBAR_LONGPRESS_DELAY = "smartbar_longpress_delay";
 
         /**
          * Pulse Solid units count
@@ -5286,6 +5271,21 @@ public final class Settings {
          * @hide
          */
         public static final String PULSE_CUSTOM_BUTTONS_OPACITY = "pulse_custom_buttons_opacity";
+
+        /**
+         * Long press delay for smartbar buttons
+         * @hide
+         * 0: Default (fast)
+         * 1: Normal delay
+         * 2: Long delay
+         */
+        public static final String SMARTBAR_LONGPRESS_DELAY = "smartbar_longpress_delay";
+
+        /**
+         * Scaling value for smartbar custom button icon
+         * @hide
+         */
+        public static final String SMARTBAR_CUSTOM_ICON_SIZE = "smartbar_custom_icon_size";
 
         /**
          * A flag containing settings used for biometric weak

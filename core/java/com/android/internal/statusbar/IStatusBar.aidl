@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import android.content.Intent;
 
 import com.android.internal.statusbar.StatusBarIcon;
 
@@ -98,6 +99,7 @@ oneway interface IStatusBar
     void startAssist(in Bundle args);
     void screenPinningStateChanged(boolean enabled);
     void leftInLandscapeChanged(boolean isLeft);
+    void toggleFlashlight();
 
     /**
      * Notifies the status bar that a camera launch gesture has been detected.
@@ -115,4 +117,8 @@ oneway interface IStatusBar
     void remQsTile(in ComponentName tile);
     void clickQsTile(in ComponentName tile);
     void handleSystemNavigationKey(in int key);
+
+    void setAutoRotate(boolean enabled);
+
+    void showCustomIntentAfterKeyguard(in Intent intent);
 }
