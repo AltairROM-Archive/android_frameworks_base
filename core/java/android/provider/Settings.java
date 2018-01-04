@@ -4576,6 +4576,46 @@ public final class Settings {
         private static final Validator QS_COLUMNS_LANDSCAPE_VALIDATOR =
               ANY_INTEGER_VALIDATOR;
 
+        /**
+         * Whether to enable Smart Pixels
+         * @hide
+         */
+        public static final String SMART_PIXELS_ENABLE = "smart_pixels_enable";
+
+        /** @hide */
+        private static final Validator SMART_PIXELS_ENABLE_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
+        /**
+         * Smart Pixels pattern
+         * @hide
+         */
+        public static final String SMART_PIXELS_PATTERN = "smart_pixels_pattern";
+
+        /** @hide */
+        private static final Validator SMART_PIXELS_PATTERN_VALIDATOR =
+                ANY_INTEGER_VALIDATOR;
+
+        /**
+         * Smart Pixels Shift Timeout
+         * @hide
+         */
+        public static final String SMART_PIXELS_SHIFT_TIMEOUT = "smart_pixels_shift_timeout";
+
+        /** @hide */
+        private static final Validator SMART_PIXELS_SHIFT_TIMEOUT_VALIDATOR =
+                ANY_INTEGER_VALIDATOR;
+
+        /**
+         * Whether Smart Pixels should enable on power saver mode
+         * @hide
+         */
+        public static final String SMART_PIXELS_ON_POWER_SAVE = "smart_pixels_on_power_save";
+
+        /** @hide */
+        private static final Validator SMART_PIXELS_ON_POWER_SAVE_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4652,6 +4692,10 @@ public final class Settings {
             QS_ROWS_LANDSCAPE,
             QS_COLUMNS_PORTRAIT,
             QS_COLUMNS_LANDSCAPE,
+            SMART_PIXELS_ENABLE,
+            SMART_PIXELS_PATTERN,
+            SMART_PIXELS_SHIFT_TIMEOUT,
+            SMART_PIXELS_ON_POWER_SAVE,
             // Altair ROM settings end
         };
 
@@ -4781,6 +4825,10 @@ public final class Settings {
             PRIVATE_SETTINGS.add(QS_ROWS_LANDSCAPE);
             PRIVATE_SETTINGS.add(QS_COLUMNS_PORTRAIT);
             PRIVATE_SETTINGS.add(QS_COLUMNS_LANDSCAPE);
+            PRIVATE_SETTINGS.add(SMART_PIXELS_ENABLE);
+            PRIVATE_SETTINGS.add(SMART_PIXELS_PATTERN);
+            PRIVATE_SETTINGS.add(SMART_PIXELS_SHIFT_TIMEOUT);
+            PRIVATE_SETTINGS.add(SMART_PIXELS_ON_POWER_SAVE);
             // Altair ROM settings end
         }
 
@@ -4884,6 +4932,10 @@ public final class Settings {
             VALIDATORS.put(QS_ROWS_LANDSCAPE, QS_ROWS_LANDSCAPE_VALIDATOR);
             VALIDATORS.put(QS_COLUMNS_PORTRAIT, QS_COLUMNS_PORTRAIT_VALIDATOR);
             VALIDATORS.put(QS_COLUMNS_LANDSCAPE, QS_COLUMNS_LANDSCAPE_VALIDATOR);
+            VALIDATORS.put(SMART_PIXELS_ENABLE, SMART_PIXELS_ENABLE_VALIDATOR);
+            VALIDATORS.put(SMART_PIXELS_PATTERN, SMART_PIXELS_PATTERN_VALIDATOR);
+            VALIDATORS.put(SMART_PIXELS_SHIFT_TIMEOUT, SMART_PIXELS_SHIFT_TIMEOUT_VALIDATOR);
+            VALIDATORS.put(SMART_PIXELS_ON_POWER_SAVE, SMART_PIXELS_ON_POWER_SAVE_VALIDATOR);
             // Altair ROM settings end
         }
 
