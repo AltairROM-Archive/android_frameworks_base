@@ -238,7 +238,7 @@ import static android.service.notification.NotificationListenerService.Ranking.i
 
 public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         DragDownHelper.DragDownCallback, ActivityStarter, OnUnlockMethodChangedListener,
-        OnHeadsUpChangedListener, VisualStabilityManager.Callback {
+        OnHeadsUpChangedListener, VisualStabilityManager.Callback, TunerService.Tunable {
     static final String TAG = "PhoneStatusBar";
     public static final boolean DEBUG = BaseStatusBar.DEBUG;
     public static final boolean SPEW = false;
@@ -5569,6 +5569,37 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         break;
                 }
             }
+        }
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case SCREEN_BRIGHTNESS_MODE:
+                mAutomaticBrightness = newValue != null && Integer.parseInt(newValue)
+                        == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+                break;
+            case NAVBAR_LEFT_IN_LANDSCAPE:
+                break;
+            case STATUS_BAR_BRIGHTNESS_CONTROL:
+                mBrightnessControl = newValue != null && Integer.parseInt(newValue) == 1;
+                break;
+            case LOCKSCREEN_MEDIA_METADATA:
+                mShowMediaMetadata = newValue == null || Integer.parseInt(newValue) == 1;
+                break;
+            case SYSTEMUI_BURNIN_PROTECTION:
+                mBurnInProtectionEnabled = newValue != null && Integer.parseInt(newValue) == 1;
+                if (mBurnInProtectionController != null) {
+                    if (mBurnInProtectionEnabled) {
+                        mBurnInProtectionController.startShiftTimer(true);
+                    } else {
+                        // Forcefully disable it
+                        mBurnInProtectionController.stopShiftTimer(true);
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 }
