@@ -51,6 +51,7 @@ import com.android.systemui.qs.tiles.PowerShareTile;
 import com.android.systemui.qs.tiles.ProfilesTile;
 import com.android.systemui.qs.tiles.ReadingModeTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
+import com.android.systemui.qs.tiles.SmartPixelsTile;
 import com.android.systemui.qs.tiles.SyncTile;
 import com.android.systemui.qs.tiles.UiModeNightTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
@@ -98,6 +99,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<PowerShareTile> mPowerShareTileProvider;
     private final Provider<ProfilesTile> mProfilesTileProvider;
     private final Provider<ReadingModeTile> mReadingModeTileProvider;
+    private final Provider<SmartPixelsTile> mSmartPixelsTileProvider;
     private final Provider<SyncTile> mSyncTileProvider;
     private final Provider<UsbTetherTile> mUsbTetherTileProvider;
     private final Provider<VolumeTile> mVolumeTileProvider;
@@ -133,6 +135,7 @@ public class QSFactoryImpl implements QSFactory {
             Provider<PowerShareTile> powerShareTileProvider,
             Provider<ProfilesTile> profilesTileProvider,
             Provider<ReadingModeTile> readingModeTileProvider,
+            Provider<SmartPixelsTile> smartPixelsTileProvider,
             Provider<SyncTile> syncTileProvider,
             Provider<UsbTetherTile> usbTetherTileProvider,
             Provider<VolumeTile> volumeTileProvider,
@@ -166,6 +169,7 @@ public class QSFactoryImpl implements QSFactory {
         mPowerShareTileProvider = powerShareTileProvider;
         mProfilesTileProvider = profilesTileProvider;
         mReadingModeTileProvider = readingModeTileProvider;
+        mSmartPixelsTileProvider = smartPixelsTileProvider;
         mSyncTileProvider = syncTileProvider;
         mUsbTetherTileProvider = usbTetherTileProvider;
         mVolumeTileProvider = volumeTileProvider;
@@ -242,6 +246,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mProfilesTileProvider.get();
             case "reading_mode":
                 return mReadingModeTileProvider.get();
+            case "smartpixels":
+                return mSmartPixelsTileProvider.get();
             case "sync":
                 return mSyncTileProvider.get();
             case "usb_tether":
