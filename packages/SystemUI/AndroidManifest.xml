@@ -44,6 +44,9 @@
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
     <uses-permission android:name="android.permission.GET_APP_OPS_STATS" />
 
+    <!-- Screen recording -->
+    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+
     <!-- Networking and telephony -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -52,6 +55,7 @@
     <uses-permission android:name="android.permission.ACCESS_BLUETOOTH_AVRCP_CT_DATA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -113,6 +117,9 @@
     <!-- Needed for WallpaperManager.clear in ImageWallpaper.updateWallpaperLocked -->
     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
 
+    <!-- Needed for WallpaperManager.clear in ImageWallpaper.updateWallpaperLocked -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+
     <!-- Recents -->
     <uses-permission android:name="android.permission.BIND_APPWIDGET" />
 
@@ -135,8 +142,39 @@
             android:protectionLevel="signature" />
     <uses-permission android:name="com.android.systemui.permission.SELF" />
 
+    <!-- Kill app permission -->
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+
+    <!-- Weather -->
+    <uses-permission android:name="com.cyanogenmod.lockclock.permission.READ_WEATHER" />
+
     <!-- blur surface -->
     <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+
+    <!-- headset icon -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <!-- Reboot -->
+    <uses-permission android:name="android.permission.REBOOT" />
+    <uses-permission android:name="android.permission.RECOVERY" />
+
+    <!-- AppSidebar -->
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+
+    <!-- Themes tile -->
+    <uses-permission android:name="cyanogenmod.permission.ACCESS_THEME_MANAGER" />
+    <uses-permission android:name="cyanogenmod.permission.READ_THEMES" />
+    <uses-permission android:name="cyanogenmod.permission.WRITE_THEMES" />
+
+    <!-- Visualizer -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Action target -->
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+
+    <!-- Images in navbar -->
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
 
     <application
         android:name=".SystemUIApplication"
@@ -167,7 +205,13 @@
             android:process=":screenshot"
             android:exported="false" />
 
+        <receiver android:name=".screenshot.TrashScreenshot"
+                android:exported="true" />
+
         <service android:name=".LoadAverageService"
+                android:exported="true" />
+
+        <service android:name=".CPUInfoService"
                 android:exported="true" />
 
         <service android:name=".ImageWallpaper"

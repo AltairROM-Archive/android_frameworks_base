@@ -78,6 +78,15 @@
                     android:src="@drawable/stat_notify_more"
                     android:visibility="gone"
                     />
+                <com.android.systemui.statusbar.widget.CarrierLabel
+                    android:id="@+id/left_statusbar_carrier_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.StatusBar.CarrierLabel"
+                    android:visibility="gone"
+                    android:singleLine="true"
+                    />
                 <com.android.systemui.statusbar.phone.IconMerger android:id="@+id/notificationIcons"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -99,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/header_battery_margin_keyguard"
+                android:layout_marginStart="@dimen/signal_cluster_battery_padding"
                 android:textColor="@color/status_bar_battery_level_text_color"
                 android:textSize="@dimen/battery_level_text_size" />
 
@@ -120,6 +129,16 @@
                 android:singleLine="true"
                 android:paddingStart="3dp"
                 android:gravity="center_vertical|start"
+                />
+            <com.android.systemui.statusbar.widget.CarrierLabel
+                android:id="@+id/statusbar_carrier_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.StatusBar.CarrierLabel"
+                android:paddingStart="4dp"
+                android:visibility="gone"
+                android:singleLine="true"
                 />
         </com.android.keyguard.AlphaOptimizedLinearLayout>
     </LinearLayout>

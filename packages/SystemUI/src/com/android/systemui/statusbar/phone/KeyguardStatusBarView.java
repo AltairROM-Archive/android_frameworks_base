@@ -17,8 +17,15 @@
 package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -29,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.internal.util.aicp.AicpUtils;
 import com.android.systemui.BatteryLevelTextView;
 import com.android.systemui.BatteryMeterView;
 import com.android.systemui.DockBatteryMeterView;
@@ -53,6 +61,37 @@ public class KeyguardStatusBarView extends RelativeLayout {
     private BatteryLevelTextView mBatteryLevel;
     private BatteryLevelTextView mDockBatteryLevel;
 
+    //private TextView mCarrierLabel;
+    private int mCarrierLabelSpot;
+    private int mShowCarrierLabel;
+
+    public static final int FONT_NORMAL = 0;
+    public static final int FONT_ITALIC = 1;
+    public static final int FONT_BOLD = 2;
+    public static final int FONT_BOLD_ITALIC = 3;
+    public static final int FONT_LIGHT = 4;
+    public static final int FONT_LIGHT_ITALIC = 5;
+    public static final int FONT_THIN = 6;
+    public static final int FONT_THIN_ITALIC = 7;
+    public static final int FONT_CONDENSED = 8;
+    public static final int FONT_CONDENSED_ITALIC = 9;
+    public static final int FONT_CONDENSED_LIGHT = 10;
+    public static final int FONT_CONDENSED_LIGHT_ITALIC = 11;
+    public static final int FONT_CONDENSED_BOLD = 12;
+    public static final int FONT_CONDENSED_BOLD_ITALIC = 13;
+    public static final int FONT_MEDIUM = 14;
+    public static final int FONT_MEDIUM_ITALIC = 15;
+    public static final int FONT_BLACK = 16;
+    public static final int FONT_BLACK_ITALIC = 17;
+    public static final int FONT_DANCINGSCRIPT = 18;
+    public static final int FONT_DANCINGSCRIPT_BOLD = 19;
+    public static final int FONT_COMINGSOON = 20;
+    public static final int FONT_NOTOSERIF = 21;
+    public static final int FONT_NOTOSERIF_ITALIC = 22;
+    public static final int FONT_NOTOSERIF_BOLD = 23;
+    public static final int FONT_NOTOSERIF_BOLD_ITALIC = 24;
+    private int mCarrierLabelFontStyle = FONT_NORMAL;
+
     private KeyguardUserSwitcher mKeyguardUserSwitcher;
 
     private int mSystemIconsSwitcherHiddenExpandedMargin;
@@ -60,8 +99,30 @@ public class KeyguardStatusBarView extends RelativeLayout {
 
     private UserInfoController mUserInfoController;
 
+    private ContentObserver mObserver = new ContentObserver(new Handler()) {
+        public void onChange(boolean selfChange, Uri uri) {
+            showStatusBarCarrier();
+            updateVisibilities();
+        }
+    };
+
     public KeyguardStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        showStatusBarCarrier();
+    }
+
+    private void showStatusBarCarrier() {
+        ContentResolver resolver = getContext().getContentResolver();
+
+        mShowCarrierLabel = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_SHOW_CARRIER, 0,
+                UserHandle.USER_CURRENT);
+        mCarrierLabelSpot = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_CARRIER_SPOT, 0,
+                UserHandle.USER_CURRENT);
+        mCarrierLabelFontStyle = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_CARRIER_FONT_STYLE, FONT_NORMAL,
+                UserHandle.USER_CURRENT);
     }
 
     @Override
@@ -73,6 +134,9 @@ public class KeyguardStatusBarView extends RelativeLayout {
         mBatteryLevel = (BatteryLevelTextView) findViewById(R.id.battery_level_text);
         mDockBatteryLevel = (BatteryLevelTextView) findViewById(R.id.dock_battery_level_text);
         mCarrierLabel = (TextView) findViewById(R.id.keyguard_carrier_text);
+        if (AicpUtils.isWifiOnly(getContext())) {
+            mCarrierLabel.setText("");
+        }
         loadDimens();
         mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(getContext(),
                 android.R.interpolator.fast_out_slow_in);
@@ -115,6 +179,140 @@ public class KeyguardStatusBarView extends RelativeLayout {
         mBatteryLevel.setVisibility(View.VISIBLE);
         if (mDockBatteryLevel != null) {
             mDockBatteryLevel.setVisibility(View.VISIBLE);
+        }
+
+        clearCarrierView();
+
+        if (mCarrierLabelSpot == 0) {
+            mCarrierLabel = (TextView) findViewById(R.id.left_keyguard_carrier_text);
+        }
+        if (mCarrierLabelSpot == 1) {
+            mCarrierLabel = (TextView) findViewById(R.id.keyguard_carrier_text);
+        }
+
+        getFontStyle(mCarrierLabelFontStyle);
+
+        if (mCarrierLabel != null) {
+            if (mShowCarrierLabel == 1) {
+                mCarrierLabel.setVisibility(View.VISIBLE);
+            } else if (mShowCarrierLabel == 3) {
+                mCarrierLabel.setVisibility(View.VISIBLE);
+            } else {
+                mCarrierLabel.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void clearCarrierView() {
+        mCarrierLabel = (TextView) findViewById(R.id.left_keyguard_carrier_text);
+        mCarrierLabel.setVisibility(View.GONE);
+        mCarrierLabel = (TextView) findViewById(R.id.keyguard_carrier_text);
+        mCarrierLabel.setVisibility(View.GONE);
+    }
+
+    public void getFontStyle(int font) {
+        switch (font) {
+            case FONT_NORMAL:
+            default:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif",
+                    Typeface.NORMAL));
+                break;
+            case FONT_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif",
+                    Typeface.ITALIC));
+                break;
+            case FONT_BOLD:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif",
+                    Typeface.BOLD));
+                break;
+            case FONT_BOLD_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif",
+                    Typeface.BOLD_ITALIC));
+                break;
+            case FONT_LIGHT:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-light",
+                    Typeface.NORMAL));
+                break;
+            case FONT_LIGHT_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-light",
+                    Typeface.ITALIC));
+                break;
+            case FONT_THIN:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-thin",
+                    Typeface.NORMAL));
+                break;
+            case FONT_THIN_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-thin",
+                    Typeface.ITALIC));
+                break;
+            case FONT_CONDENSED:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-condensed",
+                    Typeface.NORMAL));
+                break;
+            case FONT_CONDENSED_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-condensed",
+                    Typeface.ITALIC));
+                break;
+            case FONT_CONDENSED_LIGHT:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-condensed-light",
+                    Typeface.NORMAL));
+                break;
+            case FONT_CONDENSED_LIGHT_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-condensed-light",
+                    Typeface.ITALIC));
+                break;
+            case FONT_CONDENSED_BOLD:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-condensed",
+                    Typeface.BOLD));
+                break;
+            case FONT_CONDENSED_BOLD_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-condensed",
+                    Typeface.BOLD_ITALIC));
+                break;
+            case FONT_MEDIUM:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-medium",
+                    Typeface.NORMAL));
+                break;
+            case FONT_MEDIUM_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-medium",
+                    Typeface.ITALIC));
+                break;
+            case FONT_BLACK:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-black",
+                    Typeface.NORMAL));
+                break;
+            case FONT_BLACK_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("sans-serif-black",
+                    Typeface.ITALIC));
+                break;
+            case FONT_DANCINGSCRIPT:
+                mCarrierLabel.setTypeface(Typeface.create("cursive",
+                    Typeface.NORMAL));
+                break;
+            case FONT_DANCINGSCRIPT_BOLD:
+                mCarrierLabel.setTypeface(Typeface.create("cursive",
+                    Typeface.BOLD));
+                break;
+            case FONT_COMINGSOON:
+                mCarrierLabel.setTypeface(Typeface.create("casual",
+                    Typeface.NORMAL));
+                break;
+            case FONT_NOTOSERIF:
+                mCarrierLabel.setTypeface(Typeface.create("serif",
+                    Typeface.NORMAL));
+                break;
+            case FONT_NOTOSERIF_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("serif",
+                    Typeface.ITALIC));
+                break;
+            case FONT_NOTOSERIF_BOLD:
+                mCarrierLabel.setTypeface(Typeface.create("serif",
+                    Typeface.BOLD));
+                break;
+            case FONT_NOTOSERIF_BOLD_ITALIC:
+                mCarrierLabel.setTypeface(Typeface.create("serif",
+                    Typeface.BOLD_ITALIC));
+                break;
         }
     }
 
@@ -249,5 +447,16 @@ public class KeyguardStatusBarView extends RelativeLayout {
     @Override
     public boolean hasOverlappingRendering() {
         return false;
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                "status_bar_show_carrier"), false, mObserver);
+        getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                "status_bar_carrier_spot"), false, mObserver);
+        getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                "status_bar_carrier_font_style"), false, mObserver);
     }
 }
