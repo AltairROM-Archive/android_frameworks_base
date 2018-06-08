@@ -22,13 +22,16 @@ import android.annotation.NonNull;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.KeyguardManager;
+import android.app.ThemeManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -119,8 +122,9 @@ public class VolumeDialog implements TunerService.Tunable {
     private ZenFooter mZenFooter;
     private final Object mSafetyWarningLock = new Object();
     private final Accessibility mAccessibility = new Accessibility();
-    private final ColorStateList mActiveSliderTint;
-    private final ColorStateList mInactiveSliderTint;
+    private ColorStateList mActiveSliderTint;
+    private ColorStateList mInactiveSliderTint;
+    private ColorStateList mInactiveSliderTintColorEngine;
     private VolumeDialogMotion mMotion;
     private final int mWindowType;
     private final ZenModeController mZenModeController;
@@ -158,6 +162,7 @@ public class VolumeDialog implements TunerService.Tunable {
                 (AccessibilityManager) mContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
         mActiveSliderTint = ColorStateList.valueOf(Utils.getColorAccent(mContext));
         mInactiveSliderTint = loadColorStateList(R.color.volume_slider_inactive);
+        mInactiveSliderTintColorEngine = ColorStateList.valueOf(Utils.getColorAccent(mContext));
 
         initDialog();
 
@@ -263,6 +268,22 @@ public class VolumeDialog implements TunerService.Tunable {
         mZenPanel = (TunerZenModePanel) mDialog.findViewById(R.id.tuner_zen_mode_panel);
         mZenPanel.init(mZenModeController);
         mZenPanel.setCallback(mZenPanelCallback);
+
+        updateDialog();
+    }
+
+    protected void updateDialog() {
+        final TypedArray ta = mContext.obtainStyledAttributes(new int[] {
+                android.R.attr.colorPrimary,
+                android.R.attr.colorAccent
+        });
+        TextView endText = (TextView) mDialog.findViewById(R.id.volume_zen_end_now);
+        mDialog.dismiss();
+        mDialogView.setBackgroundColor(ta.getColor(0, 0));
+        mActiveSliderTint = ColorStateList.valueOf(Utils.getColorAccent(mContext));
+        mInactiveSliderTintColorEngine = ColorStateList.valueOf(Utils.getColorAccent(mContext));
+        endText.setTextColor(ta.getColor(1, 0));
+        ta.recycle();
     }
 
     @Override
@@ -387,6 +408,8 @@ public class VolumeDialog implements TunerService.Tunable {
         row.header.setId(20 * row.stream);
         mSpTexts.add(row.header);
         row.slider = (SeekBar) row.view.findViewById(R.id.volume_row_slider);
+        row.slider.setProgressTintMode(PorterDuff.Mode.SRC_ATOP);
+        row.slider.setThumbTintMode(PorterDuff.Mode.SRC_ATOP);
         row.slider.setOnSeekBarChangeListener(new VolumeSeekBarChangeListener(row));
         row.anim = null;
         row.cachedShowHeaders = VolumePrefs.DEFAULT_SHOW_HEADERS;
@@ -866,7 +889,9 @@ public class VolumeDialog implements TunerService.Tunable {
             row.slider.requestFocus();
         }
         final ColorStateList tint = isActive && row.slider.isEnabled() ? mActiveSliderTint
-                : mInactiveSliderTint;
+                : (ThemeManager.isOverlayEnabled()
+                        ? mInactiveSliderTint
+                        : mInactiveSliderTintColorEngine);
         if (tint == row.cachedSliderTint) return;
         row.cachedSliderTint = tint;
         row.slider.setProgressTintList(tint);

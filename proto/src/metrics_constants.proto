@@ -2225,6 +2225,9 @@ message MetricsEvent {
     // OS: 6.0
     ACTION_BRIGHTNESS_FOR_VR = 498;
 
+    // Quick setting tiles
+    QUICK_SETTINGS = 412;
+
     // ACTION: A captive portal was detected during network validation
     // CATEGORY: NOTIFICATION
     // OS: N-MR2

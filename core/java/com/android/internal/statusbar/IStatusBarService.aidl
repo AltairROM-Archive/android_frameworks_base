@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import android.content.Intent;
 
 import com.android.internal.statusbar.IStatusBar;
 import com.android.internal.statusbar.StatusBarIcon;
@@ -67,4 +68,18 @@ interface IStatusBarService
     void remTile(in ComponentName tile);
     void clickTile(in ComponentName tile);
     void handleSystemNavigationKey(in int key);
+
+    // Start DU methods
+    void toggleRecentApps();
+    void toggleSplitScreen();
+    void preloadRecentApps();
+    void cancelPreloadRecentApps();
+    void startAssist(in Bundle args);
+    void screenPinningStateChanged(boolean enabled);
+    void leftInLandscapeChanged(boolean isLeft);
+    void toggleFlashlight();
+
+    void setAutoRotate(boolean enabled);
+
+    void showCustomIntentAfterKeyguard(inout Intent intent);
 }

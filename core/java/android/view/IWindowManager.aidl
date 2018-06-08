@@ -22,6 +22,7 @@ import com.android.internal.view.IInputContext;
 import com.android.internal.view.IInputMethodClient;
 import com.android.internal.policy.IShortcutService;
 
+import android.content.Intent;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -344,6 +345,11 @@ interface IWindowManager
      * Device has a software navigation bar (separate from the status bar).
      */
     boolean hasNavigationBar();
+
+    /**
+     * Send some ActionHandler commands to WindowManager.
+     */
+    void sendCustomAction(in Intent intent);
 
     /**
      * Device needs a software navigation bar (because it has no hardware keys).

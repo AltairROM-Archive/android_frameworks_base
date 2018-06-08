@@ -3653,6 +3653,26 @@ public abstract class Context {
     public static final String GATEKEEPER_SERVICE = "android.service.gatekeeper.IGateKeeperService";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.content.om.OverlayManager} for managing overlay packages.
+     *
+     * @see #getSystemService
+     * @see android.content.om.OverlayManager
+     * @hide
+     */
+    public static final String OVERLAY_SERVICE = "overlay";
+
+    /**
+     * Use with {@link #getSystemService} to retrieve a
+     * {@link android.app.ThemeManager} for accessing and setting theme state.
+     *
+     * @hide
+     * @see #getSystemService
+     * @see android.app.ThemeManager
+     */
+    public static final String THEME_SERVICE = "theme";
+
+    /**
      * Determine whether the given permission is allowed for a particular
      * process and user ID running in the system.
      *

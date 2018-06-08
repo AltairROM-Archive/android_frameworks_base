@@ -86,6 +86,8 @@ LOCAL_SRC_FILES += \
 	core/java/android/app/job/IJobCallback.aidl \
 	core/java/android/app/job/IJobScheduler.aidl \
 	core/java/android/app/job/IJobService.aidl \
+	core/java/android/app/IThemeCallback.aidl \
+	core/java/android/app/IThemeService.aidl \
 	core/java/android/app/ITransientNotification.aidl \
 	core/java/android/app/IUidObserver.aidl \
 	core/java/android/app/IUiAutomationConnection.aidl \
@@ -137,6 +139,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/content/ISyncContext.aidl \
 	core/java/android/content/ISyncServiceAdapter.aidl \
 	core/java/android/content/ISyncStatusObserver.aidl \
+	core/java/android/content/om/IOverlayManager.aidl \
 	core/java/android/content/pm/ILauncherApps.aidl \
 	core/java/android/content/pm/IOnAppsChangedListener.aidl \
 	core/java/android/content/pm/IOtaDexopt.aidl \

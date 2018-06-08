@@ -76,6 +76,10 @@
         android:key="airplane"
         android:title="@string/status_bar_airplane" />
 
+    <cyanogenmod.preference.SystemSettingSwitchPreference
+        android:key="data_activity_arrows"
+        android:title="@string/data_wifi_activity_arrows_title" />
+
     <!-- other weird signal stuff -->
 
     <com.android.systemui.tuner.StatusBarSwitch

@@ -3710,6 +3710,31 @@ public final class Settings {
          public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
 
         /**
+         * Whether to display data activity arrows for wifi/data connections
+         * @hide
+         */
+        public static final String DATA_ACTIVITY_ARROWS = "data_activity_arrows";
+
+        /**
+         * Switch to add confirmation to power Dialog
+         * @hide
+         */
+        public static final String CONFIRM_SHUTDOWN_SWITCH = "confirm_shutdown_switch";
+
+        /**
+         * Whether to display qs tile titles in the qs panel
+         * @hide
+         */
+        public static final String QS_TILE_TITLE_VISIBILITY = "qs_tile_title_visibility";
+
+        /**
+         * Toast icon
+         *
+         * @hide
+         */
+        public static final String TOAST_ICON = "toast_icon";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5014,6 +5039,268 @@ public final class Settings {
                 "wifi_disconnect_delay_duration";
 
         /**
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_HEIGHT_LANDSCAPE = "navigation_bar_height_landscape";
+
+        /**
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
+
+        /**
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_WIDTH = "navigation_bar_width";
+
+        /**
+         * Add or remove software navigation bar
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_VISIBLE = "navigation_bar_visible";
+
+        /**
+         * Navigation bar mode
+         *
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_MODE = "navigation_bar_mode";
+
+        /**
+         * Fling actions
+         *
+         * @hide
+         */
+        public static final String FLING_GESTURE_ACTIONS = "fling_gesture_configs";
+
+        /**
+         * Fling logo visible
+         *
+         * @hide
+         */
+        public static final String FLING_LOGO_VISIBLE = "fling_logo_visible";
+
+        /**
+         * Fling logo animates
+         *
+         * @hide
+         */
+        public static final String FLING_LOGO_ANIMATES= "fling_logo_animates";
+
+        /**
+         * Fling logo animates
+         *
+         * @hide
+         */
+        public static final String FLING_LOGO_COLOR = "fling_logo_color";
+
+        /**
+         * Fling pulse music visualizer
+         *
+         * @hide
+         */
+        public static final String FLING_PULSE_ENABLED = "fling_pulse_enabled";
+
+        /**
+         * Fling pulse music visualizer color
+         *
+         * @hide
+         */
+        public static final String FLING_PULSE_COLOR = "fling_pulse_color";
+
+        /**
+         * Fling ripple effect
+         *
+         * @hide
+         */
+        public static final String FLING_RIPPLE_ENABLED = "fling_ripple_enabled";
+
+        /**
+         * Fling ripple color
+         *
+         * @hide
+         */
+        public static final String FLING_RIPPLE_COLOR = "fling_ripple_color";
+
+        /**
+         * Fling gesture trails on/off
+         *
+         * @hide
+         */
+        public static final String FLING_TRAILS_ENABLED = "fling_trails_enabled";
+
+        /**
+         * Fling gesture trails color
+         *
+         * @hide
+         */
+        public static final String FLING_TRAILS_COLOR = "fling_trails_color";
+
+        /**
+         * Fling pulse lavalamp psychedelic colors
+         *
+         * @hide
+         */
+        public static final String FLING_PULSE_LAVALAMP_ENABLED = "fling_pulse_lavalamp_enabled";
+
+        /**
+         * Fling pulse lavalamp animation speed
+         *
+         * @hide
+         */
+        public static final String FLING_PULSE_LAVALAMP_SPEED = "fling_pulse_lavalamp_speed";
+
+        /**
+         * Pulse renderer implementation
+         *
+         * @hide
+         */
+        public static final String PULSE_RENDER_STYLE_URI = "pulse_render_style";
+
+        /**
+         * time it takes to execute Fling long press action
+         *
+         * @hide
+         */
+        public static final String FLING_LONGPRESS_TIMEOUT = "fling_longpress_timeout";
+
+        /**
+         * distance to swipe right when device is in portrait orientation to
+         * trigger action
+         *
+         * @hide
+         */
+        public static final String FLING_LONGSWIPE_THRESHOLD_RIGHT_PORT = "fling_longswipe_threshold_right_port";
+
+        /**
+         * distance to swipe left when device is in portrait orientation to
+         * trigger action
+         *
+         * @hide
+         */
+        public static final String FLING_LONGSWIPE_THRESHOLD_LEFT_PORT = "fling_longswipe_threshold_left_port";
+
+        /**
+         * distance to swipe right when device is in landscape orientation to
+         * trigger action. Apples to a horizontal layout (tablet/phablet)
+         *
+         * @hide
+         */
+        public static final String FLING_LONGSWIPE_THRESHOLD_RIGHT_LAND = "fling_longswipe_threshold_right_land";
+
+        /**
+         * distance to swipe left when device is in landscape orientation to
+         * trigger action. Apples to a horizontal layout (tablet/phablet)
+         *
+         * @hide
+         */
+        public static final String FLING_LONGSWIPE_THRESHOLD_LEFT_LAND = "fling_longswipe_threshold_left_land";
+
+        /**
+         * distance to swipe up when device is in landscape orientation to
+         * trigger action. Apples to a vertical layout (phones)
+         *
+         * @hide
+         */
+        public static final String FLING_LONGSWIPE_THRESHOLD_UP_LAND = "fling_longswipe_threshold_up_land";
+
+        /**
+         * distance to swipe down when device is in landscape orientation to
+         * trigger action. Apples to a horizontal layout (phones)
+         *
+         * @hide
+         */
+        public static final String FLING_LONGSWIPE_THRESHOLD_DOWN_LAND = "fling_longswipe_threshold_down_land";
+
+        /**
+         * width of Fling trails stroke, in density pixels
+         *
+         * @hide
+         */
+        public static final String FLING_TRAILS_WIDTH = "fling_trails_width";
+
+        /**
+         * Navbar buttons transparency
+         * @hide
+         */
+        public static final String NAVBAR_BUTTONS_ALPHA = "navbar_buttons_alpha";
+
+        /**
+         * Custom Pulse Widths
+         * @hide
+         */
+        public static final String PULSE_CUSTOM_DIMEN = "pulse_custom_dimen";
+
+        /**
+         * Custom Spacing Between Pulse Bars
+         * @hide
+         */
+        public static final String PULSE_CUSTOM_DIV = "pulse_custom_div";
+
+        /**
+         * Custom Pulse Block Size
+         * @hide
+         */
+        public static final String PULSE_FILLED_BLOCK_SIZE = "pulse_filled_block_size";
+
+        /**
+         * Custom Spacing Between Pulse Blocks
+         * @hide
+         */
+        public static final String PULSE_EMPTY_BLOCK_SIZE = "pulse_empty_block_size";
+
+        /**
+         * Custom Pulse Sanity Levels
+         * @hide
+         */
+        public static final String PULSE_CUSTOM_FUDGE_FACTOR = "pulse_custom_fudge_factor";
+
+        /**
+         * Pulse Fudge Factor
+         * @hide
+         */
+        public static final String PULSE_SOLID_FUDGE_FACTOR = "pulse_solid_fudge_factor";
+
+        /**
+         * Pulse Lavamp Animation Speed
+         * @hide
+         */
+        public static final String PULSE_LAVALAMP_SOLID_SPEED = "lava_lamp_solid_speed";
+
+        /**
+         * Pulse Solid units count
+         * @hide
+         */
+        public static final String PULSE_SOLID_UNITS_COUNT = "pulse_solid_units_count";
+
+        /**
+         * Pulse Solid units opacity
+         * @hide
+         */
+        public static final String PULSE_SOLID_UNITS_OPACITY = "pulse_solid_units_opacity";
+
+        /**
+         * SmartBar buttons opacity on Pulse
+         * @hide
+         */
+        public static final String PULSE_CUSTOM_BUTTONS_OPACITY = "pulse_custom_buttons_opacity";
+
+        /**
+         * Long press delay for smartbar buttons
+         * @hide
+         * 0: Default (fast)
+         * 1: Normal delay
+         * 2: Long delay
+         */
+        public static final String SMARTBAR_LONGPRESS_DELAY = "smartbar_longpress_delay";
+
+        /**
+         * Scaling value for smartbar custom button icon
+         * @hide
+         */
+        public static final String SMARTBAR_CUSTOM_ICON_SIZE = "smartbar_custom_icon_size";
+
+        /**
          * A flag containing settings used for biometric weak
          * @hide
          */
@@ -6166,10 +6453,22 @@ public final class Settings {
                 INCALL_BACK_BUTTON_BEHAVIOR_NONE;
 
         /**
+         * Enable single click to turn WiFi on or off.
+         * @hide
+         */
+        public static final String QS_WIFI_EASY_TOGGLE = "qs_wifi_easy_toggle";
+
+        /**
          * Whether the device should wake when the wake gesture sensor detects motion.
          * @hide
          */
         public static final String WAKE_GESTURE_ENABLED = "wake_gesture_enabled";
+
+        /**
+         * Enable single click to turn Bluetooth on or off.
+         * @hide
+         */
+        public static final String QS_BT_EASY_TOGGLE = "qs_bt_easy_toggle";
 
         /**
          * Whether the device should doze if configured.
@@ -6533,6 +6832,27 @@ public final class Settings {
                 "managed_profile_contact_remote_search";
 
         /**
+         * Whether dark theme is enabled or not
+         *
+         * @hide
+         */
+        public static final String THEME_PRIMARY_COLOR = "theme_primary_color";
+
+        /**
+         * Whether accent colors for themes are enabled or not
+         *
+         * @hide
+         */
+        public static final String THEME_ACCENT_COLOR = "theme_accent_color";
+
+        /**
+         * Whether accent colors or dark mode is supposed to show first
+         *
+         * @hide
+         */
+        public static final String THEME_SETTINGS_MODE = "theme_settings_mode";
+
+        /**
          * Whether or not the automatic storage manager is enabled and should run on the device.
          *
          * @hide
@@ -6617,6 +6937,45 @@ public final class Settings {
          * @hide
          */
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
+
+        /**
+         * Number of rows used for the Quick Settings (portrait)
+         *
+         * @hide
+         */
+        public static final String QS_ROWS_PORTRAIT = "qs_rows_portrait";
+
+        /**
+         * Number of rows used for the Quick Settings (landscape)
+         *
+         * @hide
+         */
+        public static final String QS_ROWS_LANDSCAPE = "qs_rows_landscape";
+
+        /**
+         * Number of columns used for the Quick Settings
+         *
+         * @hide
+         */
+        public static final String QS_COLUMNS_PORTRAIT = "qs_columns_portrait";
+
+        /**
+         * Number of qs columns on landscape orientation
+         * @hide
+         */
+        public static final String QS_COLUMNS_LANDSCAPE = "qs_columns_landscape";
+
+        /**
+         * Force authorize Substratum (or equivalent) frontend calling packages by Masquerade
+         * @hide
+         */
+        public static final String FORCE_AUTHORIZE_SUBSTRATUM_PACKAGES = "force_authorize_substratum_packages";
+
+        /**
+         * One Handed mode toggle
+         * @hide
+         */
+        public static final String ONE_HANDED_MODE_UI = "one_handed_mode_ui";
 
         /**
          * This are the settings to be backed up.

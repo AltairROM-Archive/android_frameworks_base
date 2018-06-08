@@ -45,6 +45,9 @@
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
     <uses-permission android:name="android.permission.GET_APP_OPS_STATS" />
 
+    <!-- Screen recording -->
+    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+
     <!-- Networking and telephony -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -172,6 +175,19 @@
     <!-- Weather -->
     <uses-permission android:name="com.cyanogenmod.lockclock.permission.READ_WEATHER" />
 
+    <!-- DU permissions -->
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+
+    <protected-broadcast android:name="action_handler_show_power_menu" />
+    <protected-broadcast android:name="action_handler_toggle_screenrecord" />
+    <protected-broadcast android:name="action_handler_screenshot" />
+    <protected-broadcast android:name="action_handler_region_screenshot" />
+    <protected-broadcast android:name="action_handler_toggle_flashlight" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
@@ -219,6 +235,15 @@
                 <action android:name="com.android.systemui.screenshot.SHOW_ERROR" />
             </intent-filter>
         </receiver>
+
+        <!-- started from PhoneWindowManager
+             TODO: Should have an android:permission attribute -->
+        <service android:name=".omni.screenrecord.TakeScreenrecordService"
+            android:process=":screenrecord"
+            android:exported="false" />
+
+        <service android:name=".LoadAverageService"
+                android:exported="true" />
 
         <service android:name=".ImageWallpaper"
                 android:permission="android.permission.BIND_WALLPAPER"
