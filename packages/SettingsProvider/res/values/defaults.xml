@@ -190,4 +190,7 @@
 
     <!-- default setting for Settings.Global.DEFAULT_RESTRICT_BACKGROUND_DATA -->
     <bool name="def_restrict_background_data">false</bool>
+
+    <!--  default setting for Settings.System.SHOW_BATTERY_PERCENT -->
+    <integer name="def_show_battery_percent">1</integer>
 </resources>
