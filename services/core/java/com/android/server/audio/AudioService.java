@@ -749,7 +749,7 @@ public class AudioService extends IAudioService.Stub
 
         // read this in before readPersistedSettings() because updateStreamVolumeAlias needs it
         mLinkNotificationWithVolume = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, 0) == 1;
 
         // must be called before readPersistedSettings() which needs a valid mStreamVolumeAlias[]
         // array initialized by updateStreamVolumeAlias()
@@ -1289,7 +1289,7 @@ public class AudioService extends IAudioService.Stub
         }
 
         mLinkNotificationWithVolume = Settings.Secure.getInt(cr,
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, 0) == 1;
 
         mMuteAffectedStreams = System.getIntForUser(cr,
                 System.MUTE_STREAMS_AFFECTED, AudioSystem.DEFAULT_MUTE_STREAMS_AFFECTED,
@@ -5189,7 +5189,7 @@ public class AudioService extends IAudioService.Stub
                         UserHandle.USER_CURRENT) == 1;
 
                 boolean linkNotificationWithVolume = Settings.Secure.getInt(mContentResolver,
-                        Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                        Settings.Secure.VOLUME_LINK_NOTIFICATION, 0) == 1;
                 if (linkNotificationWithVolume != mLinkNotificationWithVolume) {
                     mLinkNotificationWithVolume = linkNotificationWithVolume;
                     createStreamStates();
