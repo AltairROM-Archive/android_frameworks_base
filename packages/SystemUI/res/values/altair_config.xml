@@ -32,4 +32,7 @@
     <integer name="config_qs_columns_landscape">4</integer>
     <integer name="config_qs_rows_landscape">2</integer>
 
+    <!-- Whether to show VoLTE icon in the status bar -->
+    <bool name="config_display_volte">true</bool>
+
 </resources>
