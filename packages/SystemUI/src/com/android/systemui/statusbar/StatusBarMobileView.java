@@ -65,6 +65,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
     private View mMobileRoamingSpace;
     private int mVisibleState = -1;
     private DualToneHandler mDualToneHandler;
+    private ImageView mVolte;
     private boolean mOldStyleType;
     private ImageView mMobileTypeSmall;
 
@@ -135,6 +136,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         mMobileRoaming = findViewById(R.id.mobile_roaming);
         mMobileRoamingSpace = findViewById(R.id.mobile_roaming_space);
         mInoutContainer = findViewById(R.id.inout_container);
+        mVolte = findViewById(R.id.mobile_volte);
         mMobileSignalType = findViewById(R.id.mobile_signal_type);
         mMobileTypeSmall = findViewById(R.id.mobile_type_small);
 
@@ -207,6 +209,12 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         mInoutContainer.setVisibility(
                 mShowMobileActivity && mState.visible ? View.VISIBLE : View.GONE);
         mInoutContainer.setState(mState.activityIn, mState.activityOut);
+        if (mState.volteId > 0 ) {
+            mVolte.setImageResource(mState.volteId);
+            mVolte.setVisibility(View.VISIBLE);
+        } else {
+            mVolte.setVisibility(View.GONE);
+        }
     }
 
     private void setMobileSignalWidth(boolean small) {
@@ -261,6 +269,15 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         mMobileRoaming.setVisibility(state.roaming ? View.VISIBLE : View.GONE);
         mMobileRoamingSpace.setVisibility(showRoamingSpace || state.roaming ? View.VISIBLE : View.GONE);
         mInoutContainer.setState(state.activityIn, state.activityOut);
+
+        if (mState.volteId != state.volteId) {
+            if (state.volteId != 0) {
+                mVolte.setImageResource(state.volteId);
+                mVolte.setVisibility(View.VISIBLE);
+            } else {
+                mVolte.setVisibility(View.GONE);
+            }
+        }
 
         needsLayout |= state.roaming != mState.roaming
                 || state.activityIn != mState.activityIn
