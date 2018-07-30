@@ -22,14 +22,7 @@ import static com.android.systemui.statusbar.phone.StatusBar.reinflateSignalClus
 import android.annotation.Nullable;
 import android.app.Fragment;
 import android.app.StatusBarManager;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.database.ContentObserver;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,14 +36,11 @@ import com.android.systemui.SysUiServiceProvider;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.phone.StatusBarIconController.DarkIconManager;
-import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.statusbar.policy.DarkIconDispatcher;
 import com.android.systemui.statusbar.policy.EncryptionHelper;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
-
-import lineageos.providers.LineageSettings;
 
 /**
  * Contains the collapsed status bar and handles hiding/showing based on disable flags
@@ -70,39 +60,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private StatusBar mStatusBarComponent;
     private DarkIconManager mDarkIconManager;
     private SignalClusterView mSignalClusterView;
-    private Clock mClockDefault;
-
-    private SettingsObserver mSettingsObserver;
-
-    private class SettingsObserver extends ContentObserver {
-        public SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        public void observe(Context context) {
-            ContentResolver resolver = context.getContentResolver();
-            resolver.registerContentObserver(LineageSettings.System.getUriFor(
-                    LineageSettings.System.STATUS_BAR_AM_PM),
-                    false, this, UserHandle.USER_ALL);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings(true);
-        }
-
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            if (uri.equals(LineageSettings.System.getUriFor(
-                    LineageSettings.System.STATUS_BAR_AM_PM))) {
-                updateClockAmPmStyle();
-            }
-        }
-
-        public void unobserve(Context context) {
-            context.getContentResolver().unregisterContentObserver(this);
-        }
-    }
 
     private SignalCallback mSignalCallback = new SignalCallback() {
         @Override
@@ -117,7 +74,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mKeyguardMonitor = Dependency.get(KeyguardMonitor.class);
         mNetworkController = Dependency.get(NetworkController.class);
         mStatusBarComponent = SysUiServiceProvider.getComponent(getContext(), StatusBar.class);
-        mSettingsObserver = new SettingsObserver(new Handler());
     }
 
     @Override
@@ -137,13 +93,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         Dependency.get(StatusBarIconController.class).addIconGroup(mDarkIconManager);
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
         mSignalClusterView = mStatusBar.findViewById(R.id.signal_cluster);
-        mClockDefault = (Clock) mStatusBar.findViewById(R.id.clock);
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mSignalClusterView);
         // Default to showing until we know otherwise.
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
-
-        mSettingsObserver.observe(getContext());
     }
 
     @Override
@@ -172,7 +125,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (mNetworkController.hasEmergencyCryptKeeperText()) {
             mNetworkController.removeCallback(mSignalCallback);
         }
-        mSettingsObserver.unobserve(getContext());
     }
 
     public void initNotificationIconArea(NotificationIconAreaController
@@ -315,19 +267,5 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             ViewGroup parent = (ViewGroup) emergencyViewStub.getParent();
             parent.removeView(emergencyViewStub);
         }
-    }
-
-    public void updateSettings(boolean animate) {
-        setUpClock();
-    }
-
-    private void setUpClock() {
-        updateClockAmPmStyle();
-    }
-
-    private void updateClockAmPmStyle() {
-        int style = LineageSettings.System.getInt(getContext().getContentResolver(),
-			    LineageSettings.System.STATUS_BAR_AM_PM, 0);
-        mClockDefault.setAmPmStyle(style);
     }
 }
