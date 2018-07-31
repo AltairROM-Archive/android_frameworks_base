@@ -4618,10 +4618,8 @@ message MetricsEvent {
     // Add new aosp constants above this line.
     // END OF AOSP CONSTANTS
 
-    // DUI settings
-    DUI_SETTINGS = 9997;
-
-    // Quick settings tiles
+    // Altair
+    ALTAIR = 9999;
     CUSTOM_QUICK_TILES = 9998;
   }
 }
