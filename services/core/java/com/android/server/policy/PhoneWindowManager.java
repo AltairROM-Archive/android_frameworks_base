@@ -9051,7 +9051,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     public boolean needsNavigationBar() {
-        return DUActionUtils.hasNavbarByDefault(mContext);
+        return !DUActionUtils.hasNavbarByDefault(mContext);
     }
 
     /*
