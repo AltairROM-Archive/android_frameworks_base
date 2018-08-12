@@ -2737,6 +2737,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_CURRENT) == 1;
             if (doShowNavbar != mNavbarVisible) {
                 mNavbarVisible = doShowNavbar;
+                if (mLineageHardware.isSupported(LineageHardwareManager.FEATURE_KEY_DISABLE)) {
+                    mLineageHardware.set(LineageHardwareManager.FEATURE_KEY_DISABLE,
+                            mNavbarVisible);
+                }
             }
             updateNavigationBarSize();
 
