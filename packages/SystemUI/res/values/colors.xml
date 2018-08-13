@@ -144,4 +144,17 @@
     <color name="volume_icon_color">#ffffffff</color>
     <color name="volume_settings_icon_color">#7fffffff</color>
     <color name="volume_slider_inactive">#FFB0BEC5</color><!-- blue grey 200 -->
+
+    <!-- The color of each icon on the navigation bar. Each is initially assigned
+         the same default color (white), but they can be changed by themes. -->
+    <color name="icon_color_sysbar_default_color">#ffffff</color>
+    <color name="icon_color_sysbar_add">@color/icon_color_sysbar_default_color</color>
+    <color name="icon_color_sysbar_back">@color/icon_color_sysbar_default_color</color>
+    <color name="icon_color_sysbar_back_ime">@color/icon_color_sysbar_default_color</color>
+    <color name="icon_color_sysbar_home">@color/icon_color_sysbar_default_color</color>
+    <color name="icon_color_sysbar_ime_left">@color/icon_color_sysbar_default_color</color>
+    <color name="icon_color_sysbar_ime_right">@color/icon_color_sysbar_default_color</color>
+    <color name="icon_color_sysbar_menu">@color/icon_color_sysbar_default_color</color>
+    <color name="icon_color_sysbar_recent">@color/icon_color_sysbar_default_color</color>
+    <color name="icon_color_sysbar_search">@color/icon_color_sysbar_default_color</color>
 </resources>

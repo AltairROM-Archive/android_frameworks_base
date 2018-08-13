@@ -19,13 +19,18 @@ package com.android.systemui;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BatteryStateRegistar;
 
+import android.animation.ArgbEvaluator;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
+
+import cyanogenmod.providers.CMSettings;
 
 public class BatteryLevelTextView extends TextView implements
         BatteryController.BatteryStateChangeCallback{
@@ -40,11 +45,19 @@ public class BatteryLevelTextView extends TextView implements
     private int mStyle;
     private int mPercentMode;
 
+    private boolean mAllowTint = false;
+    private boolean mUseCustomColors;
+    private int mCustomTextColor;
+    private float mDarkIntensity;
+    private int mDarkModeIconColorSingleTone;
+    private int mDefaultTextColor;
+
     public BatteryLevelTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         // setBatteryStateRegistar (if called) will made the view visible and ready to be hidden
         // if the view shouldn't be displayed. Otherwise this view should be hidden from start.
         mRequestedVisibility = GONE;
+        setColor();
     }
 
     public void setForceShown(boolean forceShow) {
@@ -100,6 +113,13 @@ public class BatteryLevelTextView extends TextView implements
     }
 
     @Override
+    public void onBatteryColorsChanged(boolean useCustomColors, int fillColor,
+            int boltColor, int textColor) {
+        setColor(mDarkIntensity);
+        updateVisibility();
+    }
+
+    @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
@@ -135,5 +155,36 @@ public class BatteryLevelTextView extends TextView implements
         } else {
             super.setVisibility(GONE);
         }
+    }
+
+    private void getColors() {
+        mDarkModeIconColorSingleTone = getContext().getColor(R.color.dark_mode_icon_color_single_tone);
+        mDefaultTextColor = getContext().getColor(R.color.status_bar_battery_level_text_color);
+        ContentResolver resolver = getContext().getContentResolver();
+        mUseCustomColors = (CMSettings.System.getInt(resolver,
+                CMSettings.System.STATUS_BAR_BATTERY_USE_CUSTOM_COLORS,
+                0) != 0);
+        mCustomTextColor = CMSettings.System.getInt(resolver,
+                CMSettings.System.STATUS_BAR_BATTERY_CUSTOM_COLOR_TEXT,
+                Color.WHITE);
+        if (mCustomTextColor == Integer.MIN_VALUE) {
+            // flag to reset the color
+            mCustomTextColor = mDefaultTextColor;
+        }
+    }
+
+    public void setColor() {
+        getColors();
+        if (!mUseCustomColors)
+            mCustomTextColor = getContext().getColor(R.color.status_bar_battery_level_text_color);
+        setTextColor(mCustomTextColor);
+    }
+
+    public void setColor(float darkIntensity) {
+        mDarkIntensity = darkIntensity;
+        getColors();
+        mCustomTextColor = (int) ArgbEvaluator.getInstance().evaluate(darkIntensity,
+                mUseCustomColors ? mCustomTextColor : mDefaultTextColor, mDarkModeIconColorSingleTone);
+        setTextColor(mCustomTextColor);
     }
 }

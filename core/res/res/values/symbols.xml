@@ -1247,7 +1247,6 @@
   <java-symbol type="drawable" name="text_select_handle_right" />
   <java-symbol type="drawable" name="unknown_image" />
   <java-symbol type="drawable" name="unlock_default" />
-  <java-symbol type="drawable" name="unlock_halo" />
   <java-symbol type="drawable" name="unlock_ring" />
   <java-symbol type="drawable" name="unlock_wave" />
   <java-symbol type="drawable" name="notification_template_icon_bg" />

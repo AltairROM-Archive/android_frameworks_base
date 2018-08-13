@@ -2653,5 +2653,16 @@
     <public type="id" name="accessibilityActionScrollRight" id="0x0102003b" />
     <public type="id" name="accessibilityActionContextClick" id="0x0102003c" />
 
-    <public type="string" name="fingerprint_icon_content_description" />
+    <public type="string" name="fingerprint_icon_content_description" id="0x1040018" />
+
+    <!--SlimSeekBar ids @hide -->
+    <public type="id" name="monitor_box" id="0x0102003d" />
+    <public type="id" name="seek_bar" id="0x0102003e" />
+
+    <!--Slim Slider layout @hide -->
+    <public type="layout" name="slider_preference" id="0x01090018" />
+
+    <!-- Slimseekbar @hide -->
+    <public type="string" name="default_string" id="0x01040019" />
+
 </resources>
