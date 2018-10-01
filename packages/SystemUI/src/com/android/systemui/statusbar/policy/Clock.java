@@ -79,7 +79,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     private static final int AM_PM_STYLE_SMALL   = 1;
     private static final int AM_PM_STYLE_GONE    = 2;
 
-    private int mAmPmStyle = AM_PM_STYLE_GONE;
+    private int mAmPmStyle = AM_PM_STYLE_SMALL;
     private final boolean mShowDark;
     private boolean mShowSeconds;
     private Handler mSecondsHandler;
@@ -210,7 +210,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             mShowSeconds = newValue != null && Integer.parseInt(newValue) != 0;
             updateShowSeconds();
         } else if (CLOCK_STYLE.equals(key)) {
-            mAmPmStyle = newValue == null ? AM_PM_STYLE_GONE : Integer.valueOf(newValue);
+            mAmPmStyle = newValue == null ? AM_PM_STYLE_SMALL : Integer.valueOf(newValue);
             mClockFormatString = ""; // force refresh
             updateClock();
         }

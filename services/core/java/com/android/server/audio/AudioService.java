@@ -133,6 +133,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import lineageos.providers.LineageSettings;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -275,6 +276,7 @@ public class AudioService extends IAudioService.Stub
 
     /* Sound effect file names  */
     private static final String SOUND_EFFECTS_PATH = "/media/audio/ui/";
+    private static final String SOUND_EFFECTS_THEMED_PATH = "/data/system/theme/audio/ui/";
     private static final List<String> SOUND_EFFECT_FILES = new ArrayList<String>();
 
     /* Sound effect file name mapping sound effect id (AudioManager.FX_xxx) to
@@ -663,6 +665,16 @@ public class AudioService extends IAudioService.Stub
         }
     };
 
+    // only these packages are allowed to override Pulse visualizer lock
+    private static final String[] VISUALIZER_WHITELIST = new String[] {
+            "android",
+            "com.android.systemui",
+            "com.android.keyguard",
+            "com.google.android.googlequicksearchbox"
+    };
+
+    private boolean mVisualizerLocked;
+
     ///////////////////////////////////////////////////////////////////////////
     // Construction
     ///////////////////////////////////////////////////////////////////////////
@@ -749,7 +761,7 @@ public class AudioService extends IAudioService.Stub
 
         // read this in before readPersistedSettings() because updateStreamVolumeAlias needs it
         mLinkNotificationWithVolume = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, 0) == 1;
 
         // must be called before readPersistedSettings() which needs a valid mStreamVolumeAlias[]
         // array initialized by updateStreamVolumeAlias()
@@ -1289,7 +1301,7 @@ public class AudioService extends IAudioService.Stub
         }
 
         mLinkNotificationWithVolume = Settings.Secure.getInt(cr,
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, 0) == 1;
 
         mMuteAffectedStreams = System.getIntForUser(cr,
                 System.MUTE_STREAMS_AFFECTED, AudioSystem.DEFAULT_MUTE_STREAMS_AFFECTED,
@@ -3867,6 +3879,25 @@ public class AudioService extends IAudioService.Stub
         return (mMuteAffectedStreams & (1 << streamType)) != 0;
     }
 
+    /** @hide */
+    public boolean isVisualizerLocked(String callingPackage) {
+        boolean isSystem = false;
+        for (int i = 0; i < VISUALIZER_WHITELIST.length; i++) {
+            if (TextUtils.equals(callingPackage, VISUALIZER_WHITELIST[i])) {
+                isSystem = true;
+                break;
+            }
+        }
+        return !isSystem && mVisualizerLocked;
+    }
+
+    /** @hide */
+    public void setVisualizerLocked(boolean doLock) {
+        if (mVisualizerLocked != doLock) {
+            mVisualizerLocked = doLock;
+        }
+    }
+
     private void ensureValidDirection(int direction) {
         switch (direction) {
             case AudioManager.ADJUST_LOWER:
@@ -4810,9 +4841,16 @@ public class AudioService extends IAudioService.Stub
                         continue;
                     }
                     if (poolId[SOUND_EFFECT_FILES_MAP[effect][0]] == -1) {
-                        String filePath = Environment.getRootDirectory()
-                                + SOUND_EFFECTS_PATH
-                                + SOUND_EFFECT_FILES.get(SOUND_EFFECT_FILES_MAP[effect][0]);
+                        String filePath = "";
+                        File theme_file = new File(SOUND_EFFECTS_THEMED_PATH +
+                            SOUND_EFFECT_FILES.get(SOUND_EFFECT_FILES_MAP[effect][0]));
+                        if (theme_file.exists()) {
+                            filePath = theme_file.getAbsolutePath();
+                        } else {
+                            filePath = Environment.getRootDirectory()
+                                    + SOUND_EFFECTS_PATH
+                                    + SOUND_EFFECT_FILES.get(SOUND_EFFECT_FILES_MAP[effect][0]);
+                        }
                         int sampleId = mSoundPool.load(filePath, 0);
                         if (sampleId <= 0) {
                             Log.w(TAG, "Soundpool could not load file: "+filePath);
@@ -4918,8 +4956,15 @@ public class AudioService extends IAudioService.Stub
                 } else {
                     MediaPlayer mediaPlayer = new MediaPlayer();
                     try {
-                        String filePath = Environment.getRootDirectory() + SOUND_EFFECTS_PATH +
-                                    SOUND_EFFECT_FILES.get(SOUND_EFFECT_FILES_MAP[effectType][0]);
+                        String filePath = "";
+                        File theme_file = new File(SOUND_EFFECTS_THEMED_PATH +
+                                    SOUND_EFFECT_FILES.get(SOUND_EFFECT_FILES_MAP[effectType][0]));
+                        if (theme_file.exists()) {
+                            filePath = theme_file.getAbsolutePath();
+                        } else {
+                            filePath = Environment.getRootDirectory() + SOUND_EFFECTS_PATH +
+                                        SOUND_EFFECT_FILES.get(SOUND_EFFECT_FILES_MAP[effectType][0]);
+                        }
                         mediaPlayer.setDataSource(filePath);
                         mediaPlayer.setAudioStreamType(AudioSystem.STREAM_SYSTEM);
                         mediaPlayer.prepare();
@@ -5189,7 +5234,7 @@ public class AudioService extends IAudioService.Stub
                         UserHandle.USER_CURRENT) == 1;
 
                 boolean linkNotificationWithVolume = Settings.Secure.getInt(mContentResolver,
-                        Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                        Settings.Secure.VOLUME_LINK_NOTIFICATION, 0) == 1;
                 if (linkNotificationWithVolume != mLinkNotificationWithVolume) {
                     mLinkNotificationWithVolume = linkNotificationWithVolume;
                     createStreamStates();
