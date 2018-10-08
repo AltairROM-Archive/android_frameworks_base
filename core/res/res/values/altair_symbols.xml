@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Oreo's recents component activity -->
+    <java-symbol type="string" name="config_recentsComponentNameOreo" />
+
+</resources>
