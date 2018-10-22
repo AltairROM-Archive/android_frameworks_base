@@ -4901,6 +4901,12 @@ public final class Settings {
         public static final String POWER_MENU_BACKGROUND_ALPHA = "power_menu_background_alpha";
 
         /**
+         * Whether to display VoLTE icon when VoLTE present
+         * @hide
+         */
+        public static final String SHOW_VOLTE_ICON = "show_volte_icon";
+
+        /**
          * Whether to display roaming indicator for roaming signal connection
          * @hide
          */
