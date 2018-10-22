@@ -4676,6 +4676,16 @@ public final class Settings {
         private static final Validator BLUETOOTH_QS_SHOW_BATTERY_VALIDATOR =
                 BOOLEAN_VALIDATOR;
 
+        /**
+         * Whether to display VoLTE icon when VoLTE present
+         * @hide
+         */
+        public static final String SHOW_VOLTE_ICON = "show_volte_icon";
+
+        /** @hide */
+        private static final Validator SHOW_VOLTE_ICON_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4762,6 +4772,7 @@ public final class Settings {
             NOTIFICATION_GUTS_KILL_APP_BUTTON,
             BLUETOOTH_SHOW_BATTERY,
             BLUETOOTH_QS_SHOW_BATTERY,
+            SHOW_VOLTE_ICON,
             // Altair ROM settings end
         };
 
@@ -4901,6 +4912,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(NOTIFICATION_GUTS_KILL_APP_BUTTON);
             PRIVATE_SETTINGS.add(BLUETOOTH_SHOW_BATTERY);
             PRIVATE_SETTINGS.add(BLUETOOTH_QS_SHOW_BATTERY);
+            PRIVATE_SETTINGS.add(SHOW_VOLTE_ICON);
             // Altair ROM settings end
         }
 
