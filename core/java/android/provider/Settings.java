@@ -4645,6 +4645,17 @@ public final class Settings {
         private static final Validator SWIPE_DOWN_TO_CLEAR_ALL_RECENTS_VALIDATOR =
                 BOOLEAN_VALIDATOR;
 
+        /**
+         * Whether to show the kill app button in notification guts
+         * @hide
+         */
+        public static final String NOTIFICATION_GUTS_KILL_APP_BUTTON =
+                "notification_guts_kill_app_button";
+
+        /** @hide */
+        private static final Validator NOTIFICATION_GUTS_KILL_APP_BUTTON_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4728,6 +4739,7 @@ public final class Settings {
             USE_OLD_MOBILETYPE,
             DATA_ACTIVITY_ARROWS,
             SWIPE_DOWN_TO_CLEAR_ALL_RECENTS,
+            NOTIFICATION_GUTS_KILL_APP_BUTTON,
             // Altair ROM settings end
         };
 
@@ -4864,6 +4876,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(USE_OLD_MOBILETYPE);
             PRIVATE_SETTINGS.add(DATA_ACTIVITY_ARROWS);
             PRIVATE_SETTINGS.add(SWIPE_DOWN_TO_CLEAR_ALL_RECENTS);
+            PRIVATE_SETTINGS.add(NOTIFICATION_GUTS_KILL_APP_BUTTON);
             // Altair ROM settings end
         }
 
@@ -4974,6 +4987,7 @@ public final class Settings {
             VALIDATORS.put(USE_OLD_MOBILETYPE, USE_OLD_MOBILETYPE_VALIDATOR);
             VALIDATORS.put(DATA_ACTIVITY_ARROWS, DATA_ACTIVITY_ARROWS_VALIDATOR);
             VALIDATORS.put(SWIPE_DOWN_TO_CLEAR_ALL_RECENTS, SWIPE_DOWN_TO_CLEAR_ALL_RECENTS_VALIDATOR);
+            VALIDATORS.put(NOTIFICATION_GUTS_KILL_APP_BUTTON, NOTIFICATION_GUTS_KILL_APP_BUTTON_VALIDATOR);
             // Altair ROM settings end
         }
 
