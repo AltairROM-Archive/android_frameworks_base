@@ -6504,5 +6504,6 @@ message MetricsEvent {
 
     // SmartNav settings
     SMARTNAV_SETTINGS = 9900;
+    ALTAIR = 9999;
   }
 }
