@@ -217,4 +217,7 @@
 
     <!-- Default for Settings.System.VIBRATE_WHEN_RINGING -->
     <bool name="def_vibrate_when_ringing">false</bool>
+
+    <!--  default setting for Settings.System.SHOW_BATTERY_PERCENT -->
+    <integer name="def_show_battery_percent">2</integer>
 </resources>
