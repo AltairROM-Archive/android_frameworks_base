@@ -56,6 +56,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
@@ -382,6 +383,8 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
                 items.add(new RestartDownloadAction());
             } else if (GLOBAL_ACTION_KEY_RESTART_FASTBOOT.equals(actionKey)) {
                 items.add(new RestartFastbootAction());
+            } else if (GLOBAL_ACTION_KEY_RESTART_SYSTEMUI.equals(actionKey)) {
+                items.add(new RestartSystemUIAction());
             }
         }
         return items;
@@ -520,6 +523,9 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             } else if (GLOBAL_ACTION_KEY_RESTART_FASTBOOT.equals(actionKey) &&
                     PowerMenuUtils.isAdvancedRestartPossible(mContext)) {
                 mItems.add(new RestartFastbootAction());
+            } else if (GLOBAL_ACTION_KEY_RESTART_SYSTEMUI.equals(actionKey) &&
+                    PowerMenuUtils.isAdvancedRestartPossible(mContext)) {
+                mItems.add(new RestartSystemUIAction());
             } else if (GLOBAL_ACTION_KEY_SCREENSHOT.equals(actionKey)) {
                 mItems.add(new ScreenshotAction());
             } else if (GLOBAL_ACTION_KEY_LOGOUT.equals(actionKey)) {
@@ -797,6 +803,27 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
         @Override
         public void onPress() {
             mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_BOOTLOADER);
+        }
+    }
+
+    private final class RestartSystemUIAction extends SinglePressAction {
+        private RestartSystemUIAction() {
+            super(com.android.systemui.R.drawable.ic_lock_restart_ui, com.android.systemui.R.string.global_action_restart_systemui);
+        }
+
+        @Override
+        public boolean showDuringKeyguard() {
+            return true;
+        }
+
+        @Override
+        public boolean showBeforeProvisioning() {
+            return true;
+        }
+
+        @Override
+        public void onPress() {
+            restartSystemUI();
         }
     }
 
@@ -2132,5 +2159,9 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
      */
     private static boolean shouldUseSeparatedView() {
         return true;
+    }
+
+    public static void restartSystemUI() {
+        Process.killProcess(Process.myPid());
     }
 }
