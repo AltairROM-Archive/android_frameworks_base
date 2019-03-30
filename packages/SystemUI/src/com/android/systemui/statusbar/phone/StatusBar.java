@@ -748,7 +748,6 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, SCREEN_BRIGHTNESS_MODE);
         tunerService.addTunable(this, STATUS_BAR_BRIGHTNESS_CONTROL);
         tunerService.addTunable(this, LOCKSCREEN_MEDIA_METADATA);
-        tunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         tunerService.addTunable(this, BERRY_GLOBAL_STYLE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
@@ -6077,23 +6076,6 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             mBrightnessControl = TunerService.parseIntegerSwitch(newValue, false);
         } else if (LOCKSCREEN_MEDIA_METADATA.equals(key)) {
             mShowMediaMetadata = TunerService.parseIntegerSwitch(newValue, true);
-        } else if (mWindowManagerService != null && FORCE_SHOW_NAVBAR.equals(key)) {
-            boolean forcedVisibility = mNeedsNavigationBar ||
-                    TunerService.parseIntegerSwitch(newValue, false);
-
-            if (forcedVisibility) {
-                if (mNavigationBarView == null) {
-                    createNavigationBar();
-                }
-            } else {
-                if (mNavigationBarView != null) {
-                    FragmentHostManager fm = FragmentHostManager.get(mNavigationBarView);
-                    mWindowManager.removeViewImmediate(mNavigationBarView);
-                    mNavigationBarView = null;
-                    fm.getFragmentManager().beginTransaction().remove(mNavigationBar).commit();
-                    mNavigationBar = null;
-                }
-            }
         } else if (BERRY_GLOBAL_STYLE.equals(key)) {
             updateTheme();
         }
