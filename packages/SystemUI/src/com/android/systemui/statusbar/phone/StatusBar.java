@@ -73,6 +73,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.UserInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -4994,6 +4995,18 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PULSE_APPS_BLACKLIST),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_ROWS_PORTRAIT),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_ROWS_LANDSCAPE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_COLUMNS_PORTRAIT),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_COLUMNS_LANDSCAPE),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -5003,10 +5016,17 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                     Settings.System.PULSE_APPS_BLACKLIST))) {
                 setPulseBlacklist();
             }
+            else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_ROWS_PORTRAIT)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.QS_ROWS_LANDSCAPE)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.QS_COLUMNS_PORTRAIT)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.QS_COLUMNS_LANDSCAPE))) {
+                setQsRowsColumns();
+            }
         }
 
         public void update() {
             setPulseBlacklist();
+            setQsRowsColumns();
         }
     }
 
@@ -5521,6 +5541,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         String blacklist = Settings.System.getStringForUser(mContext.getContentResolver(),
                 Settings.System.PULSE_APPS_BLACKLIST, UserHandle.USER_CURRENT);
         getMediaManager().setPulseBlacklist(blacklist);
+    }
+
+    private void setQsRowsColumns() {
+        if (mQSPanel != null) {
+            mQSPanel.updateResources();
+        }
     }
 
     private final BroadcastReceiver mBannerActionBroadcastReceiver = new BroadcastReceiver() {
