@@ -4706,6 +4706,16 @@ public final class Settings {
         private static final Validator SHOW_FOURG_ICON_VALIDATOR =
                 BOOLEAN_VALIDATOR;
 
+        /**
+         * Whether to display cross sign for a data disabled connection
+         * @hide
+         */
+        public static final String DATA_DISABLED_ICON = "data_disabled_icon";
+
+        /** @hide */
+        private static final Validator DATA_DISABLED_ICON_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4795,6 +4805,7 @@ public final class Settings {
             SHOW_VOLTE_ICON,
             ROAMING_INDICATOR_ICON,
             SHOW_FOURG_ICON,
+            DATA_DISABLED_ICON,
             // Altair ROM settings end
         };
 
@@ -4937,6 +4948,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SHOW_VOLTE_ICON);
             PRIVATE_SETTINGS.add(ROAMING_INDICATOR_ICON);
             PRIVATE_SETTINGS.add(SHOW_FOURG_ICON);
+            PRIVATE_SETTINGS.add(DATA_DISABLED_ICON);
             // Altair ROM settings end
         }
 
