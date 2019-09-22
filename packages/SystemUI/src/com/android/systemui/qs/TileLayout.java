@@ -61,6 +61,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         mRecords.add(tile);
         tile.tile.setListening(this, mListening);
         addView(tile.tileView);
+        tile.tileView.textVisibility();
     }
 
     @Override
@@ -97,11 +98,23 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         mCellMarginVertical= res.getDimensionPixelSize(R.dimen.qs_tile_margin_vertical);
         mCellMarginTop = res.getDimensionPixelSize(R.dimen.qs_tile_margin_top);
         mSidePadding = res.getDimensionPixelOffset(R.dimen.qs_tile_layout_margin_side);
+
+        if (Settings.System.getIntForUser(resolver,
+                Settings.System.QS_TILE_TITLE_VISIBILITY, 1,
+                UserHandle.USER_CURRENT) == 1) {
+            mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
+        } else {
+            mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height_wo_label);
+        }
+        for (TileRecord record : mRecords) {
+            record.tileView.textVisibility();
+        }
         if (mColumns != columns) {
             mColumns = columns;
             requestLayout();
             return true;
         }
+        requestLayout();
         return false;
     }
 

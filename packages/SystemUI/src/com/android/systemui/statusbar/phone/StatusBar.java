@@ -5011,6 +5011,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                     Settings.System.QS_COLUMNS_LANDSCAPE),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_TILE_TITLE_VISIBILITY),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.USE_OLD_MOBILETYPE),
                     false, this, UserHandle.USER_ALL);
         }
@@ -5025,8 +5028,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_ROWS_PORTRAIT)) ||
                     uri.equals(Settings.System.getUriFor(Settings.System.QS_ROWS_LANDSCAPE)) ||
                     uri.equals(Settings.System.getUriFor(Settings.System.QS_COLUMNS_PORTRAIT)) ||
-                    uri.equals(Settings.System.getUriFor(Settings.System.QS_COLUMNS_LANDSCAPE))) {
-                setQsRowsColumns();
+                    uri.equals(Settings.System.getUriFor(Settings.System.QS_COLUMNS_LANDSCAPE)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.QS_TILE_TITLE_VISIBILITY))) {
+                updateQsPanelResources();
             }
             else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.USE_OLD_MOBILETYPE))) {
@@ -5037,7 +5041,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
         public void update() {
             setPulseBlacklist();
-            setQsRowsColumns();
+            updateQsPanelResources();
             setMobileType();
         }
     }
@@ -5555,7 +5559,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         getMediaManager().setPulseBlacklist(blacklist);
     }
 
-    private void setQsRowsColumns() {
+    private void updateQsPanelResources() {
         if (mQSPanel != null) {
             mQSPanel.updateResources();
         }
