@@ -5032,15 +5032,16 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                     uri.equals(Settings.System.getUriFor(Settings.System.QS_TILE_TITLE_VISIBILITY))) {
                 updateQsPanelResources();
             }
+            else if (uri.equals(Settings.System.getUriFor(Settings.System.OMNI_USE_OLD_MOBILETYPE))) {
+                setMobileType();
+                mCommandQueue.restartUI();
+            }
         }
 
         public void update() {
             setPulseBlacklist();
             updateQsPanelResources();
-            USE_OLD_MOBILETYPE = Settings.System.getIntForUser(mContext.getContentResolver(),
-	            Settings.System.OMNI_USE_OLD_MOBILETYPE, 0,
-        	    UserHandle.USER_CURRENT) != 0;
-            TelephonyIcons.updateIcons(USE_OLD_MOBILETYPE);
+            setMobileType();
         }
     }
 
@@ -5563,6 +5564,16 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         }
     }
 
+    private void setMobileType() {
+        boolean mobileType = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.OMNI_USE_OLD_MOBILETYPE, 0,
+                UserHandle.USER_CURRENT) != 0;
+        if (mobileType != USE_OLD_MOBILETYPE) {
+            USE_OLD_MOBILETYPE = mobileType;
+            TelephonyIcons.updateIcons(USE_OLD_MOBILETYPE);
+        }
+    }
+
     private final BroadcastReceiver mBannerActionBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -5873,6 +5884,11 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             recomputeDisableFlags(true);
         }
         updateHideIconsForBouncer(true /* animate */);
+    }
+
+    public void restartUI() {
+        Log.d(TAG, "StatusBar API restartUI! Commiting suicide! Goodbye cruel world!");
+        Process.killProcess(Process.myPid());
     }
 
     protected void toggleKeyboardShortcuts(int deviceId) {
