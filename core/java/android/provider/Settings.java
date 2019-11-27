@@ -5291,6 +5291,12 @@ public final class Settings {
          */
         public static final String STATUS_BAR_CLOCK_SECONDS = "status_bar_clock_seconds";
 
+        /**
+         * Bring back old style mobile data indicators.
+         * @hide
+         */
+        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
