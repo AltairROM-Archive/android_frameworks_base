@@ -4616,6 +4616,15 @@ public final class Settings {
         private static final Validator SMART_PIXELS_ON_POWER_SAVE_VALIDATOR =
                 BOOLEAN_VALIDATOR;
 
+        /**
+         * @hide
+         */
+        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
+
+        /** @hide */
+        private static final Validator USE_OLD_MOBILETYPE_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4696,6 +4705,7 @@ public final class Settings {
             SMART_PIXELS_PATTERN,
             SMART_PIXELS_SHIFT_TIMEOUT,
             SMART_PIXELS_ON_POWER_SAVE,
+            USE_OLD_MOBILETYPE,
             // Altair ROM settings end
         };
 
@@ -4829,6 +4839,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SMART_PIXELS_PATTERN);
             PRIVATE_SETTINGS.add(SMART_PIXELS_SHIFT_TIMEOUT);
             PRIVATE_SETTINGS.add(SMART_PIXELS_ON_POWER_SAVE);
+            PRIVATE_SETTINGS.add(USE_OLD_MOBILETYPE);
             // Altair ROM settings end
         }
 
@@ -4936,6 +4947,7 @@ public final class Settings {
             VALIDATORS.put(SMART_PIXELS_PATTERN, SMART_PIXELS_PATTERN_VALIDATOR);
             VALIDATORS.put(SMART_PIXELS_SHIFT_TIMEOUT, SMART_PIXELS_SHIFT_TIMEOUT_VALIDATOR);
             VALIDATORS.put(SMART_PIXELS_ON_POWER_SAVE, SMART_PIXELS_ON_POWER_SAVE_VALIDATOR);
+            VALIDATORS.put(USE_OLD_MOBILETYPE, USE_OLD_MOBILETYPE_VALIDATOR);
             // Altair ROM settings end
         }
 
