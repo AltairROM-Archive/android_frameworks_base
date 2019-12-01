@@ -14171,6 +14171,13 @@ public final class Settings {
         /* Altair ROM Global Settings Start */
         /************************************/
 
+        /**
+         * @hide
+         */
+        public static final String POWER_MENU_EMERGENCY_AFFORDANCE = "power_menu_emergency_affordance";
+
+        private static final Validator POWER_MENU_EMERGENCY_AFFORDANCE_VALIDATOR = BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM Global Settings End */
         /**********************************/
@@ -14226,6 +14233,7 @@ public final class Settings {
             AWARE_ALLOWED,
             NOTIFICATION_BUBBLES,
             // Altair ROM settings start
+            POWER_MENU_EMERGENCY_AFFORDANCE,
             // Altair ROM settings end
         };
 
@@ -14296,6 +14304,7 @@ public final class Settings {
             VALIDATORS.put(POWER_BUTTON_VERY_LONG_PRESS, POWER_BUTTON_VERY_LONG_PRESS_VALIDATOR);
             VALIDATORS.put(NOTIFICATION_BUBBLES, NOTIFICATION_BUBBLES_VALIDATOR);
             // Altair ROM settings start
+            VALIDATORS.put(POWER_MENU_EMERGENCY_AFFORDANCE, POWER_MENU_EMERGENCY_AFFORDANCE_VALIDATOR);
             // Altair ROM settings end
         }
 
