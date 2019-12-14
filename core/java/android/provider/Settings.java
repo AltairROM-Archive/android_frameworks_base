@@ -4536,6 +4536,46 @@ public final class Settings {
         private static final Validator QS_TILE_TITLE_VISIBILITY_VALIDATOR =
               BOOLEAN_VALIDATOR;
 
+        /**
+         * How many rows to show in the qs panel when in portrait
+         * @hide
+         */
+        public static final String QS_ROWS_PORTRAIT = "qs_rows_portrait";
+
+        /** @hide */
+        private static final Validator QS_ROWS_PORTRAIT_VALIDATOR =
+              ANY_INTEGER_VALIDATOR;
+
+        /**
+         * How many rows to show in the qs panel when in landscape
+         * @hide
+         */
+        public static final String QS_ROWS_LANDSCAPE = "qs_rows_landscape";
+
+        /** @hide */
+        private static final Validator QS_ROWS_LANDSCAPE_VALIDATOR =
+              ANY_INTEGER_VALIDATOR;
+
+        /**
+         * How many columns to show in the qs panel when in portrait
+         * @hide
+         */
+        public static final String QS_COLUMNS_PORTRAIT = "qs_columns_portrait";
+
+        /** @hide */
+        private static final Validator QS_COLUMNS_PORTRAIT_VALIDATOR =
+              ANY_INTEGER_VALIDATOR;
+
+        /**
+         * How many columns to show in the qs panel when in landscape
+         * @hide
+         */
+        public static final String QS_COLUMNS_LANDSCAPE = "qs_columns_landscape";
+
+        /** @hide */
+        private static final Validator QS_COLUMNS_LANDSCAPE_VALIDATOR =
+              ANY_INTEGER_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4608,6 +4648,10 @@ public final class Settings {
             // Altair ROM settings start
             TOAST_ICON,
             QS_TILE_TITLE_VISIBILITY,
+            QS_ROWS_PORTRAIT,
+            QS_ROWS_LANDSCAPE,
+            QS_COLUMNS_PORTRAIT,
+            QS_COLUMNS_LANDSCAPE,
             // Altair ROM settings end
         };
 
@@ -4733,6 +4777,10 @@ public final class Settings {
             // Altair ROM settings start
             PRIVATE_SETTINGS.add(TOAST_ICON);
             PRIVATE_SETTINGS.add(QS_TILE_TITLE_VISIBILITY);
+            PRIVATE_SETTINGS.add(QS_ROWS_PORTRAIT);
+            PRIVATE_SETTINGS.add(QS_ROWS_LANDSCAPE);
+            PRIVATE_SETTINGS.add(QS_COLUMNS_PORTRAIT);
+            PRIVATE_SETTINGS.add(QS_COLUMNS_LANDSCAPE);
             // Altair ROM settings end
         }
 
@@ -4832,6 +4880,10 @@ public final class Settings {
             // Altair ROM settings start
             VALIDATORS.put(TOAST_ICON, TOAST_ICON_VALIDATOR);
             VALIDATORS.put(QS_TILE_TITLE_VISIBILITY, QS_TILE_TITLE_VISIBILITY_VALIDATOR);
+            VALIDATORS.put(QS_ROWS_PORTRAIT, QS_ROWS_PORTRAIT_VALIDATOR);
+            VALIDATORS.put(QS_ROWS_LANDSCAPE, QS_ROWS_LANDSCAPE_VALIDATOR);
+            VALIDATORS.put(QS_COLUMNS_PORTRAIT, QS_COLUMNS_PORTRAIT_VALIDATOR);
+            VALIDATORS.put(QS_COLUMNS_LANDSCAPE, QS_COLUMNS_LANDSCAPE_VALIDATOR);
             // Altair ROM settings end
         }
 
