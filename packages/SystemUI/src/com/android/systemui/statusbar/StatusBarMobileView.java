@@ -170,9 +170,9 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
                 showRoamingSpace = true;
                 setMobileSignalWidth(false);
             } else {
+                mMobileType.setVisibility(View.VISIBLE);
                 mMobileType.setContentDescription(mState.typeContentDescription);
                 mMobileType.setImageResource(mState.typeId);
-                mMobileType.setVisibility(View.VISIBLE);
                 mMobileTypeSmall.setVisibility(View.GONE);
                 setMobileSignalWidth(true);
             }
@@ -233,9 +233,9 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
                     showRoamingSpace = true;
                     setMobileSignalWidth(false);
                 } else {
+                    mMobileType.setVisibility(View.VISIBLE);
                     mMobileType.setContentDescription(state.typeContentDescription);
                     mMobileType.setImageResource(state.typeId);
-                    mMobileType.setVisibility(View.VISIBLE);
                     mMobileTypeSmall.setVisibility(View.GONE);
                     setMobileSignalWidth(true);
                 }
@@ -369,9 +369,10 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
                     showRoamingSpace = true;
                     setMobileSignalWidth(false);
                 } else {
+                    mMobileType.setVisibility(View.VISIBLE);
                     mMobileType.setContentDescription(mState.typeContentDescription);
                     mMobileType.setImageResource(mState.typeId);
-                    mMobileType.setVisibility(View.VISIBLE);
+                    mMobileTypeSmall.setVisibility(View.GONE);
                     setMobileSignalWidth(true);
                 }
             } else {
