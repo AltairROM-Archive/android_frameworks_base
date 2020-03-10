@@ -71,6 +71,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.om.OverlayManager;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -139,6 +140,7 @@ import com.android.internal.logging.UiEventLoggerImpl;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.RegisterStatusBarResult;
+import com.android.internal.statusbar.ThemeAccentUtils;
 import com.android.internal.view.AppearanceRegion;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
@@ -147,6 +149,7 @@ import com.android.systemui.ActivityIntentHelper;
 import com.android.systemui.AutoReinflateContainer;
 import com.android.systemui.DejankUtils;
 import com.android.systemui.DemoMode;
+import com.android.systemui.Dependency;
 import com.android.systemui.Dumpable;
 import com.android.systemui.EventLogTags;
 import com.android.systemui.InitController;
@@ -154,6 +157,7 @@ import com.android.systemui.Prefs;
 import com.android.systemui.R;
 import com.android.systemui.SystemUI;
 import com.android.systemui.SystemUIFactory;
+import com.android.systemui.UiOffloadThread;
 import com.android.systemui.assist.AssistManager;
 import com.android.systemui.biometrics.FODCircleViewImpl;
 import com.android.systemui.biometrics.FODCircleViewImplCallback;
@@ -297,6 +301,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_COLUMNS_LANDSCAPE;
     private static final String QS_TILE_TITLE_VISIBILITY =
             "system:" + Settings.System.QS_TILE_TITLE_VISIBILITY;
+    private static final String BERRY_DARK_STYLE =
+            "system:" + Settings.System.BERRY_DARK_STYLE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -755,6 +761,11 @@ public class StatusBar extends SystemUI implements DemoMode,
     private boolean mIsLauncherShowing;
     private ComponentName mTaskComponentName = null;
 
+    private int mDarkStyle;
+    private boolean mUseDarkTheme;
+    private OverlayManager mOverlayManager;
+    private final UiOffloadThread mUiOffloadThread = Dependency.get(UiOffloadThread.class);
+
     /**
      * Public constructor for StatusBar.
      *
@@ -939,6 +950,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     public void start() {
         mScreenLifecycle.addObserver(mScreenObserver);
         mWakefulnessLifecycle.addObserver(mWakefulnessObserver);
+        mOverlayManager = mContext.getSystemService(OverlayManager.class);
         mUiModeManager = mContext.getSystemService(UiModeManager.class);
         mBypassHeadsUpNotifier.setUp();
         mBubbleController.setExpandListener(mBubbleExpandListener);
@@ -967,6 +979,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, QS_COLUMNS_PORTRAIT);
         mTunerService.addTunable(this, QS_COLUMNS_LANDSCAPE);
         mTunerService.addTunable(this, QS_TILE_TITLE_VISIBILITY);
+        mTunerService.addTunable(this, BERRY_DARK_STYLE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -1591,6 +1604,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (mBrightnessMirrorController != null) {
             mBrightnessMirrorController.onUiModeChanged();
         }
+        updateTheme();
     }
 
     protected void createUserSwitcher() {
@@ -3818,6 +3832,22 @@ public class StatusBar extends SystemUI implements DemoMode,
      * Switches theme from light to dark and vice-versa.
      */
     protected void updateTheme() {
+        boolean useDarkTheme = (mContext.getResources().getConfiguration().uiMode
+                        & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+
+        if (mUiModeManager != null && (mUseDarkTheme != useDarkTheme ||
+                mDarkStyle != ThemeAccentUtils.getDarkStyle(mOverlayManager))) {
+            mUseDarkTheme = useDarkTheme;
+            if (mUseDarkTheme) {
+                mUiOffloadThread.execute(() -> {
+                    ThemeAccentUtils.setSystemTheme(mOverlayManager, mUseDarkTheme, mDarkStyle);
+                });
+            } else {
+                mUiOffloadThread.execute(() -> {
+                    ThemeAccentUtils.setSystemTheme(mOverlayManager, mUseDarkTheme, mDarkStyle);
+                });
+            }
+        }
 
         // Lock wallpaper defines the color of the majority of the views, hence we'll use it
         // to set our default theme.
@@ -4829,6 +4859,14 @@ public class StatusBar extends SystemUI implements DemoMode,
             case QS_TILE_TITLE_VISIBILITY:
                 if (mQSPanel != null) {
                     mQSPanel.updateResources();
+                }
+                break;
+            case BERRY_DARK_STYLE:
+                int darkStyle =
+                        TunerService.parseInteger(newValue, 0);
+                if (mDarkStyle != darkStyle) {
+                    mDarkStyle = darkStyle;
+                    updateTheme();
                 }
                 break;
             default:

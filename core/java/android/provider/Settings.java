@@ -4894,6 +4894,12 @@ public final class Settings {
          */
         public static final String BLUETOOTH_QS_SHOW_BATTERY = "bluetooth_qs_show_battery";
 
+        /**
+         * Switch between different dark styles
+         * @hide
+         */
+        public static final String BERRY_DARK_STYLE = "berry_dark_style";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
