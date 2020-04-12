@@ -366,7 +366,7 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
     }
 
     private void onNotifyVisibleW(boolean visible) {
-        if (mDestroyed) return; 
+        if (mDestroyed) return;
         mAudio.notifyVolumeControllerVisible(mVolumeController, visible);
         if (!visible) {
             if (updateActiveStreamW(-1)) {
@@ -576,7 +576,7 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
 
     private boolean updateLinkNotificationConfigW() {
         boolean linkNotificationWithVolume = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, 0) == 1;
         if (mState.linkedNotification == linkNotificationWithVolume) {
             return false;
         }
