@@ -4512,6 +4512,14 @@ public final class Settings {
           */
         public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
 
+        /************************************/
+        /* Altair ROM System Settings Start */
+        /************************************/
+
+        /**********************************/
+        /* Altair ROM System Settings End */
+        /**********************************/
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
@@ -4577,6 +4585,8 @@ public final class Settings {
             DISPLAY_COLOR_MODE,
             ALARM_ALERT,
             NOTIFICATION_LIGHT_PULSE,
+            // Altair ROM settings start
+            // Altair ROM settings end
         };
 
         /**
@@ -4646,6 +4656,8 @@ public final class Settings {
             PUBLIC_SETTINGS.add(HAPTIC_FEEDBACK_ENABLED);
             PUBLIC_SETTINGS.add(SHOW_WEB_SUGGESTIONS);
             PUBLIC_SETTINGS.add(VIBRATE_WHEN_RINGING);
+            // Altair ROM settings start
+            // Altair ROM settings end
         }
 
         /**
@@ -4696,6 +4708,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(SHOW_BATTERY_PERCENT);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
+            // Altair ROM settings start
+            // Altair ROM settings end
         }
 
         /**
@@ -4791,6 +4805,8 @@ public final class Settings {
             VALIDATORS.put(NOTIFICATION_LIGHT_PULSE, BOOLEAN_VALIDATOR);
             VALIDATORS.put(ACCELEROMETER_ROTATION_ANGLES,
                     ACCELEROMETER_ROTATION_ANGLES_VALIDATOR);
+            // Altair ROM settings start
+            // Altair ROM settings end
         }
 
         /**
@@ -9044,6 +9060,14 @@ public final class Settings {
 
         private static final Validator VOLUME_LINK_NOTIFICATION_VALIDATOR = BOOLEAN_VALIDATOR;
 
+        /************************************/
+        /* Altair ROM Secure Settings Start */
+        /************************************/
+
+        /**********************************/
+        /* Altair ROM Secure Settings End */
+        /**********************************/
+
         /**
          * This are the settings to be backed up.
          *
@@ -9181,7 +9205,9 @@ public final class Settings {
             AWARE_LOCK_ENABLED,
             AWARE_TAP_PAUSE_GESTURE_COUNT,
             AWARE_TAP_PAUSE_TOUCH_COUNT,
-            VOLUME_LINK_NOTIFICATION
+            VOLUME_LINK_NOTIFICATION,
+            // Altair ROM settings start
+            // Altair ROM settings end
         };
 
         /**
@@ -9380,6 +9406,8 @@ public final class Settings {
             VALIDATORS.put(AWARE_TAP_PAUSE_TOUCH_COUNT, NON_NEGATIVE_INTEGER_VALIDATOR);
             VALIDATORS.put(TAP_GESTURE, TAP_GESTURE_VALIDATOR);
             VALIDATORS.put(VOLUME_LINK_NOTIFICATION, VOLUME_LINK_NOTIFICATION_VALIDATOR);
+            // Altair ROM settings start
+            // Altair ROM settings end
         }
 
         /**
@@ -13984,6 +14012,14 @@ public final class Settings {
         private static final Validator POWER_BUTTON_VERY_LONG_PRESS_VALIDATOR =
                 new SettingsValidators.InclusiveIntegerRangeValidator(0, 1);
 
+        /************************************/
+        /* Altair ROM Global Settings Start */
+        /************************************/
+
+        /**********************************/
+        /* Altair ROM Global Settings End */
+        /**********************************/
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
@@ -14034,6 +14070,8 @@ public final class Settings {
             CHARGING_VIBRATION_ENABLED,
             AWARE_ALLOWED,
             NOTIFICATION_BUBBLES,
+            // Altair ROM settings start
+            // Altair ROM settings end
         };
 
         /**
@@ -14102,6 +14140,8 @@ public final class Settings {
             VALIDATORS.put(POWER_BUTTON_LONG_PRESS, POWER_BUTTON_LONG_PRESS_VALIDATOR);
             VALIDATORS.put(POWER_BUTTON_VERY_LONG_PRESS, POWER_BUTTON_VERY_LONG_PRESS_VALIDATOR);
             VALIDATORS.put(NOTIFICATION_BUBBLES, NOTIFICATION_BUBBLES_VALIDATOR);
+            // Altair ROM settings start
+            // Altair ROM settings end
         }
 
         /**
