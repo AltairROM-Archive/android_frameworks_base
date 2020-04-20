@@ -4681,11 +4681,6 @@ public final class Settings {
         /**********************************/
 
         /**
-         * @hide
-         */
-        public static final String REFRESH_RATE_SETTING = "refresh_rate_setting";
-
-        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -14236,6 +14231,15 @@ public final class Settings {
 
         private static final Validator POWER_MENU_EMERGENCY_AFFORDANCE_VALIDATOR = BOOLEAN_VALIDATOR;
 
+        /**
+         * Set variable refresh rate setting on boot if available
+         * 0 - auto/default, 1 - 60Hz, 2 - 90Hz, 3 - 120Hz
+         * @hide
+         */
+        public static final String REFRESH_RATE_SETTING = "refresh_rate_setting";
+
+        private static final Validator REFRESH_RATE_SETTING_VALIDATOR = ANY_INTEGER_VALIDATOR;
+
         /**********************************/
         /* Altair ROM Global Settings End */
         /**********************************/
@@ -14292,6 +14296,7 @@ public final class Settings {
             NOTIFICATION_BUBBLES,
             // Altair ROM settings start
             POWER_MENU_EMERGENCY_AFFORDANCE,
+            REFRESH_RATE_SETTING,
             // Altair ROM settings end
         };
 
@@ -14363,6 +14368,7 @@ public final class Settings {
             VALIDATORS.put(NOTIFICATION_BUBBLES, NOTIFICATION_BUBBLES_VALIDATOR);
             // Altair ROM settings start
             VALIDATORS.put(POWER_MENU_EMERGENCY_AFFORDANCE, POWER_MENU_EMERGENCY_AFFORDANCE_VALIDATOR);
+            VALIDATORS.put(REFRESH_RATE_SETTING, REFRESH_RATE_SETTING_VALIDATOR);
             // Altair ROM settings end
         }
 
