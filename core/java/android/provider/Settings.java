@@ -4625,6 +4625,16 @@ public final class Settings {
         private static final Validator USE_OLD_MOBILETYPE_VALIDATOR =
                 BOOLEAN_VALIDATOR;
 
+        /**
+         * Whether to display data activity arrows for wifi/data connections
+         * @hide
+         */
+        public static final String DATA_ACTIVITY_ARROWS = "data_activity_arrows";
+
+        /** @hide */
+        private static final Validator DATA_ACTIVITY_ARROWS_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4706,6 +4716,7 @@ public final class Settings {
             SMART_PIXELS_SHIFT_TIMEOUT,
             SMART_PIXELS_ON_POWER_SAVE,
             USE_OLD_MOBILETYPE,
+            DATA_ACTIVITY_ARROWS,
             // Altair ROM settings end
         };
 
@@ -4840,6 +4851,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SMART_PIXELS_SHIFT_TIMEOUT);
             PRIVATE_SETTINGS.add(SMART_PIXELS_ON_POWER_SAVE);
             PRIVATE_SETTINGS.add(USE_OLD_MOBILETYPE);
+            PRIVATE_SETTINGS.add(DATA_ACTIVITY_ARROWS);
             // Altair ROM settings end
         }
 
@@ -4948,6 +4960,7 @@ public final class Settings {
             VALIDATORS.put(SMART_PIXELS_SHIFT_TIMEOUT, SMART_PIXELS_SHIFT_TIMEOUT_VALIDATOR);
             VALIDATORS.put(SMART_PIXELS_ON_POWER_SAVE, SMART_PIXELS_ON_POWER_SAVE_VALIDATOR);
             VALIDATORS.put(USE_OLD_MOBILETYPE, USE_OLD_MOBILETYPE_VALIDATOR);
+            VALIDATORS.put(DATA_ACTIVITY_ARROWS, DATA_ACTIVITY_ARROWS_VALIDATOR);
             // Altair ROM settings end
         }
 
