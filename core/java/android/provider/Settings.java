@@ -4876,6 +4876,12 @@ public final class Settings {
          */
         public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
 
+        /**
+         * Whether to display data activity arrows for wifi/data connections
+         * @hide
+         */
+        public static final String DATA_ACTIVITY_ARROWS = "data_activity_arrows";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
