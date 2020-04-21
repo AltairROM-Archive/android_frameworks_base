@@ -5334,6 +5334,12 @@ public final class Settings {
          */
         public static final String SMART_PIXELS_ON_POWER_SAVE = "smart_pixels_on_power_save";
 
+        /**
+         * Whether to display data activity arrows for wifi/data connections
+         * @hide
+         */
+        public static final String DATA_ACTIVITY_ARROWS = "data_activity_arrows";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
