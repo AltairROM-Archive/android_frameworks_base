@@ -4635,6 +4635,16 @@ public final class Settings {
         private static final Validator DATA_ACTIVITY_ARROWS_VALIDATOR =
                 BOOLEAN_VALIDATOR;
 
+        /**
+         * Whether to allow clearing all recents by swiping down from top of screen
+         * @hide
+         */
+        public static final String SWIPE_DOWN_TO_CLEAR_ALL_RECENTS = "swipe_down_to_clear_all_recents";
+
+        /** @hide */
+        private static final Validator SWIPE_DOWN_TO_CLEAR_ALL_RECENTS_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
@@ -4717,6 +4727,7 @@ public final class Settings {
             SMART_PIXELS_ON_POWER_SAVE,
             USE_OLD_MOBILETYPE,
             DATA_ACTIVITY_ARROWS,
+            SWIPE_DOWN_TO_CLEAR_ALL_RECENTS,
             // Altair ROM settings end
         };
 
@@ -4852,6 +4863,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SMART_PIXELS_ON_POWER_SAVE);
             PRIVATE_SETTINGS.add(USE_OLD_MOBILETYPE);
             PRIVATE_SETTINGS.add(DATA_ACTIVITY_ARROWS);
+            PRIVATE_SETTINGS.add(SWIPE_DOWN_TO_CLEAR_ALL_RECENTS);
             // Altair ROM settings end
         }
 
@@ -4961,6 +4973,7 @@ public final class Settings {
             VALIDATORS.put(SMART_PIXELS_ON_POWER_SAVE, SMART_PIXELS_ON_POWER_SAVE_VALIDATOR);
             VALIDATORS.put(USE_OLD_MOBILETYPE, USE_OLD_MOBILETYPE_VALIDATOR);
             VALIDATORS.put(DATA_ACTIVITY_ARROWS, DATA_ACTIVITY_ARROWS_VALIDATOR);
+            VALIDATORS.put(SWIPE_DOWN_TO_CLEAR_ALL_RECENTS, SWIPE_DOWN_TO_CLEAR_ALL_RECENTS_VALIDATOR);
             // Altair ROM settings end
         }
 
