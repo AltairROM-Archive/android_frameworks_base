@@ -20,7 +20,7 @@
     <color name="screen_pinning_background_color">@*android:color/accent_device_default_dark</color>
 
     <!-- QS tiles Active, Inactive and Unavailable tint (Requires config_enable_qs_tile_tinting bool set to true) -->
-    <color name="qs_tiles_active_tint">@*android:color/primary_device_default_settings_dark</color>
+    <color name="qs_tiles_active_tint">@*android:color/primary_device_default_settings</color>
 
     <!-- QS tiles background Active, Disable, and Inactive tint (Requires config_enable_qs_tile_tinting bool set to true) -->
     <color name="qs_tiles_background_active_tint">@*android:color/accent_device_default_dark</color>
