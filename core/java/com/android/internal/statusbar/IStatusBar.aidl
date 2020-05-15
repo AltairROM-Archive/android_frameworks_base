@@ -177,4 +177,12 @@ oneway interface IStatusBar
      * Notifies System UI whether the recents animation is running or not.
      */
     void onRecentsAnimationStateChanged(boolean running);
+
+    /**
+     * Custom ROM additions
+     */
+
+    void toggleFlashlight();
+    void toggleSettingsPanel();
+    void killForegroundApp();
 }

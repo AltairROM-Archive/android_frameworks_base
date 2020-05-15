@@ -235,7 +235,7 @@ public class ScreenPinningRequest implements View.OnClickListener,
                     .setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
             View buttons = mLayout.findViewById(R.id.screen_pinning_buttons);
             WindowManagerWrapper wm = WindowManagerWrapper.getInstance();
-            if (!QuickStepContract.isGesturalMode(mNavBarMode) 
+            if (!QuickStepContract.isGesturalMode(mNavBarMode)
             	    && wm.hasSoftNavigationBar(mContext.getDisplayId())) {
                 buttons.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                 swapChildrenIfRtlAndVertical(buttons);
@@ -269,8 +269,8 @@ public class ScreenPinningRequest implements View.OnClickListener,
                 descriptionStringResId = !hasNavigationBar()
                         ? R.string.screen_pinning_description_no_navbar
                         : touchExplorationEnabled
-                                ? R.string.screen_pinning_description_accessible
-                                : R.string.screen_pinning_description;
+                                ? R.string.screen_pinning_description_accessible_custom
+                                : R.string.screen_pinning_description_custom;
             } else {
                 mLayout.findViewById(R.id.screen_pinning_recents_group).setVisibility(INVISIBLE);
                 mLayout.findViewById(R.id.screen_pinning_home_bg_light).setVisibility(VISIBLE);
@@ -278,15 +278,15 @@ public class ScreenPinningRequest implements View.OnClickListener,
                 descriptionStringResId = !hasNavigationBar()
                         ? R.string.screen_pinning_description_no_navbar
                         : touchExplorationEnabled
-                                ? R.string.screen_pinning_description_recents_invisible_accessible
-                                : R.string.screen_pinning_description_recents_invisible;
+                                ? R.string.screen_pinning_description_recents_invisible_accessible_custom
+                                : R.string.screen_pinning_description_recents_invisible_custom;
             }
 
             if (navigationBarView != null) {
                 ((ImageView) mLayout.findViewById(R.id.screen_pinning_back_icon))
                         .setImageDrawable(navigationBarView.getBackDrawable());
-                ((ImageView) mLayout.findViewById(R.id.screen_pinning_home_icon))
-                        .setImageDrawable(navigationBarView.getHomeDrawable());
+                /*((ImageView) mLayout.findViewById(R.id.screen_pinning_home_icon))
+                        .setImageDrawable(navigationBarView.getHomeDrawable());*/
             }
 
             ((TextView) mLayout.findViewById(R.id.screen_pinning_description))

@@ -45,6 +45,7 @@ import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.Region.Op;
 import android.os.Bundle;
+import android.os.UserHandle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -63,6 +64,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.util.custom.Utils;
 import com.android.systemui.Dependency;
 import com.android.systemui.DockedStackExistsListener;
 import com.android.systemui.Interpolators;
@@ -85,6 +87,8 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.function.Consumer;
 
+import static org.lineageos.internal.util.DeviceKeysConstants.*;
+
 public class NavigationBarView extends FrameLayout implements
         NavigationModeController.ModeChangedListener, TunerService.Tunable {
     final static boolean DEBUG = false;
@@ -92,6 +96,30 @@ public class NavigationBarView extends FrameLayout implements
 
     private static final String NAVIGATION_BAR_MENU_ARROW_KEYS =
             "lineagesystem:" + LineageSettings.System.NAVIGATION_BAR_MENU_ARROW_KEYS;
+    public static final String KEY_APP_SWITCH_ACTION =
+            "lineagesystem:" + LineageSettings.System.KEY_APP_SWITCH_ACTION;
+
+    public static final int[] NAVBAR_ICON_RESOURCES = {
+        R.drawable.ic_sysbar_no_action,
+        R.drawable.ic_sysbar_menu,
+        R.drawable.ic_sysbar_recent,
+        R.drawable.ic_sysbar_search,
+        R.drawable.ic_sysbar_voice_search,
+        R.drawable.ic_sysbar_camera,
+        R.drawable.ic_sysbar_screen_off,
+        R.drawable.ic_sysbar_last_app,
+        R.drawable.ic_sysbar_split_screen,
+        R.drawable.ic_sysbar_flashlight,
+        R.drawable.ic_sysbar_clear_notifications,
+        R.drawable.ic_sysbar_volume_panel,
+        R.drawable.ic_sysbar_notification_panel,
+        R.drawable.ic_sysbar_power_menu,
+        R.drawable.ic_sysbar_screenshot,
+        R.drawable.ic_sysbar_settings_panel,
+        R.drawable.ic_sysbar_application,
+        R.drawable.ic_sysbar_ringer_modes,
+        R.drawable.ic_sysbar_kill_app,
+    };
 
     // slippery nav bar when everything is disabled, e.g. during setup
     final static boolean SLIPPERY_WHEN_DISABLED = true;
@@ -140,6 +168,7 @@ public class NavigationBarView extends FrameLayout implements
     private boolean mInCarMode = false;
     private boolean mDockedStackExists;
     private boolean mImeVisible;
+    private boolean mShowGestureNavbar;
 
     private final SparseArray<ButtonDispatcher> mButtonDispatchers = new SparseArray<>();
     private final ContextualButtonGroup mContextualButtonGroup;
@@ -281,6 +310,7 @@ public class NavigationBarView extends FrameLayout implements
         mLongClickableAccessibilityButton = false;
         mNavBarMode = Dependency.get(NavigationModeController.class).addListener(this);
         boolean isGesturalMode = isGesturalMode(mNavBarMode);
+        mShowGestureNavbar = Utils.shouldShowGestureNav(context);
 
         // Set up the context group of buttons
         mContextualButtonGroup = new ContextualButtonGroup(R.id.menu_container);
@@ -494,7 +524,9 @@ public class NavigationBarView extends FrameLayout implements
             mHomeDefaultIcon = getHomeDrawable();
         }
         if (densityChange || dirChange) {
-            mRecentIcon = getDrawable(R.drawable.ic_sysbar_recent);
+            Action action = Action.fromSettings(getContext().getContentResolver(),
+                    LineageSettings.System.KEY_APP_SWITCH_ACTION, Action.APP_SWITCH);
+            mRecentIcon = getDrawable(getNavbarIconRes(action));
             getCursorLeftButton().updateIcon();
             getCursorRightButton().updateIcon();
             mContextualButtonGroup.updateIcons();
@@ -502,6 +534,10 @@ public class NavigationBarView extends FrameLayout implements
         if (orientationChange || densityChange || dirChange) {
             mBackIcon = getBackDrawable();
         }
+    }
+
+    private int getNavbarIconRes(Action action) {
+        return NAVBAR_ICON_RESOURCES[action.ordinal()];
     }
 
     public KeyButtonDrawable getBackDrawable() {
@@ -710,7 +746,8 @@ public class NavigationBarView extends FrameLayout implements
         getBackButton().setVisibility(disableBack      ? View.INVISIBLE : View.VISIBLE);
         getHomeButton().setVisibility(disableHome      ? View.INVISIBLE : View.VISIBLE);
         getRecentsButton().setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
-        getHomeHandle().setVisibility(disableHomeHandle ? View.INVISIBLE : View.VISIBLE);
+        getHomeHandle().setVisibility(disableHomeHandle ? View.INVISIBLE
+                : (mShowGestureNavbar ? View.VISIBLE : View.INVISIBLE));
     }
 
     @VisibleForTesting
@@ -1063,12 +1100,17 @@ public class NavigationBarView extends FrameLayout implements
                             com.android.internal.R.dimen.navigation_bar_height_landscape)
                     : getResources().getDimensionPixelSize(
                             com.android.internal.R.dimen.navigation_bar_height);
+            int finalHeight = mShowGestureNavbar ? height : 0;
             int frameHeight = getResources().getDimensionPixelSize(
                     com.android.internal.R.dimen.navigation_bar_frame_height);
-            mBarTransitions.setBackgroundFrame(new Rect(0, frameHeight - height, w, h));
+            mBarTransitions.setBackgroundFrame(new Rect(0, frameHeight - finalHeight, w, h));
         }
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    public boolean showGestureNavbar() {
+        return mShowGestureNavbar;
     }
 
     private void notifyVerticalChangedListener(boolean newVertical) {
@@ -1148,6 +1190,7 @@ public class NavigationBarView extends FrameLayout implements
         onNavigationModeChanged(mNavBarMode);
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, NAVIGATION_BAR_MENU_ARROW_KEYS);
+        tunerService.addTunable(this, KEY_APP_SWITCH_ACTION);
         setUpSwipeUpOnboarding(isQuickStepSwipeUpEnabled());
         if (mRotationButtonController != null) {
             mRotationButtonController.registerListeners();
@@ -1179,6 +1222,10 @@ public class NavigationBarView extends FrameLayout implements
         if (NAVIGATION_BAR_MENU_ARROW_KEYS.equals(key)) {
             mShowCursorKeys = TunerService.parseIntegerSwitch(newValue, false);
             setNavigationIconHints(mNavigationIconHints);
+        }
+        if (KEY_APP_SWITCH_ACTION.equals(key)) {
+            reloadNavIcons();
+            updateNavButtonIcons();
         }
     }
 
