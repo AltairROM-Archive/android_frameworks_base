@@ -110,13 +110,13 @@ public class MobileSignalController extends SignalController<
     private boolean mShow4gForLte;
     private boolean mDataDisabledIcon;
 
-    private static final String SHOW_VOLTE_ICON =
+    public static final String SHOW_VOLTE_ICON =
             "system:" + Settings.System.SHOW_VOLTE_ICON;
-    private static final String ROAMING_INDICATOR_ICON =
+    public static final String ROAMING_INDICATOR_ICON =
             "system:" + Settings.System.ROAMING_INDICATOR_ICON;
-    private static final String SHOW_FOURG_ICON =
+    public static final String SHOW_FOURG_ICON =
             "system:" + Settings.System.SHOW_FOURG_ICON;
-    private static final String DATA_DISABLED_ICON =
+    public static final String DATA_DISABLED_ICON =
             "system:" + Settings.System.DATA_DISABLED_ICON;
 
     // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
@@ -210,10 +210,10 @@ public class MobileSignalController extends SignalController<
                 mapIconSets();
                 break;
             case DATA_DISABLED_ICON:
-                mDataDisabledIcon = 
+                mDataDisabledIcon =
                     TunerService.parseIntegerSwitch(newValue, true);
-                updateTelephony();                
-                break; 
+                updateTelephony();
+                break;
             default:
                 break;
         }

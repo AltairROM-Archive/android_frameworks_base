@@ -47,6 +47,7 @@ import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.policy.Clock;
+import com.android.systemui.statusbar.policy.MobileSignalController;
 import com.android.systemui.util.leak.LeakDetector;
 
 import lineageos.providers.LineageSettings;
@@ -73,6 +74,10 @@ public class TunerServiceImpl extends TunerService {
     // shouldn't be reset with tuner settings.
     // Do not add Lineage specific keys here as they are blacklisted automatically
     private static final String[] RESET_BLACKLIST = new String[] {
+            MobileSignalController.SHOW_VOLTE_ICON,
+            MobileSignalController.ROAMING_INDICATOR_ICON,
+            MobileSignalController.SHOW_FOURG_ICON,
+            MobileSignalController.DATA_DISABLED_ICON,
             QSTileHost.TILES_SETTING,
             Settings.Secure.DOZE_ALWAYS_ON,
             StatusBar.SCREEN_BRIGHTNESS_MODE,
