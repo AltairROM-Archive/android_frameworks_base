@@ -2337,7 +2337,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mKeyDoubleTapBehavior.put(keyCode, behavior);
         }
 
-        if (hasHome) {
+        if (hasHome || hasNavigationBar()) {
             mKeyLongPressBehavior.put(KeyEvent.KEYCODE_HOME, NavbarUtilities.fromSettings(resolver,
                     LineageSettings.System.KEY_HOME_LONG_PRESS_ACTION,
                     mKeyLongPressBehavior.get(KeyEvent.KEYCODE_HOME)));
@@ -2346,7 +2346,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mKeyDoubleTapBehavior.get(KeyEvent.KEYCODE_HOME)));
         }
 
-        if (hasBack) {
+        if (hasBack || hasNavigationBar()) {
             mKeyLongPressBehavior.put(KeyEvent.KEYCODE_BACK, NavbarUtilities.fromSettings(resolver,
                     LineageSettings.System.KEY_BACK_LONG_PRESS_ACTION,
                     mKeyLongPressBehavior.get(KeyEvent.KEYCODE_BACK)));
@@ -2355,7 +2355,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mKeyDoubleTapBehavior.get(KeyEvent.KEYCODE_BACK)));
         }
 
-        if (hasAppSwitch) {
+        if (hasAppSwitch || hasNavigationBar()) {
             mAppSwitchShortPressAction = NavbarUtilities.fromSettings(resolver,
                     LineageSettings.System.KEY_APP_SWITCH_ACTION,
                     NavbarUtilities.KEY_ACTION_APP_SWITCH);
