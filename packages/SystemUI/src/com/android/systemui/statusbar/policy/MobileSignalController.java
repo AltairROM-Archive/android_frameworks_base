@@ -205,12 +205,12 @@ public class MobileSignalController extends SignalController<
             case SHOW_VOLTE_ICON:
                 mVoLTEicon =
                     TunerService.parseIntegerSwitch(newValue, false);
-                updateTelephony();
+                notifyListeners();
                 break;
             case SHOW_VOWIFI_ICON:
                 mVoWiFiIcon =
                     TunerService.parseIntegerSwitch(newValue, false);
-                updateTelephony();
+                notifyListeners();
                 break;
             case VOLTE_VOWIFI_OVERRIDE:
                 mOverride =
