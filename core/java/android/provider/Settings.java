@@ -4913,6 +4913,12 @@ public final class Settings {
         public static final String SHOW_VOWIFI_ICON = "show_vowifi_icon";
 
         /**
+         * Whether VoWiFi icon should override VoLTE icon
+         * @hide
+         */
+        public static final String VOLTE_VOWIFI_OVERRIDE = "volte_vowifi_override";
+
+        /**
          * Whether to display roaming indicator for roaming signal connection
          * @hide
          */
