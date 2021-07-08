@@ -79,6 +79,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.HardwareRenderer;
 import android.graphics.ImageDecoder;
+import android.graphics.Typeface;
 import android.hardware.display.DisplayManagerGlobal;
 import android.net.ConnectivityManager;
 import android.net.IConnectivityManager;
@@ -5596,6 +5597,8 @@ public final class ActivityThread extends ClientTransactionHandler {
             if (DEBUG_CONFIGURATION) Slog.v(TAG, "Handle configuration changed: "
                     + config);
 
+            final Resources appResources = mInitialApplication.getResources();
+            Typeface.updateDefaultFont(appResources);
             mResourcesManager.applyConfigurationToResourcesLocked(config, compat);
             updateLocaleListFromAppContext(mInitialApplication.getApplicationContext(),
                     mResourcesManager.getConfiguration().getLocales());
