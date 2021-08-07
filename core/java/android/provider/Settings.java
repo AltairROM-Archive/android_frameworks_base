@@ -4805,6 +4805,12 @@ public final class Settings {
         /* Altair ROM System Settings Start */
         /************************************/
 
+        /**
+         * Toast icon
+         * @hide
+         */
+        public static final String TOAST_ICON = "toast_icon";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
