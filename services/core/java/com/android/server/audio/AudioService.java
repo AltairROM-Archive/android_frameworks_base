@@ -820,7 +820,7 @@ public class AudioService extends IAudioService.Stub
 
         // read this in before readPersistedSettings() because updateStreamVolumeAlias needs it
         mLinkNotificationWithVolume = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, 0) == 1;
 
         mUseFixedVolume = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_useFixedVolume);
@@ -1785,7 +1785,7 @@ public class AudioService extends IAudioService.Stub
         }
 
         mLinkNotificationWithVolume = Settings.Secure.getInt(cr,
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, 0) == 1;
 
         mMuteAffectedStreams = System.getIntForUser(cr,
                 System.MUTE_STREAMS_AFFECTED, AudioSystem.DEFAULT_MUTE_STREAMS_AFFECTED,
@@ -6623,7 +6623,7 @@ public class AudioService extends IAudioService.Stub
                 updateAssistantUId(false);
 
                 boolean linkNotificationWithVolume = Settings.Secure.getInt(mContentResolver,
-                        Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                        Settings.Secure.VOLUME_LINK_NOTIFICATION, 0) == 1;
                 if (linkNotificationWithVolume != mLinkNotificationWithVolume) {
                     mLinkNotificationWithVolume = linkNotificationWithVolume;
                     createStreamStates();
