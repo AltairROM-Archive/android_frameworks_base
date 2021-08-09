@@ -5231,6 +5231,14 @@ public final class Settings {
          * the setting value. See an example above.
          */
 
+        /************************************/
+        /* Altair ROM System Settings Start */
+        /************************************/
+
+        /**********************************/
+        /* Altair ROM System Settings End */
+        /**********************************/
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
@@ -5300,6 +5308,8 @@ public final class Settings {
             PUBLIC_SETTINGS.add(HAPTIC_FEEDBACK_ENABLED);
             PUBLIC_SETTINGS.add(SHOW_WEB_SUGGESTIONS);
             PUBLIC_SETTINGS.add(VIBRATE_WHEN_RINGING);
+            // Altair ROM settings start
+            // Altair ROM settings end
         }
 
         /**
@@ -5351,6 +5361,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SHOW_BATTERY_PERCENT);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE_VENDOR_HINT);
+            // Altair ROM settings start
+            // Altair ROM settings end
         }
 
         /**
@@ -10215,6 +10227,14 @@ public final class Settings {
          * @hide
          */
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
+
+        /************************************/
+        /* Altair ROM Secure Settings Start */
+        /************************************/
+
+        /**********************************/
+        /* Altair ROM Secure Settings End */
+        /**********************************/
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -15198,6 +15218,14 @@ public final class Settings {
          */
         public static final String UIDS_ALLOWED_ON_RESTRICTED_NETWORKS =
                 "uids_allowed_on_restricted_networks";
+
+        /************************************/
+        /* Altair ROM Global Settings Start */
+        /************************************/
+
+        /**********************************/
+        /* Altair ROM Global Settings End */
+        /**********************************/
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
