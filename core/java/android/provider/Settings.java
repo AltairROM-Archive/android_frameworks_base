@@ -4801,6 +4801,14 @@ public final class Settings {
          */
         public static final String MULTI_AUDIO_FOCUS_ENABLED = "multi_audio_focus_enabled";
 
+        /************************************/
+        /* Altair ROM System Settings Start */
+        /************************************/
+
+        /**********************************/
+        /* Altair ROM System Settings End */
+        /**********************************/
+
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
@@ -4877,6 +4885,8 @@ public final class Settings {
             PUBLIC_SETTINGS.add(HAPTIC_FEEDBACK_ENABLED);
             PUBLIC_SETTINGS.add(SHOW_WEB_SUGGESTIONS);
             PUBLIC_SETTINGS.add(VIBRATE_WHEN_RINGING);
+            // Altair ROM settings start
+            // Altair ROM settings end
         }
 
         /**
@@ -4927,6 +4937,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(SHOW_BATTERY_PERCENT);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
+            // Altair ROM settings start
+            // Altair ROM settings end
         }
 
         /**
@@ -9020,6 +9032,14 @@ public final class Settings {
          * @hide
          */
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
+
+        /************************************/
+        /* Altair ROM Secure Settings Start */
+        /************************************/
+
+        /**********************************/
+        /* Altair ROM Secure Settings End */
+        /**********************************/
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -13413,6 +13433,14 @@ public final class Settings {
          */
         public static final String POWER_BUTTON_VERY_LONG_PRESS =
                 "power_button_very_long_press";
+
+        /************************************/
+        /* Altair ROM Global Settings Start */
+        /************************************/
+
+        /**********************************/
+        /* Altair ROM Global Settings End */
+        /**********************************/
 
         /**
          * Global settings that shouldn't be persisted.
