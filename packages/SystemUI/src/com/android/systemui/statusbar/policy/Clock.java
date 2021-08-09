@@ -105,7 +105,7 @@ public class Clock extends TextView implements
     private static final int AM_PM_STYLE_SMALL   = 1;
     private static final int AM_PM_STYLE_GONE    = 2;
 
-    private int mAmPmStyle = AM_PM_STYLE_GONE;
+    private int mAmPmStyle = AM_PM_STYLE_SMALL;
     private boolean mShowSeconds;
     private Handler mSecondsHandler;
 
@@ -316,7 +316,7 @@ public class Clock extends TextView implements
             mShowSeconds = TunerService.parseIntegerSwitch(newValue, false);
             updateShowSeconds();
         } else if (CLOCK_STYLE.equals(key)) {
-            mAmPmStyle = TunerService.parseInteger(newValue, AM_PM_STYLE_GONE);
+            mAmPmStyle = TunerService.parseInteger(newValue, AM_PM_STYLE_SMALL);
             mClockFormatString = ""; // force refresh
             updateClock();
         } else if (CLOCK_AUTO_HIDE.equals(key)) {
@@ -546,4 +546,3 @@ public class Clock extends TextView implements
         }
     }
 }
-
