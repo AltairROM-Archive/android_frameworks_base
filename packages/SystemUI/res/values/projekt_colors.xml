@@ -48,4 +48,6 @@
     <color name="qs_tiles_secondary_label_color">@*android:color/text_color_secondary</color>
     <color name="qs_tiles_underline_color">@*android:color/foreground_material_light</color>
 
+    <!-- Global actions menu icon tint color -->
+    <color name="global_actions_icon_tint_color">@color/control_primary_text</color>
 </resources>
