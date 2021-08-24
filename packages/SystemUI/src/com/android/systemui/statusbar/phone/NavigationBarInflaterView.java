@@ -192,12 +192,22 @@ public class NavigationBarInflaterView extends FrameLayout
             updateHint();
             onLikelyDefaultLayoutChange();
         }
+        if (NAV_BAR_VIEWS.equals(key)) {
+            setNavigationBarLayout(newValue);
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateLayoutInversion();
+    }
+
+    public void setNavigationBarLayout(String layoutValue) {
+        if (!Objects.equals(mCurrentLayout, layoutValue)) {
+            clearViews();
+            inflateLayout(layoutValue);
+        }
     }
 
     public void onLikelyDefaultLayoutChange() {

@@ -238,4 +238,22 @@ oneway interface IStatusBar
      * Used to block or unblock usage of gestural navigation
      */
     void setBlockedGesturalNavigation(boolean blocked);
+
+    /**
+     * Toggles flashlight on and off.
+     */
+
+    void toggleFlashlight();
+
+    /**
+     * Shows or hides QS panel.
+     */
+
+    void toggleSettingsPanel();
+
+    /**
+     * Kills the application in the foreground.
+     */
+
+    void killForegroundApp();
 }
