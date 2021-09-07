@@ -44,6 +44,7 @@ import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.LiveDisplayTile;
+import com.android.systemui.qs.tiles.MonoAudioTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
 import com.android.systemui.qs.tiles.PowerMenuTile;
@@ -113,6 +114,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<SmartPixelsTile> mSmartPixelsTileProvider;
     private final Provider<RebootTile> mRebootTileProvider;
     private final Provider<SoundTile> mSoundTileProvider;
+    private final Provider<MonoAudioTile> mMonoAudioTileProvider;
 
     private final Lazy<QSHost> mQsHostLazy;
 
@@ -154,7 +156,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<AntiFlickerTile> antiFlickerTileProvider,
             Provider<SmartPixelsTile> smartPixelsTileProvider,
             Provider<RebootTile> rebootTileProvider,
-            Provider<SoundTile> soundTileProvider) {
+            Provider<SoundTile> soundTileProvider,
+            Provider<MonoAudioTile> monoAudioTileProvider) {
         mQsHostLazy = qsHostLazy;
         mWifiTileProvider = wifiTileProvider;
         mBluetoothTileProvider = bluetoothTileProvider;
@@ -193,6 +196,7 @@ public class QSFactoryImpl implements QSFactory {
         mSmartPixelsTileProvider = smartPixelsTileProvider;
         mRebootTileProvider = rebootTileProvider;
         mSoundTileProvider = soundTileProvider;
+        mMonoAudioTileProvider = monoAudioTileProvider;
     }
 
     public QSTile createTile(String tileSpec) {
@@ -279,6 +283,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mRebootTileProvider.get();
             case "sound":
                 return mSoundTileProvider.get();
+            case "mono_audio":
+                return mMonoAudioTileProvider.get();
         }
 
         // Custom tiles

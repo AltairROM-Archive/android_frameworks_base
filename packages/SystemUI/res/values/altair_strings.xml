@@ -33,4 +33,9 @@
 
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Power menu</string>
+
+    <!-- Mono audio QS tile -->
+    <string name="quick_settings_mono_audio_label">Mono audio</string>
+    <string name="accessibility_quick_settings_mono_audio_changed_off">Mono audio turned off.</string>
+    <string name="accessibility_quick_settings_mono_audio_changed_on">Mono audio turned on.</string>
 </resources>
