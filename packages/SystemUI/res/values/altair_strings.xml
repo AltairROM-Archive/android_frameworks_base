@@ -29,4 +29,11 @@
     <!-- Smart Pixels QS Tile -->
     <string name="quick_settings_smart_pixels">Smart Pixels</string>
     <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled Smart Pixels</string>
+
+    <!-- Audio mode QS tile -->
+    <string name="quick_settings_audio_mode">Audio mode</string>
+    <string name="quick_settings_audio_mode_mono">Mono</string>
+    <string name="quick_settings_audio_mode_stereo">Stereo</string>
+    <string name="accessibility_quick_settings_audio_mode_changed_mono">Audio mode set to mono.</string>
+    <string name="accessibility_quick_settings_audio_mode_changed_stereo">Audio mode set to stereo.</string>
 </resources>
