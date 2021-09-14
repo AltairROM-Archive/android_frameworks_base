@@ -35,7 +35,8 @@ import javax.inject.Inject;
 /** Quick settings tile: Invert colors **/
 public class MonoAudioTile extends QSTileImpl<BooleanState> {
 
-    private final Icon mIcon = ResourceIcon.get(drawable.ic_qs_mono_audio);
+    private final Icon mIconEnabled = ResourceIcon.get(drawable.ic_qs_mono_audio_on);
+    private final Icon mIconDisabled = ResourceIcon.get(drawable.ic_qs_mono_audio_off);
     private final SystemSetting mSetting;
 
     private boolean mListening;
@@ -99,10 +100,16 @@ public class MonoAudioTile extends QSTileImpl<BooleanState> {
         state.value = enabled;
         state.slash.isSlashed = !state.value;
         state.state = state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
-        state.label = mContext.getString(R.string.quick_settings_mono_audio_label);
-        state.icon = mIcon;
+        if (enabled) {
+            state.label = mContext.getString(R.string.quick_settings_mono_audio_enabled);
+            state.icon = mIconEnabled;
+            state.contentDescription = state.label;
+        } else {
+            state.label = mContext.getString(R.string.quick_settings_mono_audio_disabled);
+            state.icon = mIconDisabled;
+            state.contentDescription = state.label;
+        }
         state.expandedAccessibilityClassName = Switch.class.getName();
-        state.contentDescription = state.label;
     }
 
     @Override
