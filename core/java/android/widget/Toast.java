@@ -31,9 +31,7 @@ import android.compat.annotation.ChangeId;
 import android.compat.annotation.EnabledAfter;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -42,12 +40,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.IAccessibilityManager;
-import android.widget.ImageView;
 
 import com.android.internal.annotations.GuardedBy;
 
@@ -500,19 +496,6 @@ public class Toast {
         } else {
             Toast result = new Toast(context, looper);
             View v = ToastPresenter.getTextToastView(context, text);
-            ImageView appIcon = (ImageView) v.findViewById(android.R.id.icon);
-            if ((Settings.System.getInt(context.getContentResolver(), Settings.System.TOAST_ICON, 1) == 1)) {
-                if (appIcon != null) {
-                    PackageManager pm = context.getPackageManager();
-                    Drawable icon = null;
-                    try {
-                        icon = pm.getApplicationIcon(context.getPackageName());
-                    } catch (PackageManager.NameNotFoundException e) {
-                        // nothing to do
-                    }
-                    appIcon.setImageDrawable(icon);
-                }
-            }
             result.mNextView = v;
             result.mDuration = duration;
 
