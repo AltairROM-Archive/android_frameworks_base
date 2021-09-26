@@ -2306,6 +2306,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.SHOW_BATTERY_PERCENT,
                     R.integer.def_show_battery_percent);
 
+            loadBooleanSetting(stmt, Settings.System.USE_OLD_MOBILETYPE,
+                    R.bool.def_use_old_mobiletype);
+
             /*
              * IMPORTANT: Do not add any more upgrade steps here as the global,
              * secure, and system settings are no longer stored in a database
