@@ -243,4 +243,7 @@
 
     <!--  default setting for Settings.System.SHOW_BATTERY_PERCENT -->
     <integer name="def_show_battery_percent">2</integer>
+
+    <!-- Default for Settings.System.USE_OLD_MOBILETYPE -->
+    <bool name="def_use_old_mobiletype">true</bool>
 </resources>
