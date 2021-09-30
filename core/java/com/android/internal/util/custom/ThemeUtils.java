@@ -18,37 +18,24 @@ package com.android.internal.util.custom;
 
 import static android.os.UserHandle.USER_SYSTEM;
 
-import com.android.internal.graphics.ColorUtils;
-import android.util.PathParser;
-
 import android.app.UiModeManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.om.IOverlayManager;
 import android.content.om.OverlayInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.ProviderInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
-import android.content.res.ColorStateList;
-import android.content.res.Configuration;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.Path;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
-import android.net.Uri;
+import android.graphics.Path;
+import android.graphics.Typeface;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
-
-import com.android.internal.util.custom.clock.ClockFace;
+import android.util.PathParser;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -96,6 +83,7 @@ public class ThemeUtils {
                         USER_SYSTEM);
             }
         } catch (RemoteException e) {
+            // Do nothing
         }
     }
 
@@ -139,8 +127,8 @@ public class ThemeUtils {
         final List<Integer> colorlist = new ArrayList<>();
             colorlist.add(mContext.getColor(android.R.color.white));
             colorlist.add(Resources.getSystem().getColor(
-                            Resources.getSystem().getIdentifier("primary_device_default_dark",
-                            "color", "android"), null));
+                    Resources.getSystem().getIdentifier("primary_device_default_dark",
+                    "color", "android"), null));
             for (String overlayPackage : getOverlayPackagesForCategory(THEMES_KEY)) {
                 try {
                     if (overlayPackage.equals("android")) continue;
@@ -150,7 +138,7 @@ public class ThemeUtils {
                             "color", overlayPackage), null);
                     colorlist.add(colorint);
                 } catch (NameNotFoundException | NotFoundException e) {
-                // Do nothing
+                    // Do nothing
                 }
             }
         return colorlist;
@@ -178,7 +166,9 @@ public class ThemeUtils {
         pkgs.add("light.theme");
         pkgs.add("dark.theme");
         for (String overlayPackage : getOverlayPackagesForCategory(THEMES_KEY)) {
-            if ("android".equals(overlayPackage)) continue;
+            if ("android".equals(overlayPackage)) {
+                continue;
+            }
             pkgs.add(overlayPackage);
         }
         return pkgs;
@@ -206,13 +196,13 @@ public class ThemeUtils {
             for (String overlayPackage : getOverlayPackagesForCategory(ACCENT_KEY)) {
                 try {
                     overlayRes = overlayPackage.equals("android") ? Resources.getSystem()
-                           : pm.getResourcesForApplication(overlayPackage);
+                            : pm.getResourcesForApplication(overlayPackage);
                     final int colorint = overlayRes.getColor(
                             overlayRes.getIdentifier(nightmode ? "accent_device_default_dark" : "accent_device_default_light",
                             "color", overlayPackage), null);
                     colorlist.add(colorint);
                 } catch (NameNotFoundException | NotFoundException e) {
-                // Do nothing
+                    // Do nothing
                 }
             }
         return colorlist;
@@ -223,13 +213,13 @@ public class ThemeUtils {
             for (String overlayPackage : getOverlayPackagesForCategory(FONT_KEY)) {
                 try {
                     overlayRes = overlayPackage.equals("android") ? Resources.getSystem()
-                           : pm.getResourcesForApplication(overlayPackage);
+                            : pm.getResourcesForApplication(overlayPackage);
                     final String font = overlayRes.getString(
                             overlayRes.getIdentifier("config_bodyFontFamily",
                             "string", overlayPackage));
                     fontlist.add(Typeface.create(font, Typeface.NORMAL));
                 } catch (NameNotFoundException | NotFoundException e) {
-                // Do nothing
+                    // Do nothing
                 }
             }
         return fontlist;
@@ -248,15 +238,17 @@ public class ThemeUtils {
             if (overlayPackage.equals("android")) {
                 overlayRes = Resources.getSystem();
             } else {
-                if (overlayPackage.equals("default")) overlayPackage = "android";
+                if (overlayPackage.equals("default")) {
+                    overlayPackage = "android";
+                }
                 overlayRes = pm.getResourcesForApplication(overlayPackage);
             }
         } catch (NameNotFoundException | NotFoundException e) {
             // Do nothing
         }
         final String shape = overlayRes.getString(
-            overlayRes.getIdentifier("config_icon_mask",
-            "string", overlayPackage));
+                overlayRes.getIdentifier("config_icon_mask",
+                "string", overlayPackage));
         Path path = TextUtils.isEmpty(shape) ? null : PathParser.createPathFromPathData(shape);
         PathShape pathShape = new PathShape(path, 100f, 100f);
         ShapeDrawable shapeDrawable = new ShapeDrawable(pathShape);
@@ -291,39 +283,4 @@ public class ThemeUtils {
         }
         return true;
     }
-
-    public List<ClockFace> getClocks() {
-        ProviderInfo providerInfo = mContext.getPackageManager().resolveContentProvider("com.android.keyguard.clock",
-                        PackageManager.MATCH_SYSTEM_ONLY);
-
-        Uri optionsUri = new Uri.Builder()
-                .scheme(ContentResolver.SCHEME_CONTENT)
-                .authority(providerInfo.authority)
-                .appendPath("list_options")
-                .build();
-
-        ContentResolver resolver = mContext.getContentResolver();
-
-        List<ClockFace> clocks = new ArrayList<>();
-        try (Cursor c = resolver.query(optionsUri, null, null, null, null)) {
-            while(c.moveToNext()) {
-                String id = c.getString(c.getColumnIndex("id"));
-                String title = c.getString(c.getColumnIndex("title"));
-                String previewUri = c.getString(c.getColumnIndex("preview"));
-                Uri preview = Uri.parse(previewUri);
-                String thumbnailUri = c.getString(c.getColumnIndex("thumbnail"));
-                Uri thumbnail = Uri.parse(thumbnailUri);
-
-                ClockFace.Builder builder = new ClockFace.Builder();
-                builder.setId(id).setTitle(title).setPreview(preview).setThumbnail(thumbnail);
-                clocks.add(builder.build());
-            }
-        } catch (Exception e) {
-            clocks = null;
-        } finally {
-            // Do Nothing
-        }
-        return clocks;
-    }
-
 }
