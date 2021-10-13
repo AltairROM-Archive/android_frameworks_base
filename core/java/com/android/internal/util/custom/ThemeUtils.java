@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2021 The Altair ROM Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,13 +47,11 @@ public class ThemeUtils {
     public static final String TAG = "ThemeUtils";
 
     public static final String ACCENT_KEY = "android.theme.customization.accent_color";
+    public static final String BACKGROUND_KEY = "android.theme.customization.primary_background";
     public static final String FONT_KEY = "android.theme.customization.font";
     public static final String ICON_SHAPE_KEY= "android.theme.customization.adaptive_icon_shape";
-
+    public static final String SYSTEM_ICON_PACK_KEY = "android.theme.customization.icon_pack.android";
     public static final String THEMES_KEY = "android.theme.customization.theme_style";
-
-    public static final Comparator<OverlayInfo> OVERLAY_INFO_COMPARATOR =
-            Comparator.comparingInt(a -> a.priority);
 
     private Context mContext;
     private UiModeManager mUiModeManager;
@@ -119,8 +118,16 @@ public class ThemeUtils {
         } catch (RemoteException re) {
             throw re.rethrowFromSystemServer();
         }
-        filteredInfos.sort(OVERLAY_INFO_COMPARATOR);
+        filteredInfos.sort(new OverlayInfoComparator());
         return filteredInfos;
+    }
+
+    class OverlayInfoComparator implements Comparator {
+        public int compare(Object obj1, Object obj2) {
+            OverlayInfo o1 = (OverlayInfo) obj1;
+            OverlayInfo o2 = (OverlayInfo) obj2;
+            return o1.packageName.compareTo(o2.packageName);
+        }
     }
 
     public List<Integer> getThemeColors() {
