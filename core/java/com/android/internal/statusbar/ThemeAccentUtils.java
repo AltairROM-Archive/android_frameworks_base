@@ -27,10 +27,10 @@ public class ThemeAccentUtils {
 
     // Dark Variants
     private static final String[] DARK_THEMES = {
-        "org.lineageos.overlay.customization.blackbackground", // 0
-        "org.lineageos.overlay.customization.matteblackbackground", // 1
-        "org.lineageos.overlay.customization.darkgraybackground", // 2
-        "org.lineageos.overlay.customization.solarizedbackground", // 3
+        "com.android.theme.background.black", // 0
+        "com.android.theme.background.matteblack", // 1
+        "com.android.theme.background.darkgray", // 2
+        "com.android.theme.background.solarized", // 3
     };
 
     // Check for the dark system theme
