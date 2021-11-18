@@ -2281,9 +2281,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
                     R.integer.def_pointer_speed);
 
-            loadIntegerSetting(stmt, Settings.System.SHOW_BATTERY_PERCENT,
-                    R.integer.def_show_battery_percent);
-
             loadBooleanSetting(stmt, Settings.System.USE_OLD_MOBILETYPE,
                     R.bool.def_use_old_mobiletype);
 
