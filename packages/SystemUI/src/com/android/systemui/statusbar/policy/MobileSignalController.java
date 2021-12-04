@@ -104,12 +104,15 @@ public class MobileSignalController extends SignalController<
     private int mCallState = TelephonyManager.CALL_STATE_IDLE;
 
     private boolean mVoLTEicon;
+    private boolean mVoWiFiIcon;
     private boolean mRoamingIconAllowed;
     private boolean mShow4gForLte;
     private boolean mDataDisabledIcon;
 
     private static final String SHOW_VOLTE_ICON =
             "system:" + Settings.System.SHOW_VOLTE_ICON;
+    private static final String SHOW_VOWIFI_ICON =
+            "system:" + Settings.System.SHOW_VOWIFI_ICON;
     private static final String ROAMING_INDICATOR_ICON =
             "system:" + Settings.System.ROAMING_INDICATOR_ICON;
     private static final String SHOW_FOURG_ICON =
@@ -179,6 +182,7 @@ public class MobileSignalController extends SignalController<
         };
 
         Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
+        Dependency.get(TunerService.class).addTunable(this, SHOW_VOWIFI_ICON);
         Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
         Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
         Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
@@ -189,6 +193,11 @@ public class MobileSignalController extends SignalController<
         switch (key) {
             case SHOW_VOLTE_ICON:
                 mVoLTEicon =
+                    TunerService.parseIntegerSwitch(newValue, false);
+                updateTelephony();
+                break;
+            case SHOW_VOWIFI_ICON:
+                mVoWiFiIcon =
                     TunerService.parseIntegerSwitch(newValue, false);
                 updateTelephony();
                 break;
@@ -203,10 +212,10 @@ public class MobileSignalController extends SignalController<
                 mapIconSets();
                 break;
             case DATA_DISABLED_ICON:
-                mDataDisabledIcon = 
+                mDataDisabledIcon =
                     TunerService.parseIntegerSwitch(newValue, true);
-                updateTelephony();                
-                break; 
+                updateTelephony();
+                break;
             default:
                 break;
         }
@@ -790,6 +799,8 @@ public class MobileSignalController extends SignalController<
     }
 
     private MobileIconGroup getVowifiIconGroup() {
+        if (!mVoWiFiIcon) return null;
+
         if ( isVowifiAvailable() && !isCallIdle() ) {
             return TelephonyIcons.VOWIFI_CALLING;
         } else if (isVowifiAvailable()) {

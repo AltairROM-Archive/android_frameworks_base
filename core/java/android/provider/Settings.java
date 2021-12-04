@@ -4907,6 +4907,12 @@ public final class Settings {
         public static final String SHOW_VOLTE_ICON = "show_volte_icon";
 
         /**
+         * Whether to display VoWiFi icon when VoWiFi present
+         * @hide
+         */
+        public static final String SHOW_VOWIFI_ICON = "show_vowifi_icon";
+
+        /**
          * Whether to display roaming indicator for roaming signal connection
          * @hide
          */
