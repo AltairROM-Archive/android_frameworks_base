@@ -4687,6 +4687,16 @@ public final class Settings {
                 BOOLEAN_VALIDATOR;
 
         /**
+         * Whether to display VoWiFi icon when VoWiFi present
+         * @hide
+         */
+        public static final String SHOW_VOWIFI_ICON = "show_vowifi_icon";
+
+        /** @hide */
+        private static final Validator SHOW_VOWIFI_ICON_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
+        /**
          * Whether to display roaming indicator for roaming signal connection
          * @hide
          */
@@ -4803,6 +4813,7 @@ public final class Settings {
             BLUETOOTH_SHOW_BATTERY,
             BLUETOOTH_QS_SHOW_BATTERY,
             SHOW_VOLTE_ICON,
+            SHOW_VOWIFI_ICON,
             ROAMING_INDICATOR_ICON,
             SHOW_FOURG_ICON,
             DATA_DISABLED_ICON,
@@ -4946,6 +4957,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(BLUETOOTH_SHOW_BATTERY);
             PRIVATE_SETTINGS.add(BLUETOOTH_QS_SHOW_BATTERY);
             PRIVATE_SETTINGS.add(SHOW_VOLTE_ICON);
+            PRIVATE_SETTINGS.add(SHOW_VOWIFI_ICON);
             PRIVATE_SETTINGS.add(ROAMING_INDICATOR_ICON);
             PRIVATE_SETTINGS.add(SHOW_FOURG_ICON);
             PRIVATE_SETTINGS.add(DATA_DISABLED_ICON);
