@@ -87,7 +87,7 @@ class LegacyGlobalActions implements DialogInterface.OnDismissListener, DialogIn
      * see config.xml config_globalActionList */
     private static final String GLOBAL_ACTION_KEY_POWER = "power";
     private static final String GLOBAL_ACTION_KEY_AIRPLANE = "airplane";
-    private static final String GLOBAL_ACTION_KEY_BUGREPORT = "bugreport";
+    //private static final String GLOBAL_ACTION_KEY_BUGREPORT = "bugreport";
     private static final String GLOBAL_ACTION_KEY_SILENT = "silent";
     private static final String GLOBAL_ACTION_KEY_USERS = "users";
     private static final String GLOBAL_ACTION_KEY_SETTINGS = "settings";
@@ -281,11 +281,13 @@ class LegacyGlobalActions implements DialogInterface.OnDismissListener, DialogIn
                 mItems.add(new PowerAction(mContext, mWindowManagerFuncs));
             } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {
                 mItems.add(mAirplaneModeOn);
+            /*
             } else if (GLOBAL_ACTION_KEY_BUGREPORT.equals(actionKey)) {
                 if (Settings.Global.getInt(mContext.getContentResolver(),
                         Settings.Global.BUGREPORT_IN_POWER_MENU, 0) != 0 && isCurrentUserOwner()) {
                     mItems.add(new BugReportAction());
                 }
+            */
             } else if (GLOBAL_ACTION_KEY_SILENT.equals(actionKey)) {
                 if (mShowSilentToggle) {
                     mItems.add(mSilentModeAction);
@@ -347,6 +349,7 @@ class LegacyGlobalActions implements DialogInterface.OnDismissListener, DialogIn
         return dialog;
     }
 
+/*
     private class BugReportAction extends SinglePressAction implements LongPressAction {
 
         public BugReportAction() {
@@ -413,6 +416,7 @@ class LegacyGlobalActions implements DialogInterface.OnDismissListener, DialogIn
                     Build.ID);
         }
     }
+*/
 
     private Action getSettingsAction() {
         return new SinglePressAction(com.android.internal.R.drawable.ic_settings,

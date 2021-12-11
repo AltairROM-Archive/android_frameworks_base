@@ -472,11 +472,13 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
                 continue;
             } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {
                 mItems.add(mAirplaneModeOn);
+            /*
             } else if (GLOBAL_ACTION_KEY_BUGREPORT.equals(actionKey)) {
                 if (Settings.Global.getInt(mContext.getContentResolver(),
                         Settings.Global.BUGREPORT_IN_POWER_MENU, 0) != 0 && isCurrentUserOwner()) {
                     mItems.add(new BugReportAction());
                 }
+            */
             } else if (GLOBAL_ACTION_KEY_SILENT.equals(actionKey)) {
                 if (mShowSilentToggle) {
                     mItems.add(mSilentModeAction);
@@ -884,6 +886,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
         }
     }
 
+/*
     private class BugReportAction extends SinglePressAction implements LongPressAction {
 
         public BugReportAction() {
@@ -941,6 +944,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             return false;
         }
     }
+*/
 
     private final class LogoutAction extends SinglePressAction {
         private LogoutAction() {
