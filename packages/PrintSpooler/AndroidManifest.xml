@@ -43,7 +43,7 @@
     <application
         android:allowClearUserData="true"
         android:label="@string/app_label"
-        android:icon="@drawable/ic_app_icon"
+        android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true">
 
         <service
