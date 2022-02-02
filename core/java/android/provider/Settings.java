@@ -5364,6 +5364,12 @@ public final class Settings {
          */
         public static final String DARK_MODE_BACKGROUND_THEME = "dark_mode_background_theme";
 
+        /**
+         * Show app volume rows in volume panel
+         * @hide
+         */
+        public static final String SHOW_APP_VOLUME = "show_app_volume";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
