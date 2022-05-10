@@ -5259,6 +5259,12 @@ public final class Settings {
          */
         public static final String DATA_DISABLED_ICON = "data_disabled_icon";
 
+        /**
+         * Toast icon
+         * @hide
+         */
+        public static final String TOAST_ICON = "toast_icon";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
