@@ -5235,6 +5235,12 @@ public final class Settings {
         /* Altair ROM System Settings Start */
         /************************************/
 
+        /**
+         * Whether to display VoLTE icon when VoLTE present
+         * @hide
+         */
+        public static final String SHOW_VOLTE_ICON = "show_volte_icon";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
