@@ -1,0 +1,26 @@
+<!--
+    Copyright (C) 2016 The Android Open Source Project
+    Copyright (C) 2017 The ABC rom
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24.0dp"
+        android:height="24.0dp"
+        android:viewportHeight="24.0"
+        android:viewportWidth="24.0"
+        android:tint="?android:attr/colorControlNormal">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M13.429,3.429C8.726,3.429 4.857,7.298 4.857,12L2,12L5.705,15.705L5.771,15.838L9.619,12L6.762,12C6.762,8.343 9.771,5.333 13.429,5.333C17.086,5.333 20.095,8.343 20.095,12C20.095,15.657 17.086,18.667 13.429,18.667C11.59,18.667 9.924,17.914 8.724,16.705L7.371,18.057C8.924,19.619 11.048,20.571 13.429,20.571C18.131,20.571 22,16.702 22,12C22,7.298 18.131,3.429 13.429,3.429ZM10.28,8.394L11.651,8.394L11.651,12.951C11.651,13.306 11.673,13.594 11.718,13.815C11.762,14.035 11.866,14.214 12.028,14.35C12.191,14.487 12.401,14.555 12.657,14.555C12.907,14.555 13.106,14.502 13.254,14.395C13.402,14.288 13.507,14.139 13.568,13.948C13.628,13.757 13.659,13.446 13.659,13.015L13.659,8.394L15.04,8.394L15.04,13.095C15.04,13.664 14.968,14.143 14.823,14.533C14.678,14.923 14.43,15.223 14.078,15.433C13.726,15.644 13.276,15.749 12.727,15.749C12.154,15.749 11.695,15.663 11.348,15.492C11.001,15.321 10.736,15.035 10.553,14.632C10.371,14.229 10.28,13.628 10.28,12.829L10.28,8.394ZM17.882,15.626L16.495,15.626L16.495,8.394L17.882,8.394L17.882,15.626Z" />
+</vector>
