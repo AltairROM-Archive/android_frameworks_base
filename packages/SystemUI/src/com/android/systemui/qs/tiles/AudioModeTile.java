@@ -119,7 +119,7 @@ public class AudioModeTile extends QSTileImpl<BooleanState> {
         }
         state.value = enabled;
         state.slash.isSlashed = !state.value;
-        state.state = state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
+        state.state = Tile.STATE_ACTIVE;
         state.label = mContext.getString(R.string.quick_settings_audio_mode);
         if (enabled) {
             state.icon = mIconAudioMono;
