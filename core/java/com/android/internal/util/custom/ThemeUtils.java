@@ -64,6 +64,9 @@ public class ThemeUtils {
     public static final String ICON_SHAPE_KEY= "android.theme.customization.adaptive_icon_shape";
     public static final String SYSTEM_ICON_PACK_KEY = "android.theme.customization.icon_pack.android";
     public static final String THEMES_KEY = "android.theme.customization.theme_style";
+    public static final String SIGNAL_ICON_KEY = "android.theme.customization.signal_icon";
+    public static final String WIFI_ICON_KEY = "android.theme.customization.wifi_icon";
+    public static final String NAVBAR_KEY = "android.theme.customization.navbar";
 
     public static final Comparator<OverlayInfo> OVERLAY_INFO_COMPARATOR =
             Comparator.comparingInt(a -> a.priority);
@@ -210,9 +213,13 @@ public class ThemeUtils {
     }
 
     public List<String> getLabels(String category) {
+        return getLabels(category, "android");
+    }
+
+    public List<String> getLabels(String category, String target) {
         List<String> labels = new ArrayList<>();
         labels.add("Default");
-        for (OverlayInfo info : getOverlayInfos(category)) {
+        for (OverlayInfo info : getOverlayInfos(category, target)) {
             if (category.equals(info.getCategory())) {
                 try {
                     labels.add(pm.getApplicationInfo(info.packageName, 0)
