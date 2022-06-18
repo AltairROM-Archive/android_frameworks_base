@@ -60,6 +60,7 @@ public class ThemeUtils {
 
     public static final String TAG = "ThemeUtils";
 
+    public static final String ACCENT_KEY = "android.theme.customization.accent_color";
     public static final String FONT_KEY = "android.theme.customization.font";
     public static final String ICON_SHAPE_KEY= "android.theme.customization.adaptive_icon_shape";
     public static final String SYSTEM_ICON_PACK_KEY = "android.theme.customization.icon_pack.android";
@@ -182,6 +183,27 @@ public class ThemeUtils {
         }
     }
 
+    public List<Integer> getThemeColors() {
+        final List<Integer> colorlist = new ArrayList<>();
+        colorlist.add(mContext.getColor(android.R.color.white));
+        colorlist.add(Resources.getSystem().getColor(
+                Resources.getSystem().getIdentifier("primary_device_default_dark",
+                "color", "android"), null));
+        for (String overlayPackage : getOverlayPackagesForCategory(THEMES_KEY)) {
+            try {
+                if (overlayPackage.equals("android")) continue;
+                overlayRes = pm.getResourcesForApplication(overlayPackage);
+                final int colorint = overlayRes.getColor(
+                        overlayRes.getIdentifier("primary_device_default_dark",
+                        "color", overlayPackage), null);
+                colorlist.add(colorint);
+            } catch (NameNotFoundException | NotFoundException e) {
+                // Do nothing
+            }
+        }
+        return colorlist;
+    }
+
     public List<String> getThemeLabels() {
         List<String> labels = new ArrayList<>();
         labels.add("Light Theme");
@@ -230,6 +252,24 @@ public class ThemeUtils {
             }
         }
         return labels;
+    }
+
+    public List<Integer> getColors() {
+        final boolean nightmode = (mContext.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_YES) != 0;
+        final List<Integer> colorlist = new ArrayList<>();
+        for (String overlayPackage : getOverlayPackagesForCategory(ACCENT_KEY)) {
+            try {
+                overlayRes = overlayPackage.equals("android") ? Resources.getSystem()
+                        : pm.getResourcesForApplication(overlayPackage);
+                final int colorint = overlayRes.getColor(
+                        overlayRes.getIdentifier(nightmode ? "accent_device_default_dark" : "accent_device_default_light",
+                        "color", overlayPackage), null);
+                colorlist.add(colorint);
+            } catch (NameNotFoundException | NotFoundException e) {
+                // Do nothing
+            }
+        }
+        return colorlist;
     }
 
     public List<Typeface> getFonts() {
