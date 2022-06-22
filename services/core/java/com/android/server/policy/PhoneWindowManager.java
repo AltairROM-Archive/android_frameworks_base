@@ -213,6 +213,7 @@ import com.android.internal.policy.PhoneWindow;
 import com.android.internal.policy.TransitionAnimation;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.util.ArrayUtils;
+import com.android.internal.util.custom.Utils;
 import com.android.server.ExtconStateObserver;
 import com.android.server.ExtconUEventObserver;
 import com.android.server.GestureLauncherService;
@@ -1714,6 +1715,30 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case KILL_APP:
                 ActionUtils.killForegroundApp(mContext, mCurrentUserId);
+                break;
+            case TORCH:
+                Utils.toggleCameraFlash();
+                break;
+            case SCREENSHOT:
+                mHandler.removeCallbacks(mScreenshotRunnable);
+                mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_FULLSCREEN);
+                mScreenshotRunnable.setScreenshotSource(SCREENSHOT_KEY_OTHER);
+                mHandler.post(mScreenshotRunnable);
+                break;
+            case VOLUME_PANEL:
+                Utils.toggleVolumePanel(mContext);
+                break;
+            case CLEAR_ALL_NOTIFICATIONS:
+                Utils.clearAllNotifications();
+                break;
+            case NOTIFICATIONS:
+                Utils.toggleNotifications();
+                break;
+            case QS_PANEL:
+                Utils.toggleQsPanel();
+                break;
+            case RINGER_MODES:
+                Utils.toggleRingerModes(mContext);
                 break;
             default:
                 break;
