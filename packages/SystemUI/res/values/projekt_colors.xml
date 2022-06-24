@@ -16,4 +16,7 @@
 -->
 <resources>
 
+    <!-- Screenshot action colors -->
+    <color name="screenshot_flash_color">@android:color/white</color>
+
 </resources>
