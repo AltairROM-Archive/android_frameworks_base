@@ -68,6 +68,7 @@ public class ThemeUtils {
     public static final String SIGNAL_ICON_KEY = "android.theme.customization.signal_icon";
     public static final String WIFI_ICON_KEY = "android.theme.customization.wifi_icon";
     public static final String NAVBAR_KEY = "android.theme.customization.navbar";
+    public static final String DARK_THEME_KEY = "android.theme.customization.system_palette";
 
     public static final Comparator<OverlayInfo> OVERLAY_INFO_COMPARATOR =
             Comparator.comparingInt(a -> a.priority);
