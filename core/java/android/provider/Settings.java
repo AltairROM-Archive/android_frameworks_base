@@ -5358,6 +5358,12 @@ public final class Settings {
          */
         public static final String LESS_BORING_HEADS_UP = "less_boring_heads_up";
 
+        /**
+         * Theme overlay to use for dark mode background
+         * @hide
+         */
+        public static final String DARK_MODE_BACKGROUND_THEME = "dark_mode_background_theme";
+
         /**********************************/
         /* Altair ROM System Settings End */
         /**********************************/
