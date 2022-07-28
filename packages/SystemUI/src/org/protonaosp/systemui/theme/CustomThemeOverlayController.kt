@@ -26,6 +26,7 @@ import android.os.UserManager
 import android.provider.Settings
 import android.util.Log
 import android.util.TypedValue
+
 import com.android.systemui.Dependency
 import com.android.systemui.broadcast.BroadcastDispatcher
 import com.android.systemui.dagger.SysUISingleton
@@ -43,6 +44,7 @@ import com.android.systemui.tuner.TunerService
 import com.android.systemui.tuner.TunerService.Tunable
 import com.android.systemui.util.settings.SecureSettings
 import com.android.systemui.util.settings.SystemSettings
+
 import dev.kdrag0n.colorkt.Color
 import dev.kdrag0n.colorkt.cam.Zcam
 import dev.kdrag0n.colorkt.conversion.ConversionGraph.convert
@@ -52,8 +54,11 @@ import dev.kdrag0n.colorkt.tristimulus.CieXyzAbs.Companion.toAbs
 import dev.kdrag0n.colorkt.ucs.lab.CieLab
 import dev.kdrag0n.monet.theme.DynamicColorScheme
 import dev.kdrag0n.monet.theme.MaterialYouTargets
+
 import java.util.concurrent.Executor
+
 import javax.inject.Inject
+
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -96,25 +101,32 @@ class CustomThemeOverlayController @Inject constructor(
     private lateinit var cond: Zcam.ViewingConditions
     private lateinit var targets: MaterialYouTargets
 
+    private var colorType: Int = COLOR_TYPE_DEFAULT
     private var colorOverride: Int = 0
+    private var colorAccent: Int = 0
+    private var tintSurface: Boolean = true
     private var chromaFactor: Double = Double.MIN_VALUE
     private var accurateShades: Boolean = true
     private var whiteLuminance: Double = Double.MIN_VALUE
     private var linearLightness: Boolean = false
-    private var customColor: Boolean = false
     private val mTunerService: TunerService = Dependency.get(TunerService::class.java)
     override fun start() {
-        mTunerService.addTunable(this, PREF_COLOR_OVERRIDE, PREF_WHITE_LUMINANCE,
-                PREF_CHROMA_FACTOR, PREF_ACCURATE_SHADES, PREF_LINEAR_LIGHTNESS, PREF_CUSTOM_COLOR)
+        mTunerService.addTunable(this, PREF_COLOR_TYPE, PREF_COLOR_OVERRIDE, PREF_COLOR_ACCENT,
+                PREF_TINT_SURFACE, PREF_WHITE_LUMINANCE, PREF_CHROMA_FACTOR, PREF_ACCURATE_SHADES,
+                PREF_LINEAR_LIGHTNESS)
         super.start()
     }
 
     override fun onTuningChanged(key: String?, newValue: String?) {
         key?.let {
             if (it.contains(PREF_PREFIX)) {
-                customColor = Settings.Secure.getInt(mContext.contentResolver, PREF_CUSTOM_COLOR, 0) == 1
+                colorType = Settings.Secure.getInt(mContext.contentResolver, PREF_COLOR_TYPE, 0)
                 colorOverride = Settings.Secure.getInt(mContext.contentResolver,
                         PREF_COLOR_OVERRIDE, -1)
+                colorAccent = Settings.Secure.getInt(mContext.contentResolver, PREF_COLOR_ACCENT,
+                        -1)
+                tintSurface = Settings.Secure.getInt(mContext.contentResolver, PREF_TINT_SURFACE,
+                        1) == 1
                 chromaFactor = (Settings.Secure.getFloat(mContext.contentResolver,
                         PREF_CHROMA_FACTOR, 100.0f) / 100f).toDouble()
                 accurateShades = Settings.Secure.getInt(mContext.contentResolver, PREF_ACCURATE_SHADES, 1) != 0
@@ -157,8 +169,15 @@ class CustomThemeOverlayController @Inject constructor(
         // Generate color scheme
         val colorScheme = DynamicColorScheme(
             targets = targets,
-            seedColor = if (customColor) Srgb(colorOverride) else Srgb(primaryColor),
-            chromaFactor = chromaFactor,
+            seedColor = when (colorType) {
+                COLOR_TYPE_CUSTOM -> Srgb(colorOverride)
+                COLOR_TYPE_THEME -> Srgb(colorAccent)
+                else -> Srgb(primaryColor)
+            },
+            chromaFactor = when (type) {
+                NEUTRAL -> if (tintSurface) chromaFactor else 0.0
+                else -> chromaFactor
+            },
             cond = cond,
             accurateShades = accurateShades,
         )
@@ -200,12 +219,18 @@ class CustomThemeOverlayController @Inject constructor(
         private const val TAG = "CustomThemeOverlayController"
 
         private const val PREF_PREFIX = "monet_engine"
-        private const val PREF_CUSTOM_COLOR = "${PREF_PREFIX}_custom_color"
+        private const val PREF_COLOR_TYPE = "${PREF_PREFIX}_color_type"
         private const val PREF_COLOR_OVERRIDE = "${PREF_PREFIX}_color_override"
+        private const val PREF_COLOR_ACCENT = "${PREF_PREFIX}_color_accent"
+        private const val PREF_TINT_SURFACE = "${PREF_PREFIX}_tint_surface"
         private const val PREF_CHROMA_FACTOR = "${PREF_PREFIX}_chroma_factor"
         private const val PREF_ACCURATE_SHADES = "${PREF_PREFIX}_accurate_shades"
         private const val PREF_LINEAR_LIGHTNESS = "${PREF_PREFIX}_linear_lightness"
         private const val PREF_WHITE_LUMINANCE = "${PREF_PREFIX}_white_luminance_user"
+
+        private const val COLOR_TYPE_DEFAULT = 0
+        private const val COLOR_TYPE_CUSTOM = 1
+        private const val COLOR_TYPE_THEME = 2
 
         private const val WHITE_LUMINANCE_MIN = 1.0
         private const val WHITE_LUMINANCE_MAX = 10000.0
