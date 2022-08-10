@@ -73,6 +73,8 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController.DeviceP
 import com.android.systemui.util.settings.SecureSettings;
 import com.android.systemui.util.settings.SystemSettings;
 
+import lineageos.providers.LineageSettings;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
