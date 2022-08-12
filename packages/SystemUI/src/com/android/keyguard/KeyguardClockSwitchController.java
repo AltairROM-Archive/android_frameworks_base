@@ -440,7 +440,7 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
 
     private void updateDoubleLineClock() {
         mCanShowDoubleLineClock = mSecureSettings.getInt(
-            Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK, 1) != 0;
+            Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK, 0) != 0;
 
         if (!mCanShowDoubleLineClock) {
             mUiExecutor.execute(() -> displayClock(KeyguardClockSwitch.SMALL));
