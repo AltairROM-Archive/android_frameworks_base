@@ -46,11 +46,7 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel>
 
     private final QSPanel.OnConfigurationChangedListener mOnConfigurationChangedListener =
             newConfig -> {
-                int newMaxTiles = getResources().getInteger(R.integer.quick_qs_panel_max_tiles);
-                newMaxTiles = TileUtils.getQSColumnsCount(getContext(), newMaxTiles);
-                if (newMaxTiles != mView.getNumQuickTiles()) {
-                    setMaxTiles(newMaxTiles);
-                }
+                updateConfig();
             };
 
     private final FooterActionsController mFooterActionsController;
@@ -85,13 +81,28 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel>
     @Override
     protected void onViewAttached() {
         super.onViewAttached();
+
+        mTunerService.addTunable(mView, QSPanel.QS_SHOW_AUTO_BRIGHTNESS);
+        mTunerService.addTunable(mView, QSPanel.QS_SHOW_BRIGHTNESS_SLIDER);
+        mTunerService.addTunable(mView, QSPanel.QS_LAYOUT_COLUMNS);
+        mTunerService.addTunable(mView, QSPanel.QS_LAYOUT_COLUMNS_LANDSCAPE);
+
         mView.addOnConfigurationChangedListener(mOnConfigurationChangedListener);
+        updateConfig();
     }
 
     @Override
     protected void onViewDetached() {
         super.onViewDetached();
         mView.removeOnConfigurationChangedListener(mOnConfigurationChangedListener);
+    }
+
+    private void updateConfig() {
+        int maxTiles = getResources().getInteger(R.integer.quick_qs_panel_max_tiles);
+        int columns = getResources().getInteger(R.integer.quick_settings_num_columns);
+        columns = TileUtils.getQSColumnsCount(getContext(), columns);
+        mView.setMaxTiles(Math.max(columns, maxTiles));
+        setTiles();
     }
 
     @Override
@@ -102,11 +113,6 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel>
 
     public boolean isListening() {
         return mView.isListening();
-    }
-
-    private void setMaxTiles(int parseNumTiles) {
-        mView.setMaxTiles(parseNumTiles);
-        setTiles();
     }
 
     @Override
