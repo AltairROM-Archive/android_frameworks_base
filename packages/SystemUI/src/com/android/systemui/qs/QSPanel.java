@@ -60,9 +60,6 @@ public class QSPanel extends LinearLayout implements Tunable {
     public static final String QS_SHOW_BRIGHTNESS_SLIDER =
             "lineagesecure:" + LineageSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER;
 
-    public static final String QS_SHOW_BRIGHTNESS = "qs_show_brightness";
-    public static final String QS_SHOW_HEADER = "qs_show_header";
-
     private static final String TAG = "QSPanel";
 
     protected final Context mContext;
@@ -294,15 +291,24 @@ public class QSPanel extends LinearLayout implements Tunable {
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (QS_SHOW_AUTO_BRIGHTNESS.equals(key) && mIsAutomaticBrightnessAvailable) {
-            updateViewVisibilityForTuningValue(mAutoBrightnessView, newValue);
-        } else if (QS_SHOW_BRIGHTNESS_SLIDER.equals(key) && mBrightnessView != null) {
-            updateViewVisibilityForTuningValue(mBrightnessView, newValue);
-        }
-    }
-
-    private void updateViewVisibilityForTuningValue(View view, @Nullable String newValue) {
-        view.setVisibility(TunerService.parseIntegerSwitch(newValue, true) ? VISIBLE : GONE);
+        switch (key) {
+            case QS_SHOW_BRIGHTNESS_SLIDER:
+                boolean value =
+                       TunerService.parseInteger(newValue, 1) >= 1;
+                if (mBrightnessView != null) {
+                    mBrightnessView.setVisibility(value ? VISIBLE : GONE);
+                }
+                break;
+            case QS_SHOW_AUTO_BRIGHTNESS:
+                if (mAutoBrightnessView != null) {
+                    mAutoBrightnessView.setVisibility(mIsAutomaticBrightnessAvailable &&
+                            TunerService.parseIntegerSwitch(newValue, true) ? View.VISIBLE
+                                                                            : View.GONE);
+                }
+                break;
+            default:
+                break;
+         }
     }
 
     /** */

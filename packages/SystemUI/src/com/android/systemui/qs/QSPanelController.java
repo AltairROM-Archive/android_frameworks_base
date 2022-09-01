@@ -18,9 +18,6 @@ package com.android.systemui.qs;
 
 import static com.android.systemui.classifier.Classifier.QS_SWIPE;
 import static com.android.systemui.media.dagger.MediaModule.QS_PANEL;
-import static com.android.systemui.qs.QSPanel.QS_SHOW_BRIGHTNESS;
-import static com.android.systemui.qs.QSPanel.QS_SHOW_AUTO_BRIGHTNESS;
-import static com.android.systemui.qs.QSPanel.QS_SHOW_BRIGHTNESS_SLIDER;
 import static com.android.systemui.qs.dagger.QSFragmentModule.QS_USING_MEDIA_PLAYER;
 
 import android.annotation.NonNull;
@@ -142,9 +139,9 @@ public class QSPanelController extends QSPanelControllerBase<QSPanel> {
 
         updateMediaDisappearParameters();
 
-        mTunerService.addTunable(mView, QS_SHOW_BRIGHTNESS);
-        mTunerService.addTunable(mView, QS_SHOW_AUTO_BRIGHTNESS);
-        mTunerService.addTunable(mView, QS_SHOW_BRIGHTNESS_SLIDER);
+        mTunerService.addTunable(mView, QSPanel.QS_SHOW_BRIGHTNESS_SLIDER);
+        mTunerService.addTunable(mView, QSPanel.QS_SHOW_AUTO_BRIGHTNESS);
+
         mView.updateResources();
         if (mView.isListening()) {
             refreshAllTiles();
@@ -311,4 +308,3 @@ public class QSPanelController extends QSPanelControllerBase<QSPanel> {
         mView.setPageMargin(pageMargin);
     }
 }
-
