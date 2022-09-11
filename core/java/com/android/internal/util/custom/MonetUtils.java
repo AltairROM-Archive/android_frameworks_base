@@ -23,18 +23,11 @@ import android.provider.Settings;
 
 public class MonetUtils {
 
-    public static final String KEY_MONET_COLOR_TYPE = "monet_engine_color_type";
-    public static final String KEY_MONET_COLOR_OVERRIDE = "monet_engine_color_override";
     public static final String KEY_MONET_COLOR_ACCENT = "monet_engine_color_accent";
     public static final String KEY_MONET_TINT_SURFACE = "monet_engine_tint_surface";
-    public static final String KEY_MONET_CHROMA_FACTOR = "monet_engine_chroma_factor";
     public static final String KEY_MONET_ACCURATE_SHADES = "monet_engine_accurate_shades";
-    public static final String KEY_MONET_LINEAR_LIGHTNESS = "monet_engine_linear_lightness";
-    public static final String KEY_MONET_WHITE_LUMINANCE = "monet_engine_white_luminance_user";
 
-    public static final int COLOR_TYPE_DEFAULT = 0;
-    public static final int COLOR_TYPE_CUSTOM = 1;
-    public static final int COLOR_TYPE_INTERNAL = 2;
+    public static final int ACCENT_COLOR_DISABLED = 0;
 
     private Context mContext;
 
@@ -42,80 +35,68 @@ public class MonetUtils {
         mContext = context;
     }
 
+    /*
+     * Private helper functions.
+     */
+
+    // Obtain integer value from Settings.Secure key.
     private int getInt(String key, int defaultValue) {
         return Settings.Secure.getInt(mContext.getContentResolver(), key, defaultValue);
     }
 
+    // Set Settings.Secure key to integer value.
     private void putInt(String key, int value) {
         Settings.Secure.putInt(mContext.getContentResolver(), key, value);
     }
 
+    // Obtain boolean value (0 or 1) from Settings.Secure key.
     private boolean getBoolean(String key, boolean defaultValue) {
         return Settings.Secure.getInt(mContext.getContentResolver(), key,
                 defaultValue ? 1 : 0) != 0;
     }
 
+    // Set Settings.Secure key to boolean value (0 or 1).
     private void putBoolean(String key, boolean value) {
         Settings.Secure.putInt(mContext.getContentResolver(), key, value ? 1 : 0);
     }
 
-    public int getColorType() {
-        return getInt(KEY_MONET_COLOR_TYPE, COLOR_TYPE_DEFAULT);
+    /*
+     * Public class functions.
+     */
+
+    // Returns true if accent color is set, false if not.
+    public boolean isAccentColorSet() {
+        return getAccentColor() != 0;
     }
 
-    public void setColorType(int colorType) {
-        switch (colorType) {
-            case COLOR_TYPE_CUSTOM:
-            case COLOR_TYPE_INTERNAL:
-                putInt(KEY_MONET_COLOR_TYPE, colorType);
-                break;
-            default:
-                putInt(KEY_MONET_COLOR_TYPE, COLOR_TYPE_DEFAULT);
-                break;
-        }
-    }
-
-    public int getOverrideColor() {
-        return getInt(KEY_MONET_COLOR_OVERRIDE, -1);
-    }
-
-    public void setOverrideColor(int color) {
-        putInt(KEY_MONET_COLOR_OVERRIDE, color);
-    }
-
+    // Returns the current accent color.
     public int getAccentColor() {
-        return getInt(KEY_MONET_COLOR_ACCENT, -1);
+        return getInt(KEY_MONET_COLOR_ACCENT, ACCENT_COLOR_DISABLED);
     }
 
+    // Sets the accent color. Setting to ACCENT_COLOR_DISABLED removes the custom color and
+    // returns the system to using the color obtained from the current wallpaper.
     public void setAccentColor(int color) {
         putInt(KEY_MONET_COLOR_ACCENT, color);
     }
 
+    // Returns true if surface color tinting is enabled, false if not.
     public boolean isSurfaceTintEnabled() {
         return getBoolean(KEY_MONET_TINT_SURFACE, true);
     }
 
+    // Enables or disables surface color tinting.
     public void setSurfaceTintEnabled(boolean enable) {
         putBoolean(KEY_MONET_TINT_SURFACE, enable);
     }
 
+    // Returns true if accurate color shading is enabled, false if not.
     public boolean isAccurateShadesEnabled() {
         return getBoolean(KEY_MONET_ACCURATE_SHADES, true);
     }
 
+    // Enables or disables accurate color shading.
     public void setAccurateShadesEnabled(boolean enable) {
         putBoolean(KEY_MONET_ACCURATE_SHADES, enable);
-    }
-
-    public boolean isLinearLightnessEnabled() {
-        return getBoolean(KEY_MONET_LINEAR_LIGHTNESS, false);
-    }
-
-    public void setLinearLightnessEnabled(boolean enable) {
-        putBoolean(KEY_MONET_LINEAR_LIGHTNESS, enable);
-    }
-
-    public void resetAccentColor() {
-        setAccentColor(mContext.getResources().getColor(android.R.color.system_accent1_500));
     }
 }
