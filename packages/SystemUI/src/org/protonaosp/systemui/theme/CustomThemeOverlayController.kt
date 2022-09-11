@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2021 The Proton AOSP Project
+ * Copyright (C) 2022 Altair ROM Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,42 +102,32 @@ class CustomThemeOverlayController @Inject constructor(
     private lateinit var cond: Zcam.ViewingConditions
     private lateinit var targets: MaterialYouTargets
 
-    private var colorType: Int = COLOR_TYPE_DEFAULT
-    private var colorOverride: Int = 0
     private var colorAccent: Int = 0
     private var tintSurface: Boolean = true
     private var chromaFactor: Double = Double.MIN_VALUE
     private var accurateShades: Boolean = true
     private var whiteLuminance: Double = Double.MIN_VALUE
     private var linearLightness: Boolean = false
+
     private val mTunerService: TunerService = Dependency.get(TunerService::class.java)
+
     override fun start() {
-        mTunerService.addTunable(this, PREF_COLOR_TYPE, PREF_COLOR_OVERRIDE, PREF_COLOR_ACCENT,
-                PREF_TINT_SURFACE, PREF_WHITE_LUMINANCE, PREF_CHROMA_FACTOR, PREF_ACCURATE_SHADES,
-                PREF_LINEAR_LIGHTNESS)
+        mTunerService.addTunable(this, PREF_COLOR_ACCENT, PREF_TINT_SURFACE, PREF_ACCURATE_SHADES)
         super.start()
     }
 
     override fun onTuningChanged(key: String?, newValue: String?) {
         key?.let {
             if (it.contains(PREF_PREFIX)) {
-                colorType = Settings.Secure.getInt(mContext.contentResolver, PREF_COLOR_TYPE, 0)
-                colorOverride = Settings.Secure.getInt(mContext.contentResolver,
-                        PREF_COLOR_OVERRIDE, -1)
-                colorAccent = Settings.Secure.getInt(mContext.contentResolver, PREF_COLOR_ACCENT,
-                        -1)
-                tintSurface = Settings.Secure.getInt(mContext.contentResolver, PREF_TINT_SURFACE,
-                        1) == 1
-                chromaFactor = (Settings.Secure.getFloat(mContext.contentResolver,
-                        PREF_CHROMA_FACTOR, 100.0f) / 100f).toDouble()
-                accurateShades = Settings.Secure.getInt(mContext.contentResolver, PREF_ACCURATE_SHADES, 1) != 0
+                colorAccent = Settings.Secure.getInt(mContext.contentResolver,
+                        PREF_COLOR_ACCENT, 0)
+                tintSurface = Settings.Secure.getInt(mContext.contentResolver,
+                        PREF_TINT_SURFACE, 1) != 0
+                chromaFactor = CHROMA_FACTOR_DEFAULT
+                accurateShades = Settings.Secure.getInt(mContext.contentResolver,
+                        PREF_ACCURATE_SHADES, 1) != 0
+                whiteLuminance = parseWhiteLuminanceUser(WHITE_LUMINANCE_USER_DEFAULT)
 
-                whiteLuminance = parseWhiteLuminanceUser(
-                    Settings.Secure.getInt(mContext.contentResolver,
-                            PREF_WHITE_LUMINANCE, WHITE_LUMINANCE_USER_DEFAULT)
-                )
-                linearLightness = Settings.Secure.getInt(mContext.contentResolver,
-                        PREF_LINEAR_LIGHTNESS, 0) != 0
                 reevaluateSystemTheme(true /* forceReload */)
             }
         }
@@ -169,13 +160,9 @@ class CustomThemeOverlayController @Inject constructor(
         // Generate color scheme
         val colorScheme = DynamicColorScheme(
             targets = targets,
-            seedColor = when (colorType) {
-                COLOR_TYPE_CUSTOM -> Srgb(colorOverride)
-                COLOR_TYPE_THEME -> Srgb(colorAccent)
-                else -> Srgb(primaryColor)
-            },
+            seedColor = if (colorAccent != 0) Srgb(colorAccent) else Srgb(primaryColor),
             chromaFactor = when (type) {
-                NEUTRAL -> if (tintSurface) chromaFactor else 0.0
+                NEUTRAL -> if (tintSurface) chromaFactor else CHROMA_FACTOR_NONE
                 else -> chromaFactor
             },
             cond = cond,
@@ -199,14 +186,23 @@ class CustomThemeOverlayController @Inject constructor(
                 }
             }
 
+            // Override accent colors for custom colors
+            if ((type == ACCENT)/* && (colorAccent != 0)*/) {
+                // Dark colors
+                colorsList[0][100]?.let { setColor("material_deep_teal_200", it) }
+                colorsList[0][100]?.let { setColor("holo_blue_bright", it) }
+                colorsList[0][100]?.let { setColor("holo_blue_light", it) }
+                // Light colors
+                colorsList[0][600]?.let { setColor("material_deep_teal_500", it) }
+                colorsList[0][600]?.let { setColor("holo_blue_dark", it) }
+            }
+
             // Override special modulated surface colors for performance and consistency
             if (type == NEUTRAL) {
                 // surface light = neutral1 20 (L* 98)
                 colorsList[0][20]?.let { setColor("surface_light", it) }
-
                 // surface highlight dark = neutral1 650 (L* 35)
                 colorsList[0][650]?.let { setColor("surface_highlight_dark", it) }
-
                 // surface_header_dark_sysui = neutral1 950 (L* 5)
                 colorsList[0][950]?.let { setColor("surface_header_dark_sysui", it) }
             }
@@ -219,18 +215,12 @@ class CustomThemeOverlayController @Inject constructor(
         private const val TAG = "CustomThemeOverlayController"
 
         private const val PREF_PREFIX = "monet_engine"
-        private const val PREF_COLOR_TYPE = "${PREF_PREFIX}_color_type"
-        private const val PREF_COLOR_OVERRIDE = "${PREF_PREFIX}_color_override"
         private const val PREF_COLOR_ACCENT = "${PREF_PREFIX}_color_accent"
         private const val PREF_TINT_SURFACE = "${PREF_PREFIX}_tint_surface"
-        private const val PREF_CHROMA_FACTOR = "${PREF_PREFIX}_chroma_factor"
         private const val PREF_ACCURATE_SHADES = "${PREF_PREFIX}_accurate_shades"
-        private const val PREF_LINEAR_LIGHTNESS = "${PREF_PREFIX}_linear_lightness"
-        private const val PREF_WHITE_LUMINANCE = "${PREF_PREFIX}_white_luminance_user"
 
-        private const val COLOR_TYPE_DEFAULT = 0
-        private const val COLOR_TYPE_CUSTOM = 1
-        private const val COLOR_TYPE_THEME = 2
+        private const val CHROMA_FACTOR_DEFAULT = 1.0
+        private const val CHROMA_FACTOR_NONE = 0.0
 
         private const val WHITE_LUMINANCE_MIN = 1.0
         private const val WHITE_LUMINANCE_MAX = 10000.0
