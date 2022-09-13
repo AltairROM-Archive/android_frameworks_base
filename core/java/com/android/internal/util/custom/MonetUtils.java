@@ -26,6 +26,7 @@ public class MonetUtils {
     public static final String KEY_MONET_COLOR_ACCENT = "monet_engine_color_accent";
     public static final String KEY_MONET_TINT_SURFACE = "monet_engine_tint_surface";
     public static final String KEY_MONET_ACCURATE_SHADES = "monet_engine_accurate_shades";
+    public static final String KEY_MONET_RICHER_COLORS = "monet_engine_richer_colors";
 
     public static final int ACCENT_COLOR_DISABLED = 0;
 
@@ -98,5 +99,15 @@ public class MonetUtils {
     // Enables or disables accurate color shading.
     public void setAccurateShadesEnabled(boolean enable) {
         putBoolean(KEY_MONET_ACCURATE_SHADES, enable);
+    }
+
+    // Returns true if richer colors are enabled, false if not.
+    public boolean isRicherColorsEnabled() {
+        return getBoolean(KEY_MONET_RICHER_COLORS, false);
+    }
+
+    // Enables or disables richer colors.
+    public void setRicherColorsEnabled(boolean enable) {
+        putBoolean(KEY_MONET_RICHER_COLORS, enable);
     }
 }

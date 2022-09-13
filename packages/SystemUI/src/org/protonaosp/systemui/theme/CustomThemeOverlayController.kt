@@ -106,13 +106,15 @@ class CustomThemeOverlayController @Inject constructor(
     private var tintSurface: Boolean = true
     private var chromaFactor: Double = Double.MIN_VALUE
     private var accurateShades: Boolean = true
+    private var richerColors: Boolean = false
     private var whiteLuminance: Double = Double.MIN_VALUE
     private var linearLightness: Boolean = false
 
     private val mTunerService: TunerService = Dependency.get(TunerService::class.java)
 
     override fun start() {
-        mTunerService.addTunable(this, PREF_COLOR_ACCENT, PREF_TINT_SURFACE, PREF_ACCURATE_SHADES)
+        mTunerService.addTunable(this, PREF_COLOR_ACCENT, PREF_TINT_SURFACE, PREF_ACCURATE_SHADES,
+                PREF_RICHER_COLORS)
         super.start()
     }
 
@@ -126,6 +128,8 @@ class CustomThemeOverlayController @Inject constructor(
                 chromaFactor = CHROMA_FACTOR_DEFAULT
                 accurateShades = Settings.Secure.getInt(mContext.contentResolver,
                         PREF_ACCURATE_SHADES, 1) != 0
+                richerColors = Settings.Secure.getInt(mContext.contentResolver,
+                        PREF_RICHER_COLORS, 0) != 0
                 whiteLuminance = parseWhiteLuminanceUser(WHITE_LUMINANCE_USER_DEFAULT)
 
                 reevaluateSystemTheme(true /* forceReload */)
@@ -187,14 +191,46 @@ class CustomThemeOverlayController @Inject constructor(
             }
 
             // Override accent colors for custom colors
-            if ((type == ACCENT)/* && (colorAccent != 0)*/) {
-                // Dark colors
-                colorsList[0][100]?.let { setColor("material_deep_teal_200", it) }
-                colorsList[0][100]?.let { setColor("holo_blue_bright", it) }
-                colorsList[0][100]?.let { setColor("holo_blue_light", it) }
-                // Light colors
-                colorsList[0][600]?.let { setColor("material_deep_teal_500", it) }
-                colorsList[0][600]?.let { setColor("holo_blue_dark", it) }
+            if (type == ACCENT) {
+                if (richerColors) {
+                    // Adjust system accent colors to use shades that, among other things, make colors
+                    // under dark mode a little richer
+
+                    // system_accent1 colors
+                    colorsList[0][300]?.let { setColor("accent_device_default_dark", it) }
+                    colorsList[0][300]?.let { setColor("accent_primary_device_default", it) }
+                    colorsList[0][400]?.let { setColor("accent_primary_variant_dark_device_default", it) }
+                    colorsList[0][500]?.let { setColor("accent_device_default_light", it) }
+                    colorsList[0][500]?.let { setColor("accent_primary_variant_light_device_default", it) }
+
+                    // system_accent2 colors
+                    colorsList[1][300]?.let { setColor("accent_secondary_device_default", it) }
+                    colorsList[1][400]?.let { setColor("accent_secondary_variant_dark_device_default", it) }
+                    colorsList[1][500]?.let { setColor("accent_secondary_variant_light_device_default", it) }
+
+                    // system_accent3 colors
+                    colorsList[2][300]?.let { setColor("accent_tertiary_device_default", it) }
+                    colorsList[2][400]?.let { setColor("accent_tertiary_variant_dark_device_default", it) }
+                    colorsList[2][500]?.let { setColor("accent_tertiary_variant_light_device_default", it) }
+
+                    // Holo blue colors
+                    colorsList[0][200]?.let { setColor("holo_blue_bright", it) }
+                    colorsList[0][300]?.let { setColor("holo_blue_light", it) }
+                    colorsList[0][500]?.let { setColor("holo_blue_dark", it) }
+
+                    // Material deep teal colors
+                    colorsList[0][300]?.let { setColor("material_deep_teal_200", it) }
+                    colorsList[0][500]?.let { setColor("material_deep_teal_500", it) }
+                } else {
+                    // Holo blue colors
+                    colorsList[0][100]?.let { setColor("holo_blue_bright", it) }
+                    colorsList[0][200]?.let { setColor("holo_blue_light", it) }
+                    colorsList[0][500]?.let { setColor("holo_blue_dark", it) }
+
+                    // Material deep teal colors
+                    colorsList[0][200]?.let { setColor("material_deep_teal_200", it) }
+                    colorsList[0][500]?.let { setColor("material_deep_teal_500", it) }
+                }
             }
 
             // Override special modulated surface colors for performance and consistency
@@ -218,6 +254,7 @@ class CustomThemeOverlayController @Inject constructor(
         private const val PREF_COLOR_ACCENT = "${PREF_PREFIX}_color_accent"
         private const val PREF_TINT_SURFACE = "${PREF_PREFIX}_tint_surface"
         private const val PREF_ACCURATE_SHADES = "${PREF_PREFIX}_accurate_shades"
+        private const val PREF_RICHER_COLORS = "${PREF_PREFIX}_richer_colors"
 
         private const val CHROMA_FACTOR_DEFAULT = 1.0
         private const val CHROMA_FACTOR_NONE = 0.0
