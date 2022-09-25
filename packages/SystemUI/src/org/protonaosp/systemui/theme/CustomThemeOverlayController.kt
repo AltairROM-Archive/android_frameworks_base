@@ -114,7 +114,7 @@ class CustomThemeOverlayController @Inject constructor(
 
     override fun start() {
         mTunerService.addTunable(this, PREF_COLOR_ACCENT, PREF_TINT_SURFACE, PREF_ACCURATE_SHADES,
-                PREF_RICHER_COLORS)
+                PREF_RICHER_COLORS, PREF_CHROMA_FACTOR, PREF_LINEAR_LIGHTNESS, PREF_WHITE_LUMINANCE)
         super.start()
     }
 
@@ -124,13 +124,19 @@ class CustomThemeOverlayController @Inject constructor(
                 colorAccent = Settings.Secure.getInt(mContext.contentResolver,
                         PREF_COLOR_ACCENT, 0)
                 tintSurface = Settings.Secure.getInt(mContext.contentResolver,
-                        PREF_TINT_SURFACE, 1) != 0
-                chromaFactor = CHROMA_FACTOR_DEFAULT
+                        PREF_TINT_SURFACE, 1) == 1
+                chromaFactor = (Settings.Secure.getFloat(mContext.contentResolver,
+                        PREF_CHROMA_FACTOR, CHROMA_FACTOR_DEFAULT) / 100f).toDouble()
                 accurateShades = Settings.Secure.getInt(mContext.contentResolver,
-                        PREF_ACCURATE_SHADES, 1) != 0
+                        PREF_ACCURATE_SHADES, 1) == 1
                 richerColors = Settings.Secure.getInt(mContext.contentResolver,
                         PREF_RICHER_COLORS, 0) != 0
-                whiteLuminance = parseWhiteLuminanceUser(WHITE_LUMINANCE_USER_DEFAULT)
+                whiteLuminance = parseWhiteLuminanceUser(
+                    Settings.Secure.getInt(mContext.contentResolver,
+                            PREF_WHITE_LUMINANCE, WHITE_LUMINANCE_USER_DEFAULT)
+                )
+                linearLightness = Settings.Secure.getInt(mContext.contentResolver,
+                        PREF_LINEAR_LIGHTNESS, 0) != 0
 
                 reevaluateSystemTheme(true /* forceReload */)
             }
@@ -255,8 +261,11 @@ class CustomThemeOverlayController @Inject constructor(
         private const val PREF_TINT_SURFACE = "${PREF_PREFIX}_tint_surface"
         private const val PREF_ACCURATE_SHADES = "${PREF_PREFIX}_accurate_shades"
         private const val PREF_RICHER_COLORS = "${PREF_PREFIX}_richer_colors"
+        private const val PREF_CHROMA_FACTOR = "${PREF_PREFIX}_chroma_factor"
+        private const val PREF_LINEAR_LIGHTNESS = "${PREF_PREFIX}_linear_lightness"
+        private const val PREF_WHITE_LUMINANCE = "${PREF_PREFIX}_white_luminance_user"
 
-        private const val CHROMA_FACTOR_DEFAULT = 1.0
+        private const val CHROMA_FACTOR_DEFAULT = 100.0f
         private const val CHROMA_FACTOR_NONE = 0.0
 
         private const val WHITE_LUMINANCE_MIN = 1.0
