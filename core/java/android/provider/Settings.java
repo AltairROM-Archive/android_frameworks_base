@@ -5275,6 +5275,7 @@ public final class Settings {
          * Toast icon
          * @hide
          */
+        @Readable
         public static final String TOAST_ICON = "toast_icon";
 
         /**
